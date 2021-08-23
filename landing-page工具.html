@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ladngin page 工具</title>
+  <script src="工具包/js/jquery-3.5.1.js"></script>
+  <script src="工具包/js/xlsx.full.min.js"></script>
+  <script src="工具包/js/babel.min.js"></script>
+</head>
+
+<body>
+  <div class="landing-page-tool">
+    <div class="brand">
+      车型：<input type="text" placeholder="ford" onchange="this.value = this.value.trim();">
+    </div>
+    <div id="container" class="container" style="visibility: hidden;">
+      <div class="import">
+        导入信息：<input type="file" id="categoryFile"
+        accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        onchange="showfile2(this,100)" onclick="this.value=''";>
+      </div>
+      <div class="menu">
+        <ul>
+          <li class="active">top-img</li>
+          <li>hotProducts</li>
+          <li>standard-chooseReason</li>
+          <li>reviews-learnBrand</li>
+          <li>模板文件</li>
+        </ul>
+      </div>
+      <div class="nav">
+        <ul class="nav-list">
+          <li class="topImg active">
+            <div class="listEdit">
+              <span>mobile img</span><input class="mobile" type="text">
+              <br>
+              <span>pc img</span><input class="pc" type="text">
+            </div>
+            <div class="listsubmit">
+              <button class="submit">submit</button>
+              <div class="submitItem">
+                <span>block name:</span><textarea class="block_name"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>block id:</span><textarea class="block_id"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>block content:</span><textarea class="block_content"></textarea>
+              </div>
+            </div>
+            <br>
+          </li>
+          <li class="discount-hotProducts page">
+            <div class="listEdit" style="display: none;">
+              discount:
+              <div class="li-menu">
+                <ul>
+                  <li class="active">默认</li>
+                  <li>自定义</li>
+                </ul>
+              </div>
+              <div class="li-nav">
+                <ul>
+                  <li class="discount active">
+                    <div class="img1">
+                      <span>img1:</span><input type="text"> <input type="text">
+                    </div>
+                    <div class="img2">
+                      <span>img2:</span><input type="text"> <input type="text">
+                    </div>
+                    <div class="img3">
+                      <span>img3:</span><input type="text"> <input type="text">
+                    </div>
+                  </li>
+                  <li class="discount"><textarea class="li-nav-content"></textarea></li>
+                </ul>
+              </div>
+            </div>
+            <div class="listEdit">
+              hotProducts:
+              <div class="li-menu">
+                <ul>
+                  <li class="active">默认</li>
+                  <li>自定义</li>
+                </ul>
+              </div>
+              <div class="li-nav">
+                <ul>
+                  <li class="hotProducts active">
+                    <input type="text" class="categoryNum" placeholder="分类条数" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                    <input type="text" class="phtml" placeholder="block-phtml" onchange="this.value = this.value.trim();">
+                    <table id="category" bordercolor="#aaaaaa" border="1" cellpadding="0" width="100%">
+                      <thead>
+                        <tr>
+                          <th>num</th>
+                          <th>block-phtml</th>
+                          <th>block-limitNum</th>
+                          <th>block-id</th>
+                          <th>category-name</th>
+                          <th>category-link</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td><textarea></textarea></td>
+                          <td><textarea>12</textarea></td>
+                          <td><textarea></textarea></td>
+                          <td><textarea></textarea></td>
+                          <td><textarea></textarea></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button class="del">-</button>
+                    <button class="add">+</button>
+                    <textarea class="hot-js" style="display: none;">
+  <script>
+    var tab = document.querySelector(".menu-list").getElementsByClassName("list-item");
+    var tab_content = document.querySelector(".menu-content").getElementsByClassName("item-content");
+    tabEvent(tab, tab_content);
+  </script></textarea>
+                  </li>
+                  <li class="hotProducts"><textarea class="li-nav-content"></textarea></li>
+                </ul>
+              </div>
+            </div>
+            <div class="listsubmit">
+              <button class="submit">submit</button>
+              <div class="submitItem">
+                <span>page name:</span><textarea class="name"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>page url:</span><textarea class="url"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>page content:</span><textarea class="content"></textarea>
+              </div>
+            </div>
+          </li>
+          <li class="standard-chooseReason">
+            <div class="listEdit">
+              standard:
+              <div class="li-menu">
+                <ul>
+                  <li class="active">默认</li>
+                  <li>自定义</li>
+                </ul>
+              </div>
+              <div class="li-nav">
+                <ul>
+                  <li class="standard active">
+                    <table id="product" bordercolor="#aaaaaa" border="1" cellpadding="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th>num</th>
+                        <th>block-phtml</th>
+                        <th>block-limitNum</th>
+                        <th>block-id</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td><textarea></textarea></td>
+                        <td><textarea>18</textarea></td>
+                        <td><textarea></textarea></td>
+                      </tr>
+                    </tbody>
+                    </table>
+                  </li>
+                  <li class="standard"><textarea class="li-nav-content"></textarea></li>
+                </ul>
+              </div>
+            </div>
+            <div class="listEdit">
+              why choose us:
+              <div class="li-menu">
+                <ul>
+                  <li class="active">默认</li>
+                  <li>自定义</li>
+                </ul>
+              </div>
+              <div class="li-nav">
+                <ul>
+                  <li class="chooseReason active">
+                    <select class="type">
+                      <option>左字右图</option>
+                      <option>左图右字</option>
+                    </select>
+                    <div class="img editItem">
+                      <span>img</span>
+                      mobile:&nbsp;<textarea></textarea>&nbsp;
+                      ipad:&nbsp;<textarea></textarea>&nbsp;
+                      pc:&nbsp;<textarea></textarea>
+                    </div>
+                    <div class="bg editItem">
+                      <span>background-img</span><textarea></textarea>
+                    </div>
+                    <div class="article">
+                      <div class="editItem h2">
+                        <span>h2</span><textarea>WHY CHOOSE US</textarea>
+                      </div>
+                      <div class="editItem h3">
+                        <span>h3</span><textarea></textarea>
+                      </div>
+                      <div class="editItem p">
+                        <span>p</span><textarea></textarea>
+                      </div>
+                      <div class="editItem p">
+                        <span>p</span><textarea></textarea>
+                      </div>
+                      <div class="editItem p">
+                        <span>p</span><textarea></textarea>
+                      </div>
+                    </div>
+                    <button class="del">-</button>
+                    <button class="add">+</button>
+                  </li>
+                  <li class="chooseReason"><textarea class="li-nav-content"></textarea></li>
+                </ul>
+              </div>
+            </div>
+            <div class="listsubmit">
+              <button class="submit">submit</button>
+              <div class="submitItem">
+                <span>block name:</span><textarea class="block_name"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>block id:</span><textarea class="block_id"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>block content:</span><textarea class="block_content"></textarea>
+              </div>
+            </div>
+          </li>
+          <li class="reviews-learnBrand">
+            <div class="listEdit">
+              reviews:
+              <div class="li-menu">
+                <ul>
+                  <li class="active">默认</li>
+                  <li>自定义</li>
+                </ul>
+              </div>
+              <div class="li-nav">
+                <ul>
+                  <li class="reviews active">
+                    <input type="text" class="reviewNum" placeholder="评论条数" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                    <input type="file" id="reviewFile"
+                    accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    onchange="showfile(this,50)"  onclick="this.value=''";>
+                    <table id="review" bordercolor="#aaaaaa" border="1" cellpadding="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th>num</th>
+                        <th>title</th>
+                        <th>product-name</th>
+                        <th>review-content</th>
+                        <th>review-info</th>
+                        <th>review-model</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td><textarea></textarea></td>
+                        <td><textarea></textarea></td>
+                        <td><textarea></textarea></td>
+                        <td><textarea></textarea></td>
+                        <td><textarea></textarea></td>
+                      </tr>
+                    </tbody>
+                    </table>
+                    <button class="del">-</button>
+                    <button class="add">+</button>
+                    <textarea class="revies-js" style="display: none;"><script>
+     moreList(document.querySelector("ul.customer-reviews-content").getElementsByTagName("li"), document.querySelector(".landing-page-reviews .more-review"), 4, "view more", "view less");
+  </script></textarea>
+                  </li>
+                  <li class="reviews"><textarea class="li-nav-content"></textarea></li>
+                </ul>
+              </div>
+            </div>
+            <div class="listEdit">
+              want to know us:
+              <div class="li-menu">
+                <ul>
+                  <li class="active">默认</li>
+                  <li>自定义</li>
+                </ul>
+              </div>
+              <div class="li-nav">
+                <ul>
+                  <li class="learnBrand active">
+                    <select class="type">
+                      <option>左图右字</option>
+                      <option>左字右图</option>
+                    </select>
+                    <div class="img editItem">
+                      <span>img</span>
+                      mobile:&nbsp;<textarea></textarea>&nbsp;
+                      ipad:&nbsp;<textarea></textarea>&nbsp;
+                      pc:&nbsp;<textarea></textarea>
+                    </div>
+                    <div class="bg editItem">
+                      <span>background-img</span><textarea></textarea>
+                    </div>
+                    <div class="link editItem">
+                      <span>link</span><textarea></textarea>
+                    </div>
+                    <div class="article">
+                      <div class="editItem h2">
+                        <span>h2</span><textarea>WANT TO KNOW MORE</textarea>
+                      </div>
+                      <div class="editItem h3">
+                        <span>h3</span><textarea></textarea>
+                      </div>
+                      <div class="editItem p">
+                        <span>p</span><textarea></textarea>
+                      </div>
+                      <div class="editItem p">
+                        <span>p</span><textarea></textarea>
+                      </div>
+                    </div>
+                    <button class="del">-</button>
+                    <button class="add">+</button>
+                      </li>
+                  <li class="learnBrand"><textarea class="li-nav-content"></textarea></li>
+                </ul>
+              </div>
+            </div>
+            <div class="listsubmit">
+              <button class="submit">submit</button>
+              <div class="submitItem">
+                <span>block name:</span><textarea class="block_name"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>block id:</span><textarea class="block_id"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>block content:</span><textarea class="block_content"></textarea>
+              </div>
+            </div>
+          </li>
+          <li class="model">
+            <div class="listsubmit">
+              <div class="submitItem">
+                <span>file name:</span><textarea class="name"></textarea>
+              </div>
+              <div class="submitItem">
+                <span>file content:</span><textarea class="content"></textarea>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var brand = document.querySelector(".brand input");
+
+    var menu = document.querySelector(".menu");
+    var nav = document.querySelector(".nav");
+    tabEvent(menu, nav);
+
+    var li_menu = document.getElementsByClassName("li-menu");
+    var li_nav = document.getElementsByClassName("li-nav");
+    for(var i=0; i<li_menu.length; i++){
+      tabEvent(li_menu[i], li_nav[i]);
+    }
+
+    /********************************top-img************************************/
+    var top_img = document.querySelector(".topImg");
+    var top_submit = top_img.querySelector(".submit");
+    var top_id = top_img.querySelector(".block_id");
+    var top_name = top_img.querySelector(".block_name");
+    var top_content = top_img.querySelector(".block_content");
+
+    var top_mobile = top_img.querySelector(".mobile");
+    var top_pc = top_img.querySelector(".pc");
+
+    top_submit.addEventListener('click',function () {
+      if(brand.value.trim()!=""){
+        if((top_mobile.value+top_pc.value).trim()!=""){
+          top_content.value = '<img class="imgs-22" src="{{media url="lazyloading/blank.png"}}" onload="imgSwitch(this, widthArr_22, imgsrcArr_22)" src_2_1="{{media url="wysiwyg/landing_page/'
+      +top_mobile.value+'"}}"  src_2_2="{{media url="wysiwyg/landing_page/'
+      +top_pc.value+'"}}" alt="'+brand.value+'" />';
+        }
+      }
+
+      // 为每一个textarea绑定事件使其高度自适应
+      $.each($("textarea"), function (i, n) {
+        autoTextarea($(n)[0]);
+      });
+    });
+
+
+    /**************************page**discount**hotProducts******************************/
+    var discount_hot = document.querySelector(".discount-hotProducts");
+    var dh_submit = discount_hot.querySelector(".submit");
+    var page_name = discount_hot.querySelector("textarea.name");
+    var page_url = discount_hot.querySelector("textarea.url");
+    var page_content = discount_hot.querySelector("textarea.content");
+
+    /*
+    //discount
+    var discount = discount_hot.querySelector(".discount");
+    var discount_content = discount.parentElement.querySelector("textarea.li-nav-content");
+    var discount1 = discount.querySelector(".img1").getElementsByTagName("input");
+    var discount2 = discount.querySelector(".img2").getElementsByTagName("input");
+    var discount3 = discount.querySelector(".img3").getElementsByTagName("input");
+    discount1[0].value = "autoparts_accessories_1_1.jpg";
+    discount1[1].value = "autoparts_accessories_1_2.png";
+    discount2[0].value = "autoparts_accessories_2_1.jpg";
+    discount2[1].value = "autoparts_accessories_2_2.png";
+    discount3[0].value = "autoparts_accessories_3_1.jpg";
+    discount3[1].value = "autoparts_accessories_3_2.png";
+    */
+
+    //hotProducts
+    var hotProducts = discount_hot.querySelector(".hotProducts");
+    var hot_content = hotProducts.parentElement.querySelector("textarea.li-nav-content");
+    var category_num = hotProducts.querySelector(".categoryNum");
+    var phtml = hotProducts.querySelector(".phtml");
+    var hot_js = hotProducts.querySelector(".hot-js");
+    var hot_add = hotProducts.querySelector(".add");
+    var hot_del = hotProducts.querySelector(".del");
+    var hot_table = document.getElementById("category");
+    var hot_tbody = hot_table.tBodies[0];
+
+    hot_add.addEventListener('click',function () {
+      var hot_tbody = hot_table.tBodies[0];
+      addRow(hot_tbody,6);
+      hot_tbody.rows[hot_tbody.rows.length-1].cells[1].querySelector("textarea").value = hot_tbody.rows[0].cells[1].querySelector("textarea").value;
+      hot_tbody.rows[hot_tbody.rows.length-1].cells[2].querySelector("textarea").value = "12";
+    });
+
+    hot_del.addEventListener('click',function () {
+      var hot_tbody = hot_table.tBodies[0];
+      delRow(hot_tbody);
+    });
+
+    category_num.addEventListener('change',function () {
+      var hot_tbody = hot_table.tBodies[0];
+      var len = hot_tbody.rows.length;
+      var num = this.value;
+      if(num>len){
+        var deffer = num - len;
+        for(var i=0; i<deffer; i++){
+          addRow(hot_tbody,6);
+          hot_tbody.rows[hot_tbody.rows.length-1].cells[1].querySelector("textarea").value = phtml.value;
+          hot_tbody.rows[hot_tbody.rows.length-1].cells[2].querySelector("textarea").value = "12";
+        }
+
+        for(var j=0; j<hot_tbody.rows.length; j++){
+          hot_tbody.rows[j].cells[1].querySelector("textarea").value = phtml.value;
+          hot_tbody.rows[j].cells[2].querySelector("textarea").value = "12";
+        }
+      }else if(num<len){
+        var deffer = len - num;
+        for(var i=0; i<deffer; i++){
+          delRow(hot_tbody);
+        }
+      }else{
+        return;
+      }
+    });
+
+    dh_submit.addEventListener('click',function () {
+      if(brand.value.trim()!=""){
+        /*
+        if(((discount_content.parentElement.className.indexOf("active")!=-1)&&(discount_content.value.trim()==""))
+        ||(discount_content.parentElement.className.indexOf("active")==-1)){
+          discount_content.value = `  <div class="landing-page-discount">
+    <div class="container">
+      <ul>
+        <li><img class="imgs-22" src_2_1="{{media url="wysiwyg/landing_page/`
+      +discount1[0].value+`"}}"
+            src_2_2="{{media url="wysiwyg/landing_page/`
+      +discount1[1].value+'"}}" alt="'+brand.value+`" /></li>
+        <li><img class="imgs-22" src_2_1="{{media url="wysiwyg/landing_page/`
+      +discount2[0].value+`"}}"
+            src_2_2="{{media url="wysiwyg/landing_page/`
+      +discount2[1].value+'"}}" alt="'+brand.value+`" /></li>
+        <li><img class="imgs-22" src_2_1="{{media url="wysiwyg/landing_page/`
+      +discount3[0].value+`"}}"
+            src_2_2="{{media url="wysiwyg/landing_page/`
+      +discount3[1].value+'"}}" alt="'+brand.value+`" /></li>
+      </ul>
+    </div>
+  </div>`;
+
+          if(discount_content.offsetHeight==0){
+            discount_content.style.height = (discount_content.value.split(/\n/).length + 5) * 1.2 + "em";
+          }
+        }
+        */
+
+        var str1="";
+        var str2="";
+        var hot_tbody = hot_table.tBodies[0];
+        for(var i=0;i<hot_tbody.rows.length;i++){
+          var cellValue1 = hot_tbody.rows[i].cells[1].querySelector("textarea").value.trim();
+          var cellValue2 = hot_tbody.rows[i].cells[2].querySelector("textarea").value.trim();
+          var cellValue3 = hot_tbody.rows[i].cells[3].querySelector("textarea").value.trim();
+          var cellValue4 = hot_tbody.rows[i].cells[4].querySelector("textarea").value.trim();
+          var cellValue5 = hot_tbody.rows[i].cells[5].querySelector("textarea").value.trim();
+          if((cellValue1!="")&&(cellValue2!="")&&(cellValue3!="")&&(cellValue4!="")&&(cellValue5!="")){
+            str1 = str1 + `
+          <li>
+            <a class="list-item`;
+          str2 = str2 + `
+        <div class="landing-page-products item-content`;
+
+          if(i==0){
+            str1 = str1 +` active`;
+            str2 = str2 +` active`;
+          }
+
+          str1 = str1 + `">`+ cellValue4 +`</a>
+          </li>`;
+          str2 = str2 + `">
+          {{block class="Sm\\FilterProducts\\Block\\FilterProducts" template="Sm_FilterProducts::`
+        + cellValue1 + `"\n          title_module=" " display_countdown="0" select_category="`
+        + cellValue3 +`" product_limitation="`
+        + cellValue2 +`"}}
+          <div class="view-more">
+            <a href="`
+        + cellValue5 +`">view more</a>
+          </div>
+        </div>`;
+          }
+        }
+
+        if(((hot_content.parentElement.className.indexOf("active")!=-1)&&(hot_content.value.trim()==""))
+        ||(hot_content.parentElement.className.indexOf("active")==-1)){
+          if((str1!="") && (str2 !="")){
+            hot_content.value = `<div class="landing-page-hotProduct">
+    <div class="container">
+      <h2 class="products-title">HOT PRODUCTS</h2>
+      <div class="hot-menu">
+        <ul class="menu-list">` + str1 +`
+        </ul>
+      </div>
+      <div class="menu-content">`+ str2 +`
+     </div>
+    </div>
+  </div>
+`+ hot_js.value;
+
+            if(hot_content.offsetHeight==0){
+              hot_content.style.height = (hot_content.value.split(/\n/).length + 5) * 1.2 + "em";
+            }
+          }
+        }
+
+        if(hot_content.value.trim()!=""){
+          page_content.value = `<div class="landing-page">
+  `+ hot_content.value +`
+</div>`;
+        }
+
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+      }
+    });
+
+
+    /********************************standard**chooseReason************************************/
+    var standard_choose = document.querySelector(".standard-chooseReason");
+    var sc_submit = standard_choose.querySelector(".submit");
+    var sc_id = standard_choose.querySelector(".block_id");
+    var sc_name = standard_choose.querySelector(".block_name");
+    var sc_content = standard_choose.querySelector(".block_content");
+
+    //standard
+    var standard = standard_choose.querySelector(".standard");
+    var standard_content = standard.parentElement.querySelector("textarea.li-nav-content");
+    var standard_table = document.getElementById("product");
+    var standard_tbody = standard_table.tBodies[0];
+
+    phtml.addEventListener('change',function () {
+      var hot_tbody = hot_table.tBodies[0];
+      for(var i=0; i<hot_tbody.rows.length; i++){
+        hot_tbody.rows[i].cells[1].querySelector("textarea").value = phtml.value;
+      }
+      standard_table.rows[1].cells[1].querySelector("textarea").value = phtml.value;
+    });
+
+    //chooseReason
+    var chooseReason = standard_choose.querySelector(".chooseReason");
+    var chooseReason_content = chooseReason.parentElement.querySelector("textarea.li-nav-content");
+    var chooseReason_bg = chooseReason.querySelector(".bg.editItem textarea");
+    var chooseReason_img = chooseReason.querySelectorAll(".img.editItem textarea");
+    var chooseReason_h3 = chooseReason.querySelector(".h3.editItem textarea");
+    var chooseReason_p = chooseReason.querySelectorAll(".p.editItem textarea");
+    var chooseReason_add = chooseReason.querySelector(".add");
+    articlePNum(chooseReason);
+
+    sc_submit.addEventListener('click',function () {
+      if(brand.value.trim()!=""){
+        if(((standard_content.parentElement.className.indexOf("active")!=-1)&&(standard_content.value.trim()==""))
+          ||(standard_content.parentElement.className.indexOf("active")==-1)){
+          var standard_tbody = standard_table.tBodies[0];
+          var cellValue1 = standard_tbody.rows[0].cells[1].querySelector("textarea").value.trim();
+          var cellValue2 = standard_tbody.rows[0].cells[2].querySelector("textarea").value.trim();
+          var cellValue3 = standard_tbody.rows[0].cells[3].querySelector("textarea").value.trim();
+
+          console.log(cellValue1)
+          console.log(cellValue2)
+          console.log(cellValue3)
+          if((cellValue1!="")&&(cellValue2!="")&&(cellValue3!="")){
+          console.log(2)
+            standard_content.value = `  <div class="landing-page-standard landing-page-blue1">
+    <div class="container">
+      <h2 class="products-title">You May Also Like</h2>
+      <div class="landing-page-products">
+        {{block class="Sm\\FilterProducts\\Block\\FilterProducts" template="Sm_FilterProducts::`
+      + cellValue1 + `"\n          title_module=" " display_countdown="0"   select_category="`
+      + cellValue3 + `" product_limitation="`
+      + cellValue2 + `"}}
+      </div>
+    </div>
+  </div>`
+            if(standard_content.offsetHeight==0){
+              standard_content.style.height = (standard_content.value.split(/\n/).length + 5) * 1.2 + "em";
+            }
+          }
+        }
+
+        if(((chooseReason_content.parentElement.className.indexOf("active")!=-1)&&(chooseReason_content.value.trim()==""))
+          ||(chooseReason_content.parentElement.className.indexOf("active")==-1)){
+          chooseReason_content.value = articleStr(chooseReason, "chooseReason");
+          if(chooseReason_content.offsetHeight==0){
+            chooseReason_content.style.height = (chooseReason_content.value.split(/\n/).length + 5) * 1.2 + "em";
+          }
+        }
+
+        if((standard_content.value+chooseReason_content.value).trim()!=""){
+          var standardVal = standard_content.value;
+          if(standardVal.trim()!=""){
+            standardVal = standardVal + "\n\n";
+          }
+          sc_content.value = `<div class="landing-page">
+`+ standardVal + chooseReason_content.value +`
+</div>`;
+        }
+
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+      }
+    })
+
+
+    /********************************reviews**learnBrand************************************/
+    var reviews_learn = document.querySelector(".reviews-learnBrand");
+    var rl_submit = reviews_learn.querySelector(".submit");
+    var rl_id = reviews_learn.querySelector(".block_id");
+    var rl_name = reviews_learn.querySelector(".block_name");
+    var rl_content = reviews_learn.querySelector(".block_content");
+
+    //reviews
+    var reviews = reviews_learn.querySelector(".reviews");
+    var reviews_content = reviews.parentElement.querySelector("textarea.li-nav-content");
+    var review_add = reviews.querySelector(".add");
+    var review_del = reviews.querySelector(".del");
+    var revies_js = reviews.querySelector(".revies-js");
+    var review_file = reviews.querySelector("#reviewFile");
+    var review_num = reviews.querySelector(".reviewNum");
+    var review_table = document.getElementById("review");
+    var review_tbody = review_table.tBodies[0];
+
+    review_add.addEventListener('click',function () {
+      review_file.value = "";
+      var review_tbody = review_table.tBodies[0];
+      addRow(review_tbody,6);
+      var scrollDistance = reviews.offsetHeight + reviews.offsetTop - document.documentElement.clientHeight;
+      if(scrollDistance>0){
+        document.documentElement.scrollTop = scrollDistance;
+      }
+    });
+
+    review_del.addEventListener('click',function () {
+      review_file.value = "";
+      var review_tbody = review_table.tBodies[0];
+      delRow(review_tbody);
+      var scrollDistance = reviews.offsetHeight + reviews.offsetTop - document.documentElement.clientHeight;
+      if(scrollDistance>0){
+        document.documentElement.scrollTop = scrollDistance;
+      }
+    });
+
+    review_num.addEventListener('change',function () {
+      review_file.value = "";
+      var review_tbody = review_table.tBodies[0];
+      var len = review_tbody.rows.length;
+      var num = review_num.value;
+      if(num>len){
+        var deffer = num - len;
+        for(var i=0; i<deffer; i++){
+          addRow(review_tbody,6);
+        }
+      }else if(num<len){
+        var deffer = len - num;
+        for(var i=0; i<deffer; i++){
+          delRow(review_tbody);
+        }
+      }else{
+        return;
+      }
+    });
+
+    //learnBrand
+    var learnBrand = reviews_learn.querySelector(".learnBrand");
+    var learnBrand_content = learnBrand.parentElement.querySelector("textarea.li-nav-content");
+    var learnBrand_link = learnBrand.querySelector(".link.editItem textarea");
+    var learnBrand_bg = learnBrand.querySelector(".bg.editItem textarea");
+    var learnBrand_img = learnBrand.querySelectorAll(".img.editItem textarea");
+    var learnBrand_h3 = learnBrand.querySelector(".h3.editItem textarea");
+    var learnBrand_p = learnBrand.querySelectorAll(".p.editItem textarea");
+    var learnBrand_add = learnBrand.querySelector(".add");
+    articlePNum(learnBrand);
+
+    //reviews-learnBrand-submit
+    rl_submit.addEventListener("click", function () {
+      if(brand.value.trim()!=""){
+        var review_tbody = review_table.tBodies[0];
+        var len = review_tbody.rows.length;
+        var str = "";
+        for (var i = 0; i < len; i++) {
+          var allStr = review_tbody.rows[i].cells[1].querySelector("textarea").value
+                    + review_tbody.rows[i].cells[2].querySelector("textarea").value
+                    + review_tbody.rows[i].cells[3].querySelector("textarea").value
+                    + review_tbody.rows[i].cells[4].querySelector("textarea").value
+                    + review_tbody.rows[i].cells[5].querySelector("textarea").value;
+          if(allStr.replace(/\s*/g,"")!=""){
+            str = str + `
+        <li>
+          <div class="reviews-content">
+            <div class="review-descripe">
+              <h3>`
+          + review_tbody.rows[i].cells[1].querySelector("textarea").value.trim() + "</h3>"
+          + `
+              <small>`+ review_tbody.rows[i].cells[2].querySelector("textarea").value.trim() + "</small>"
+          + `
+              <div class="rate">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>`
+          + `
+              <p>` + review_tbody.rows[i].cells[3].querySelector("textarea").value.trim() + "</p>"
+          + `
+              <div class="review-date-model">
+                <h4>`+ review_tbody.rows[i].cells[4].querySelector("textarea").value.trim() + "</h4>"
+            + `
+                <small>`+ review_tbody.rows[i].cells[5].querySelector("textarea").value.trim() + "</small>"
+          + `
+              </div>
+            </div>
+          </div>
+        </li>`;
+          }
+        }
+
+        if(((reviews_content.parentElement.className.indexOf("active")!=-1)&&(reviews_content.value.trim()==""))
+          ||(reviews_content.parentElement.className.indexOf("active")==-1)){
+            if(str.trim()!=""){
+              reviews_content.value = `  <div class="landing-page-reviews landing-page-blue1">
+    <div class="container">
+      <h2 class="products-title">Customer reviews</h2>
+      <ul class="customer-reviews-content">`+ str + `
+      </ul>
+      <div class="view-more">
+        <a class="more-review">view more</a>
+      </div>
+    </div>
+  </div>
+  ` + revies_js.value;
+
+            if(reviews_content.offsetHeight==0){
+              reviews_content.style.height = (reviews_content.value.split(/\n/).length + review_tbody.rows.length) * 1.2 + "em";
+            }
+          }
+        }
+
+        if(((learnBrand_content.parentElement.className.indexOf("active")!=-1)&&(learnBrand_content.value.trim()==""))
+          ||(learnBrand_content.parentElement.className.indexOf("active")==-1)){
+          learnBrand_content.value = articleStr(learnBrand, "learnBrand");
+
+          if(learnBrand_content.offsetHeight==0){
+            learnBrand_content.style.height = (learnBrand_content.value.split(/\n/).length + 5) * 1.2 + "em";
+          }
+        }
+
+        if((reviews_content.value+learnBrand_content.value).trim()!=""){
+          var reviewsVal = reviews_content.value;
+          if(reviewsVal.trim()!=""){
+            reviewsVal = reviewsVal + "\n\n";
+          }
+          rl_content.value = `<div class="landing-page">
+`+ reviewsVal + learnBrand_content.value +`
+</div>`;
+        }
+
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+      }
+    });
+
+
+    /********************************model************************************/
+    var model = document.querySelector(".model");
+    var model_name = model.querySelector("textarea.name");
+    var model_content = model.querySelector("textarea.content");
+
+    page_url.addEventListener('change',function () {
+      var str = "cms_page_view_selectable_" + page_url.value + "_";
+      if(page_url.value.indexOf("-")!=-1){
+        model_name.value = str
+        + capitalInitials(page_url.value.slice(0,page_url.value.indexOf("-")))
+        + capitalInitials(page_url.value.slice(page_url.value.indexOf("-")+1));
+      }else{
+        model_name.value = str + capitalInitials(page_url.value);
+      }
+    });
+
+    /********************************brand************************************/
+    brand.addEventListener('change',function () {
+      var brandValue = this.value.trim();
+      var container = document.getElementsByClassName("container")[0];
+      if(brandValue.replace(/\s*/g,"")!=""){
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+
+        if(container.style.visibility!= ""){
+          container.style.visibility = "";
+        }
+
+        //top-img
+        top_mobile.value = brandValue + "_accessories_0_1.jpg";
+        top_pc.value = brandValue + "_accessories_0_2.jpg";
+        top_id.value = brandValue + "_top";
+        top_name.value = "Landing Page 主图【" + brandValue  + "】";
+
+        //discount-hotProducts-page
+        phtml.value = "default_landing-"+brandValue+".phtml";
+        page_name.value = capitalInitials(brandValue) + " Accessories";
+        page_url.value = brandValue + "-accessories";
+
+        for(var i=0; i<hot_tbody.rows.length; i++){
+          hot_tbody.rows[i].cells[1].querySelector("textarea").value = phtml.value;
+        }
+        standard_table.rows[1].cells[1].querySelector("textarea").value = phtml.value;
+
+        chooseReason_bg.value = brandValue + "_chooseReason_bg.jpg";
+        chooseReason_img[0].value = brandValue + "_accessories_2_1.jpg";
+        chooseReason_img[1].value = brandValue + "_accessories_2_2.jpg";
+        chooseReason_img[2].value = brandValue + "_accessories_2_3.jpg";
+        sc_id.value = brandValue + "_bottom1";
+        sc_name.value = "standard+chooseReason【" + brandValue  + "】";
+
+        //reviews-learnBrand
+        learnBrand_bg.value = brandValue + "_learnBrand_bg.jpg";
+        learnBrand_img[0].value = brandValue + "_accessories_3_1.jpg";
+        learnBrand_img[1].value = brandValue + "_accessories_3_2.jpg";
+        learnBrand_img[2].value = brandValue + "_accessories_3_3.jpg";
+        rl_id.value = brandValue + "_bottom2";
+        rl_name.value = "reviews + allProducts【" + brandValue  + "】";
+
+        //model
+        model_name.value = "cms_page_view_selectable_"+brandValue+"-accessories_"+capitalInitials(brandValue)+"Accessories";
+        model_content.value =
+`<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+  <body>
+    <referenceContainer name="content">
+      <block class="MagentoCmsBlockPage" name="cms_page" />
+    </referenceContainer>
+
+    <referenceContainer name="page.top">
+      <block class="MagentoCmsBlockBlock" name="`+brandValue+`_top">
+        <arguments>
+          <argument name="block_id" xsi:type="string">`+brandValue+`_top</argument>
+        </arguments>
+      </block>
+    </referenceContainer>
+
+    <referenceBlock name="catalog.compare.sidebar" remove="true" />
+    <referenceBlock name="view.addto.compare" remove="true" />
+    <referenceBlock name="view.addto.wishlist" remove="true" />
+    <referenceBlock name="sidebar.category.brand" remove="true" />
+    <referenceBlock name="category.page.finder" remove="true" />
+
+    <referenceContainer name="page.bottom">
+      <block class="MagentoCmsBlockBlock" name="`+brandValue+`_bottom1">
+        <arguments>
+          <argument name="block_id" xsi:type="string">`+brandValue+`_bottom1</argument>
+        </arguments>
+      </block>
+      <block class="MagentoCmsBlockBlock" name="`+brandValue+`_bottom2">
+        <arguments>
+          <argument name="block_id" xsi:type="string">`+brandValue+`_bottom2</argument>
+        </arguments>
+      </block>
+    </referenceContainer>
+  </body>
+</page>`;
+
+        if(model_content.offsetHeight==0){
+          model_content.style.height = (model_content.value.split(/\n/).length + 5) * 1.2 + "em";
+        }
+      }else{
+        if(container.style.visibility != "hidden"){
+          container.style.visibility = "hidden";
+          window.location.reload();
+        }
+      }
+    });
+
+    //tab
+    function tabEvent(menu, nav) {
+      var menuLi = menu.querySelector("ul").children;
+      var navLi = nav.querySelector("ul").children;
+      for (var i = 0; i < menuLi.length; i++) {
+        menuLi[i].index = i;
+        menuLi[i].addEventListener("click", function () {
+          for (var j = 0; j < menuLi.length; j++) {
+            if(menuLi[j].className.indexOf("active")!=-1){
+              menuLi[j].className = menuLi[j].className.replace(/active/g,"").trim();
+              navLi[j].className = navLi[j].className.replace(/active/g,"").trim();
+              break;
+            }
+          }
+          this.className = (this.className + " active").trim();
+          navLi[this.index].className = (navLi[this.index].className + " active").trim();
+
+          // 为每一个textarea绑定事件使其高度自适应
+          $.each($("textarea"), function (i, n) {
+            autoTextarea($(n)[0]);
+          });
+
+          // 为每一个textarea绑定事件使其高度自适应
+          $.each($("textarea"), function (i, n) {
+            var str = n.value;
+            n.value="";
+            n.value=str;
+          });
+        })
+      }
+    }
+
+    //首字母大写
+    function capitalInitials(word) {
+      return word.replace(word[0],word[0].toUpperCase());
+    }
+
+    //增加行
+    function addRow(tbody,num) {
+      var tr = tbody.insertRow(tbody.rows.length);
+      var td_1 = tr.insertCell(0);
+      td_1.innerHTML = tbody.rows.length;
+      for(var i=1; i<num; i++){
+        var tds = tr.insertCell(i);
+        tds.innerHTML = "<textarea></textarea>";
+      }
+
+      // 为每一个textarea绑定事件使其高度自适应
+      $.each($("textarea"), function (i, n) {
+        autoTextarea($(n)[0]);
+      });
+    }
+
+    //减少行
+    function delRow(tbody) {
+      var len = tbody.rows.length;
+      if(len>1){
+        tbody.deleteRow(tbody.rows.length - 1);
+      }
+    }
+
+    //articlePNum
+    function articlePNum(ele) {
+      var article = ele.getElementsByClassName("article")[0];
+      var del = ele.getElementsByClassName("del")[0];
+      var add = ele.getElementsByClassName("add")[0];
+
+      del.addEventListener("click",function () {
+        var p = article.getElementsByClassName("editItem p");
+        if(p.length>0){
+          article.removeChild(p[p.length-1]);
+        }
+      });
+
+      add.addEventListener("click",function () {
+        var editItemP = document.createElement("div");
+        editItemP.className = "editItem p";
+        editItemP.innerHTML = "<span>p</span><textarea></textarea>";
+        article.appendChild(editItemP);
+      });
+    }
+
+    //articleStr
+    function articleStr(ele, eleClass) {
+      var linkStr = "";
+      if(ele.querySelector(".link.editItem")){
+        var article_link = ele.querySelector(".link.editItem").querySelector("textarea");
+        var article_link_val = article_link.value.trim();
+        if(article_link_val == ""){
+          article_link_val = "#";
+        }
+        linkStr = `
+            <a class="more-products" href="` + article_link_val +`">` + brand.value + ` All Products</a>`;
+      }
+      var type = ele.querySelector(".type");
+      var bg = ele.querySelector(".bg.editItem").querySelector("textarea");
+      var img = ele.querySelector(".img.editItem").getElementsByTagName("textarea");
+      var article = ele.querySelector(".article");
+      var article_h2 = article.querySelector(".h2.editItem").querySelector("textarea");
+      var article_h3 = article.querySelector(".h3.editItem").querySelector("textarea");
+      var article_p = article.getElementsByClassName("p editItem");
+      var str="";
+      var pStr="";
+      var imgStr="";
+
+      for(var i=0; i<article_p.length; i++){
+        pStr = pStr + `
+              <p>` + article_p[i].querySelector("textarea").value + "</p>";
+      }
+      pStr = `
+        <div class="col-lg-7">
+          <div class="article-content">
+            <div class="article">
+              <h2 class="article-title">` + article_h2.value + `</h2>
+              <h3>` + article_h3.value + `</h3>` + pStr + `
+            </div>`+ linkStr +`
+          </div>
+        </div>`;
+
+      imgStr = `
+        <div class="col-lg-5">
+          <img class="article-img imgs-33" src="{{media url="lazyloading/blank.png"}}" onload="imgSwitch(this, widthArr_33, imgsrcArr_33)" alt="` + brand.value + ` accessories"
+          src_3_1="{{media url="wysiwyg/landing_page/` + img[0].value + `"}}" src_3_2="{{media url="wysiwyg/landing_page/` + img[1].value + `"}}" src_3_3="{{media url="wysiwyg/landing_page/` + img[2].value + `"}}"/>
+        </div>`;
+
+      if(type.value=="左字右图"){
+        str = pStr + imgStr;
+      }else if(type.value=="左图右字"){
+        str = imgStr + pStr;
+      }
+
+      str = `  <div class="landing-page-`+ eleClass +` landing-page-article">
+    <img class="article-bg" src="{{media url="wysiwyg/landing_page/`
+    + bg.value + `"}}" alt="`+ article_h2.value +`" />
+    <div class="container">
+      <div class="row">` + str + `
+      </div>
+    </div>
+  </div>`
+      return str;
+    }
+
+    function showfile(obj,maxNum) {
+      if (obj.files.length==0) {
+        return;
+      }
+
+      var f = obj.files[0];
+      var reader = new FileReader();
+      reader.readAsBinaryString(f);
+      reader.onload = function (e) {
+        var data = e.target.result;
+        excelFile = XLSX.read(data, {
+          type: 'binary'
+        });
+
+        var dataTable1 = "";
+        //只展示第一个表
+        var headers = new Array();
+        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+        dataTable1 += `
+                      <thead>
+                        <tr>
+                          <th>num</th>
+                          <th>title</th>
+                          <th>product-name</th>
+                          <th>review-content</th>
+                          <th>review-info</th>
+                          <th>review-model</th>
+                        </tr>
+                      </thead>
+                      <tbody>`;
+        for (var key in str[0]) {
+          headers.push(key);  //获取表头
+        }
+
+        //这里显示前maxNum行
+        if(maxNum>str.length){
+          maxNum = str.length;
+        }
+        for (var i = 0; i < maxNum; i++) {
+          var json = str[i];
+          if(json!=undefined){
+            dataTable1 += `
+                        <tr>
+                          <td>` + (i+1)+`</td>`;
+            for (var j = 1; j < headers.length; j++) {
+              dataTable1 += `
+                          <td>
+                            <textarea>` + json[headers[j]] + `</textarea>
+                          </td>`;
+            }
+            dataTable1 += `
+                        </tr>`;
+          }else{
+            break;
+          }
+        }
+
+        dataTable1 += `
+                      </tbody>
+                    `;
+        review_table.innerHTML = dataTable1;
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+
+        var scrollDistance = reviews.offsetHeight + reviews.offsetTop - document.documentElement.clientHeight;
+        if(scrollDistance>0){
+          document.documentElement.scrollTop = scrollDistance;
+        }
+      }
+    }
+
+    function showfile2(obj,maxNum) {
+      if (obj.files.length==0) {
+        return;
+      }
+
+      var f = obj.files[0];
+      var reader = new FileReader();
+      reader.readAsBinaryString(f);
+      reader.onload = function (e) {
+        var data = e.target.result;
+        excelFile = XLSX.read(data, {
+          type: 'binary'
+        });
+
+        var dataTable1 = "";
+        //只展示第一个表
+        var headers = new Array();
+        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+        for (var key in str[0]) {
+          headers.push(key);  //获取表头
+        }
+
+        if(maxNum>str.length){
+          maxNum = str.length;
+        }
+        for(var s=0; s<maxNum; s++){
+          var json = str[s];
+          if(json!=undefined){
+            if(json[headers[0]]==brand.value){
+              var top_imgs = json[headers[1]].split("\\");
+              top_mobile.value = top_imgs[0];
+              top_pc.value = top_imgs[1];
+
+              var chooseReason_imgs = json[headers[8]].split("\\");
+              chooseReason_img[0].value = chooseReason_imgs[0];
+              chooseReason_img[1].value = chooseReason_imgs[1];
+              chooseReason_img[2].value = chooseReason_imgs[2];
+              chooseReason_bg.value = json[headers[7]];
+              chooseReason_h3.value = json[headers[9]];
+              var chooseReason_ps = json[headers[10]].split("\n");
+              for(var i=0; i<chooseReason_ps.length; i++){
+                if(chooseReason_ps[i].trim()!=""){
+                  if(i>=chooseReason_p.length){
+                    if ("createEvent" in document) {
+                      var evt = document.createEvent("HTMLEvents");
+                      evt.initEvent("click", false, true);
+                      chooseReason_add.dispatchEvent(evt);
+                    } else {
+                      chooseReason_add.fireEvent("onclick");
+                    }
+                    chooseReason_p = chooseReason.querySelectorAll(".p.editItem textarea");
+                  }
+                  chooseReason_p[i].value = chooseReason_ps[i];
+                }else{
+                  chooseReason_ps.splice(i,1);
+                  i--;
+                }
+              }
+
+              learnBrand_link.value = json[headers[13]];
+              learnBrand_bg.value = json[headers[11]];
+              var learnBrand_imgs = json[headers[12]].split("\\");
+              learnBrand_img[0].value = learnBrand_imgs[0];
+              learnBrand_img[1].value = learnBrand_imgs[1];
+              learnBrand_img[2].value = learnBrand_imgs[2];
+              learnBrand_h3.value = json[headers[14]];
+              var learnBrand_ps = json[headers[15]].split("\n");
+              for(var j=0;j<learnBrand_ps.length; j++){
+                if(learnBrand_ps[j].trim()!=""){
+                  if(j>=learnBrand_p.length){
+                    if ("createEvent" in document) {
+                      var evt = document.createEvent("HTMLEvents");
+                      evt.initEvent("click", false, true);
+                      learnBrand_add.dispatchEvent(evt);
+                    } else {
+                      learnBrand_add.fireEvent("onclick");
+                    }
+                    learnBrand_p = learnBrand.querySelectorAll(".p.editItem textarea");
+                  }
+                  learnBrand_p[j].value = learnBrand_ps[j];
+                }else{
+                  learnBrand_ps.splice(j,1);
+                  j--;
+                }
+              }
+
+              var hot_tbody = hot_table.tBodies[0];
+              phtml.value = json[headers[2]];
+              for(var k=0; k<hot_tbody.rows.length; k++){
+                hot_tbody.rows[k].cells[1].querySelector("textarea").value = phtml.value;
+              }
+              standard_table.rows[1].cells[1].querySelector("textarea").value = phtml.value;
+
+              var hot_cell1 = hot_tbody.rows[0].cells[1].querySelector("textarea").value.trim();
+              var hot_cell2 = hot_tbody.rows[0].cells[2].querySelector("textarea").value.trim();
+
+              var hot_id = json[headers[3]].split("\n");
+              var hot_name = json[headers[4]].split("\n");
+              var hot_link = json[headers[5]].split("\n");
+              var hotTableHtml = "";
+
+              hotTableHtml += `
+                      <thead>
+                        <tr>
+                          <th>num</th>
+                          <th>block-phtml</th>
+                          <th>block-limitNum</th>
+                          <th>block-id</th>
+                          <th>category-name</th>
+                          <th>category-link</th>
+                        </tr>
+                      </thead>
+                      <tbody>`;
+
+              for(var h=0; h<hot_id.length; h++){
+                hotTableHtml += `
+                        <tr>
+                          <td>` + (h+1) +`</td>
+                          <td>
+                            <textarea>` + hot_cell1 +`</textarea>
+                          </td>
+                          <td>
+                            <textarea>` + hot_cell2 +`</textarea>
+                          </td>
+                          <td>
+                            <textarea>` + hot_id[h] +`</textarea>
+                          </td>
+                          <td>
+                            <textarea>` + hot_name[h] +`</textarea>
+                          </td>
+                          <td>
+                            <textarea>` + hot_link[h] +`</textarea>
+                          </td>
+                        </tr>`;
+              }
+              hot_table.innerHTML = hotTableHtml + `
+                      </tbody>`;
+
+              var standard_tbody = standard_table.tBodies[0];
+              var standard_cell1 = standard_tbody.rows[0].cells[1].querySelector("textarea").value.trim();
+              var standard_cell2 = standard_tbody.rows[0].cells[2].querySelector("textarea").value.trim();
+
+              var standardTableHtml = `
+                              <thead>
+                                <tr>
+                                  <th>num</th>
+                                  <th>block-phtml</th>
+                                  <th>block-limitNum</th>
+                                  <th>block-id</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>` + 1 +`</td>
+                                  <td>
+                                    <textarea>` + standard_cell1 +`</textarea>
+                                  </td>
+                                  <td>
+                                    <textarea>` + standard_cell2 +`</textarea>
+                                  </td>
+                                  <td>
+                                    <textarea>` + json[headers[6]] +`</textarea>
+                                  </td>
+                                </tr>
+                              </tbody>`;
+
+              standard_table.innerHTML = standardTableHtml;
+
+              return;
+            }
+          }
+        }
+
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+      }
+    }
+
+    /*
+    function showfile1(obj,maxNum) {
+      if (obj.files.length==0) {
+        return;
+      }
+
+      var f = obj.files[0];
+      var reader = new FileReader();
+      reader.readAsBinaryString(f);
+      reader.onload = function (e) {
+        var data = e.target.result;
+        excelFile = XLSX.read(data, {
+          type: 'binary'
+        });
+
+        var dataTable1 = "";
+        //只展示第一个表
+        var headers = new Array();
+        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+        dataTable1 += `
+                      <thead>
+                        <tr>
+                          <th>num</th>
+                          <th>block-phtml</th>
+                          <th>block-limitNum</th>
+                          <th>block-id</th>
+                          <th>category-name</th>
+                          <th>category-link</th>
+                        </tr>
+                      </thead>
+                      <tbody>`;
+        for (var key in str[0]) {
+          headers.push(key);  //获取表头
+        }
+
+        var hot_tbody = hot_table.tBodies[0];
+        var hot_cell1 = hot_tbody.rows[0].cells[1].querySelector("textarea").value.trim();
+        var hot_cell2 = hot_tbody.rows[0].cells[2].querySelector("textarea").value.trim();
+        //这里显示前maxNum行
+        for (var i = 0; i < maxNum; i++) {
+          var json = str[i];
+          if(json!=undefined){
+            dataTable1 += `
+                        <tr>
+                          <td>` + (i+1) +`</td>
+                          <td>
+                            <textarea>` + hot_cell1 +`</textarea>
+                          </td>
+                          <td>
+                            <textarea>` + hot_cell2 +`</textarea>
+                          </td>`;
+            for (var j = 0; j < 3; j++) {
+              dataTable1 += `
+                          <td>
+                            <textarea>` + json[headers[j]] + `</textarea>
+                          </td>`;
+            }
+            dataTable1 += `
+                        </tr>`;
+          }else{
+            break;
+          }
+        }
+
+        dataTable1 += `
+                      </tbody>
+                    `;
+        hot_table.innerHTML = dataTable1;
+
+        // 为每一个textarea绑定事件使其高度自适应
+        $.each($("textarea"), function (i, n) {
+          autoTextarea($(n)[0]);
+        });
+      }
+    }
+    */
+
+    /**
+    * 文本框根据输入内容自适应高度
+    * @param {HTMLElement} 输入框元素
+    * @param {Number} 设置光标与输入框保持的距离(默认0)
+    * @param {Number} 设置最大高度(可选)
+    */
+    var autoTextarea = function (elem, extra, maxHeight) {
+      extra = extra || 0;
+      var isFirefox = !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
+        isOpera = !!window.opera && !!window.opera.toString().indexOf('Opera'),
+        addEvent = function (type, callback) {
+          elem.addEventListener ? elem.addEventListener(type, callback, false) : elem.attachEvent('on' + type, callback);
+        },
+        getStyle = elem.currentStyle ?
+          function (name) {
+            var val = elem.currentStyle[name];
+
+            if (name === 'height' && val.search(/px/i) !== 1) {
+              var rect = elem.getBoundingClientRect();
+              return rect.bottom - rect.top - parseFloat(getStyle('paddingTop')) - parseFloat(getStyle('paddingBottom')) + 'px';
+            };
+
+            return val;
+          } : function (name) {
+            return getComputedStyle(elem, null)[name];
+          },
+        minHeight = parseFloat(getStyle('height'));
+
+      elem.style.resize = 'none';
+
+      var change = function () {
+        var scrollTop, height, padding = 0,
+          style = elem.style;
+
+        if (elem._length === elem.value.length) return;
+        elem._length = elem.value.length;
+
+        if (!isFirefox && !isOpera) {
+          padding = parseInt(getStyle('paddingTop')) + parseInt(getStyle('paddingBottom'));
+        };
+        scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+
+        elem.style.height = minHeight + 'px';
+        if (elem.scrollHeight > minHeight) {
+          if (maxHeight && elem.scrollHeight > maxHeight) {
+            height = maxHeight - padding;
+            style.overflowY = 'auto';
+          } else {
+            height = elem.scrollHeight - padding;
+            style.overflowY = 'hidden';
+          };
+          style.height = height + extra + 'px';
+          scrollTop += parseInt(style.height) - elem.currHeight;
+          document.body.scrollTop = scrollTop;
+          document.documentElement.scrollTop = scrollTop;
+          elem.currHeight = parseInt(style.height);
+        };
+      };
+
+      addEvent('propertychange', change);
+      addEvent('input', change);
+      addEvent('focus', change);
+      change();
+    };
+
+    // 为每一个textarea绑定事件使其高度自适应
+    $.each($("textarea"), function (i, n) {
+      autoTextarea($(n)[0]);
+    });
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    input {
+      margin: 5px 0;
+      padding: 5px;
+    }
+
+    button {
+      padding: 5px;
+    }
+
+    .landing-page-tool {
+      margin: 20px 10px;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .import {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .listEdit {
+      margin-bottom: 20px;
+    }
+
+    .menu ul {
+      display: flex;
+      justify-content: center;
+    }
+
+    .menu ul li.active {
+      color: #fff;
+      background: #03a9f4;
+    }
+
+    .menu ul li {
+      padding: 10px;
+      margin: 10px;
+    }
+
+    .nav .nav-list>li {
+      display: none;
+    }
+
+    .nav .nav-list>li.active {
+      display: block;
+    }
+
+    .nav .listEdit span {
+      width: 10em;
+      display: inline-block;
+    }
+
+    .listsubmit .submitItem {
+      width: 100%;
+      display: flex;
+    }
+
+    .listsubmit .submitItem>span {
+      width: 10em;
+    }
+
+    .discount-hotProducts .listEdit {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .discount-hotProducts .listEdit>div {
+      width: 100%;
+    }
+
+    .discount-hotProducts .listEdit .discount>div {
+      width: 100%;
+      display: flex;
+    }
+
+    .discount-hotProducts .listEdit>div input,
+    .discount-hotProducts .listEdit .hotProducts textarea {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .standard,
+    .chooseReason .editItem,
+    .learnBrand .editItem {
+      display: flex;
+      padding: 5px 0;
+    }
+
+    .standard textarea,
+    .chooseReason textarea,
+    .learnBrand textarea{
+      flex: 1;
+    }
+
+    table textarea {
+      padding: 2px;
+      width: -webkit-fill-available;
+      border: 0;
+    }
+
+    textarea:focus-visible {
+      outline: 0;
+    }
+    .listsubmit {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 5px 0;
+    }
+
+    .listsubmit textarea {
+      margin: 5px 0;
+      width: 100%;
+      min-height: 3em;
+    }
+
+    .li-menu>ul {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    .li-menu>ul:after {
+      content: '';
+      flex: 1;
+      border-bottom: 2px dotted #e6e6e6;
+    }
+
+    .li-menu>ul>li {
+      padding: 0 10px;
+      color: #999;
+      border-bottom: 2px dotted #e6e6e6;
+    }
+
+    .li-menu>ul>li.active {
+      color: #000;
+      border: 2px dotted #e6e6e6;
+      border-bottom: 0;
+    }
+
+    .li-nav {
+      border: 2px dotted #e6e6e6;
+      border-top: 0;
+      padding: 10px;
+    }
+
+    .li-nav>ul>li.active {
+      display: block;
+    }
+
+    .li-nav>ul>li {
+      display: none;
+    }
+
+    .li-nav>ul>li>textarea {
+      width: 100%;
+    }
+  </style>
+</body>
+
+</html>
