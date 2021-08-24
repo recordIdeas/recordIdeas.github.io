@@ -4,8 +4,9 @@
 首先抛一个Windows用户的下载链接：Git for windows
 下载下来之后直接安装，除了下图选第一个，其他的不用改，直接next就行。
 选这个use git from git bash only
-<img src="../../resources/imgs/study/gitbash1.png" alt="在这里插入图片描述">
+<img src="../../resources/imgs/study/gitbash1.png">
 安装完成后我的电脑上是显示了这么三个东西的。
+<img src="../../resources/imgs/study/gitbash2.png">
 
 
 Git CMD：
@@ -19,45 +20,54 @@ Git Bash：
 
 git config --global user.name "Your Name"（注意前边是“- -global”，有两个横线）
 git config --global user.email "email@example.com"
-
+<img src="../../resources/imgs/study/gitbash3.png">
 
 3 本地文件夹的操作
 3.1 进入文件夹
 首先你可以试着打开你本地仓库的文件夹。
 比如我要打开E:\code有两种方法
 
-直接在电脑上打开那个文件夹，然后在文件夹空白处右键选择Git Bash here
+3.1.1.直接在电脑上打开那个文件夹，然后在文件夹空白处右键选择Git Bash here
+<img src="../../resources/imgs/study/gitbash4.png">
 
-
-在Git Bash中输入路径
+3.1.2.在Git Bash中输入路径
 注意！ 使用cd命令进入到目录中时，在Git-Bash中应该使用斜线”/”， 而不是反斜线”\”
 ①可以逐个输入文件夹名（在文件夹名称前要加cd ）
+<img src="../../resources/imgs/study/gitbash5.png">
 
 ②也可以直接输入一个完整的文件夹路径
+<img src="../../resources/imgs/study/gitbash6.png">
 
 
 3.2 查看
 当前目录
 你输入命令之前上边有一行字，后边那段黄色的就是你所在的文件夹位置。你也可以输入$ pwd，回车之后进行查看。
+<img src="../../resources/imgs/study/gitbash7.png">
 查看当前文件夹都有什么文件$ ls
+<img src="../../resources/imgs/study/gitbash8.png">
 
 3.3 退出文件夹
 当然你也可能进错文件夹，要学会回退。
 $ cd .. 点和cd之间有空格
 
 就可以回退到上一个文件夹。
+<img src="../../resources/imgs/study/gitbash9.png">
 
 
 3.4 新建、删除
 $ mkdir +文件夹名字 只能新建文件夹
 我在E盘的code文件夹下新建一个front-end文件夹。建完之后打开文件夹看看创建成功了嗷。
+<img src="../../resources/imgs/study/gitbash10.png">
 
 touch +文件名 只能新建文件
+<img src="../../resources/imgs/study/gitbash11.png">
 
 
 $ rm 文件名.文件类型 删除文件
+<img src="../../resources/imgs/study/gitbash12.png">
 
 $ rm -r 文件夹删除文件夹 ，注意这个要回到上一级文件夹才可以删。比如我要删除front-end文件夹，front-end在code里边，我就要在code目录下删除。
+<img src="../../resources/imgs/study/gitbash13.png">
 
 
 4 仓库设置
