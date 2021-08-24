@@ -1,37 +1,39 @@
 <h1>这个主要介绍Git Bash的使用教程。</h1>
 
 <h2>1 下载安装</h2>
-首先抛一个Windows用户的下载链接：Git for windows
-下载下来之后直接安装，除了下图选第一个，其他的不用改，直接next就行。
-选这个use git from git bash only
+<p>首先抛一个Windows用户的下载链接：Git for windows</p>
+<p>下载下来之后直接安装，除了下图选第一个，其他的不用改，直接next就行。</p>
+<p>选这个use git from git bash only</p>
 <img src="../../resources/imgs/study/gitbash1.png">
-安装完成后我的电脑上是显示了这么三个东西的。
+
+<p>安装完成后我的电脑上是显示了这么三个东西的。</p>
 <img src="../../resources/imgs/study/gitbash2.png">
 
-
-Git CMD：
-　　Git CMD我并没用过，但是我查了一下它是什么。据别人说，Git中的Bash是基于CMD的，在CMD的基础上增添一些新的命令与功能。所以建议在使用的时候，用Bash更加方便（原网址）。
-Git GUI：
-　　其次就是Git GUI，Git GUI是Git Bash的替代品，他为Windows用户提供了更简便易懂的图形界面。（但是相比GitHub Desktop这个桌面版客户端，_(:3 」∠)我觉得Git GUI也没什么用。）
-Git Bash：
-　　最后是Git Bash，Git Bash是命令行操作，官方介绍有一句就是“让*nix用户感到宾至如归。”（(;´༎ຶД༎ຶ`) 当然了，萌新用户使用了就肥肠憋屈。）
+<h3>Git CMD：</h3>
+　　<p>Git CMD我并没用过，但是我查了一下它是什么。据别人说，Git中的Bash是基于CMD的，在CMD的基础上增添一些新的命令与功能。所以建议在使用的时候，用Bash更加方便（原网址）。</p>
+<h3>Git GUI：</h3>
+　　<p>其次就是Git GUI，Git GUI是Git Bash的替代品，他为Windows用户提供了更简便易懂的图形界面。（但是相比GitHub Desktop这个桌面版客户端，_(:3 」∠)我觉得Git GUI也没什么用。）</p>
+<h3>Git Bash：</h3>
+　　<p>最后是Git Bash，Git Bash是命令行操作，官方介绍有一句就是“让*nix用户感到宾至如归。”（(;´༎ຶД༎ຶ`) 当然了，萌新用户使用了就肥肠憋屈。）</p>
 
 <h2>2 设置用户</h2>
-下载之后打开是这个样子的，第一件事设置用户。注意这个不是登录哦，是给你的电脑设置一个用户，等你上传的时候，告诉远程仓库是谁上传的而已。
+<p>下载之后打开是这个样子的，第一件事设置用户。注意这个不是登录哦，是给你的电脑设置一个用户，等你上传的时候，告诉远程仓库是谁上传的而已。</p>
 
-git config --global user.name "Your Name"（注意前边是“- -global”，有两个横线）
-git config --global user.email "email@example.com"
+
+
+<p>git config --global user.name "Your Name"（注意前边是“- -global”，有两个横线）</p>
+<p>git config --global user.email "email@example.com"</p>
 <img src="../../resources/imgs/study/gitbash3.png">
 
 <h2>3 本地文件夹的操作</h2>
-3.1 进入文件夹
-首先你可以试着打开你本地仓库的文件夹。
-比如我要打开E:\code有两种方法
+<h3>3.1 进入文件夹</h3>
+<p>首先你可以试着打开你本地仓库的文件夹。</p></p>
+<p>比如我要打开E:\code有两种方法</p>
 
-3.1.1.直接在电脑上打开那个文件夹，然后在文件夹空白处右键选择Git Bash here
+<h4>3.1.1.直接在电脑上打开那个文件夹，然后在文件夹空白处右键选择Git Bash here</h4>
 <img src="../../resources/imgs/study/gitbash4.png">
 
-3.1.2.在Git Bash中输入路径
+<h4>3.1.2.在Git Bash中输入路径</h4>
 注意！ 使用cd命令进入到目录中时，在Git-Bash中应该使用斜线”/”， 而不是反斜线”\”
 ①可以逐个输入文件夹名（在文件夹名称前要加cd ）
 <img src="../../resources/imgs/study/gitbash5.png">
@@ -40,14 +42,14 @@ git config --global user.email "email@example.com"
 <img src="../../resources/imgs/study/gitbash6.png">
 
 
-3.2 查看
+<h3>3.2 查看</h3>
 当前目录
 你输入命令之前上边有一行字，后边那段黄色的就是你所在的文件夹位置。你也可以输入$ pwd，回车之后进行查看。
 <img src="../../resources/imgs/study/gitbash7.png">
 查看当前文件夹都有什么文件$ ls
 <img src="../../resources/imgs/study/gitbash8.png">
 
-3.3 退出文件夹
+<h3>3.3 退出文件夹</h3>
 当然你也可能进错文件夹，要学会回退。
 $ cd .. 点和cd之间有空格
 
@@ -55,7 +57,7 @@ $ cd .. 点和cd之间有空格
 <img src="../../resources/imgs/study/gitbash9.png">
 
 
-3.4 新建、删除
+<h3>3.4 新建、删除</h3>
 $ mkdir +文件夹名字 只能新建文件夹
 我在E盘的code文件夹下新建一个front-end文件夹。建完之后打开文件夹看看创建成功了嗷。
 <img src="../../resources/imgs/study/gitbash10.png">
@@ -76,7 +78,7 @@ $ rm -r 文件夹删除文件夹 ，注意这个要回到上一级文件夹才�
 托管就是，代码是小朋友，你就是他父母，你把它丢到托儿所，让托儿所帮你管。怎么去托儿所，总不能一生下来就在托儿所。你得把孩子从家里送过去吧。放学了你得把孩子接回来吧。（当然这个例子不太恰当。）
 那你需要一个本地存储代码的地方（家里），你还需要一个远程仓库（托儿所）
 
-4.1 初始化本地仓库
+<h3>4.1 初始化本地仓库</h3>
 进入到你想建立本地仓库的文件夹，它可以是空的，你建好了之后再写代码。里边也可以有东西，直接建就好。
 $ git init
 我用个空文件夹做示范：E:\code\front-end
@@ -84,7 +86,7 @@ $ git init
 
 初始化成功之后，你的文件夹里就会多出.git的隐藏文件。 (●′ω`●)千万不要乱删，你如果看他烦你就设置一下不显示隐藏文件。
 
-4.2 新建远程仓库
+<h3>4.2 新建远程仓库</h3>
 打开github右上角，点击new repository
 <img src="../../resources/imgs/study/gitbash15.png">
 
@@ -95,7 +97,7 @@ $ git init
 以前使用私有仓库是付费， 或者你可以申请学生认证获得私有仓库的使用权。但是现在2020年3月份的时候我收到github的邮件，邮件里边说现在已经开放私有仓库的使用了。
 说一下学生认证
 以前github的教育认证可以让学生和教育者免费使用私有仓库，并且还有许多其他的优惠政策。比如github的一些付费功能，教育认证之后会有巨大的折扣。戳我查看如何进行学生认证╰(●’◡’●)╮
-4.3 建立连接
+<h3>4.3 建立连接</h3>
 孩子在家里，你能用意念让他直接飞到托儿所吗，显然不可能，那你总得把他送过去，或者用校车之类的吧。
 那现在就得想办法建立远程仓库和本地仓库的连接。
 4.3.1 配置SSH，给孩子联系好校车。
@@ -120,7 +122,7 @@ $ git remote -v
 
 补充一点：如果你以后不想连接这个远程仓库了，只需要输入git remote remove + 名字即可。比如我刚才添加的远程仓库代称是origin，那我就要写：git remote remove origin
 
-4.4 文件上传
+<h3>4.4 文件上传</h3>
 4.4.1 git add 将修改的文件添加暂存区，也就是将要提交的文件的信息添加到索引库中。（看不懂没关系，现在来说这个不重要）。
 什么是修改的文件，你新建、更改、删除文件都是修改。
 git add有好多种。下边我介绍一下，看看就行，对现在来说记住最后一条就可以了：
@@ -189,7 +191,7 @@ github你可以理解为差额备份，就是你本地提交上去之后，它�
 但是远程仓库上次的commit是“readmee”。
 我修改的是上次的commit，所以我这次推的时候github就认为这次修改之前的本地仓库和远程仓库不一样，因此就会报错说我数据冲突。
 
-4.5 文件下拉
+<h3>4.5 文件下拉</h3>
 上边push报错，我自己知道数据差在哪里，所以使用了强制推送。但是在团队合作中，push报错，那铁定是你队友修改了远程仓库，如果你再强制上传，那你就是毁了你队友的代码。所以如何保证在你修改之前，自己的文件跟远程仓库一致呢。
 方法1： $ git pull 仓库名称
 
