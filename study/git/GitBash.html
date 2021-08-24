@@ -1,6 +1,6 @@
-这个主要介绍Git Bash的使用教程。
+<h1>这个主要介绍Git Bash的使用教程。</h1>
 
-1 下载安装
+<h2>1 下载安装</h2>
 首先抛一个Windows用户的下载链接：Git for windows
 下载下来之后直接安装，除了下图选第一个，其他的不用改，直接next就行。
 选这个use git from git bash only
@@ -15,14 +15,15 @@ Git GUI：
 　　其次就是Git GUI，Git GUI是Git Bash的替代品，他为Windows用户提供了更简便易懂的图形界面。（但是相比GitHub Desktop这个桌面版客户端，_(:3 」∠)我觉得Git GUI也没什么用。）
 Git Bash：
 　　最后是Git Bash，Git Bash是命令行操作，官方介绍有一句就是“让*nix用户感到宾至如归。”（(;´༎ຶД༎ຶ`) 当然了，萌新用户使用了就肥肠憋屈。）
-2 设置用户
+
+<h2>2 设置用户</h2>
 下载之后打开是这个样子的，第一件事设置用户。注意这个不是登录哦，是给你的电脑设置一个用户，等你上传的时候，告诉远程仓库是谁上传的而已。
 
 git config --global user.name "Your Name"（注意前边是“- -global”，有两个横线）
 git config --global user.email "email@example.com"
 <img src="../../resources/imgs/study/gitbash3.png">
 
-3 本地文件夹的操作
+<h2>3 本地文件夹的操作</h2>
 3.1 进入文件夹
 首先你可以试着打开你本地仓库的文件夹。
 比如我要打开E:\code有两种方法
@@ -70,7 +71,7 @@ $ rm -r 文件夹删除文件夹 ，注意这个要回到上一级文件夹才�
 <img src="../../resources/imgs/study/gitbash13.png">
 
 
-4 仓库设置
+<h2>4 仓库设置</h2>
 你既然学git，那就是想要把本地的代码放到远程仓库托管。
 托管就是，代码是小朋友，你就是他父母，你把它丢到托儿所，让托儿所帮你管。怎么去托儿所，总不能一生下来就在托儿所。你得把孩子从家里送过去吧。放学了你得把孩子接回来吧。（当然这个例子不太恰当。）
 那你需要一个本地存储代码的地方（家里），你还需要一个远程仓库（托儿所）
