@@ -4,10 +4,10 @@
 <p>首先抛一个Windows用户的下载链接：Git for windows</p>
 <p>下载下来之后直接安装，除了下图选第一个，其他的不用改，直接next就行。</p>
 <p>选这个use git from git bash only</p>
-<img src="../../resources/imgs/study/gitbash1.png">
+</br><img src="../../resources/imgs/study/gitbash1.png">
 
 <p>安装完成后我的电脑上是显示了这么三个东西的。</p>
-<img src="../../resources/imgs/study/gitbash2.png">
+</br><img src="../../resources/imgs/study/gitbash2.png">
 
 <h3>Git CMD：</h3>
 　　<p>Git CMD我并没用过，但是我查了一下它是什么。据别人说，Git中的Bash是基于CMD的，在CMD的基础上增添一些新的命令与功能。所以建议在使用的时候，用Bash更加方便（原网址）。</p>
@@ -23,7 +23,7 @@
 
 <p>git config --global user.name "Your Name"（注意前边是“- -global”，有两个横线）</p>
 <p>git config --global user.email "email@example.com"</p>
-<img src="../../resources/imgs/study/gitbash3.png">
+</br><img src="../../resources/imgs/study/gitbash3.png">
 
 <h2>3 本地文件夹的操作</h2>
 <h3>3.1 进入文件夹</h3>
@@ -31,46 +31,46 @@
 <p>比如我要打开E:\code有两种方法</p>
 
 <h4>3.1.1.直接在电脑上打开那个文件夹，然后在文件夹空白处右键选择Git Bash here</h4>
-<img src="../../resources/imgs/study/gitbash4.png">
+</br><img src="../../resources/imgs/study/gitbash4.png">
 
 <h4>3.1.2.在Git Bash中输入路径</h4>
 注意！ 使用cd命令进入到目录中时，在Git-Bash中应该使用斜线”/”， 而不是反斜线”\”
 ①可以逐个输入文件夹名（在文件夹名称前要加cd ）
-<img src="../../resources/imgs/study/gitbash5.png">
+</br><img src="../../resources/imgs/study/gitbash5.png">
 
 ②也可以直接输入一个完整的文件夹路径
-<img src="../../resources/imgs/study/gitbash6.png">
+</br><img src="../../resources/imgs/study/gitbash6.png">
 
 
 <h3>3.2 查看</h3>
 当前目录
 你输入命令之前上边有一行字，后边那段黄色的就是你所在的文件夹位置。你也可以输入$ pwd，回车之后进行查看。
-<img src="../../resources/imgs/study/gitbash7.png">
+</br></br><img src="../../resources/imgs/study/gitbash7.png">
 查看当前文件夹都有什么文件$ ls
-<img src="../../resources/imgs/study/gitbash8.png">
+</br><img src="../../resources/imgs/study/gitbash8.png">
 
 <h3>3.3 退出文件夹</h3>
 当然你也可能进错文件夹，要学会回退。
 $ cd .. 点和cd之间有空格
 
 就可以回退到上一个文件夹。
-<img src="../../resources/imgs/study/gitbash9.png">
+</br><img src="../../resources/imgs/study/gitbash9.png">
 
 
 <h3>3.4 新建、删除</h3>
 $ mkdir +文件夹名字 只能新建文件夹
 我在E盘的code文件夹下新建一个front-end文件夹。建完之后打开文件夹看看创建成功了嗷。
-<img src="../../resources/imgs/study/gitbash10.png">
+</br><img src="../../resources/imgs/study/gitbash10.png">
 
 touch +文件名 只能新建文件
-<img src="../../resources/imgs/study/gitbash11.png">
+</br><img src="../../resources/imgs/study/gitbash11.png">
 
 
 $ rm 文件名.文件类型 删除文件
-<img src="../../resources/imgs/study/gitbash12.png">
+</br><img src="../../resources/imgs/study/gitbash12.png">
 
 $ rm -r 文件夹删除文件夹 ，注意这个要回到上一级文件夹才可以删。比如我要删除front-end文件夹，front-end在code里边，我就要在code目录下删除。
-<img src="../../resources/imgs/study/gitbash13.png">
+</br><img src="../../resources/imgs/study/gitbash13.png">
 
 
 <h2>4 仓库设置</h2>
@@ -82,13 +82,13 @@ $ rm -r 文件夹删除文件夹 ，注意这个要回到上一级文件夹才�
 进入到你想建立本地仓库的文件夹，它可以是空的，你建好了之后再写代码。里边也可以有东西，直接建就好。
 $ git init
 我用个空文件夹做示范：E:\code\front-end
-<img src="../../resources/imgs/study/gitbash14.png">
+</br><img src="../../resources/imgs/study/gitbash14.png">
 
 初始化成功之后，你的文件夹里就会多出.git的隐藏文件。 (●′ω`●)千万不要乱删，你如果看他烦你就设置一下不显示隐藏文件。
 
 <h3>4.2 新建远程仓库</h3>
 打开github右上角，点击new repository
-<img src="../../resources/imgs/study/gitbash15.png">
+</br><img src="../../resources/imgs/study/gitbash15.png">
 
 
 
