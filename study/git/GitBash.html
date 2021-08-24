@@ -97,6 +97,8 @@
 <p>打开github右上角，点击new repository</p>
 <img src="../../resources/imgs/study/gitbash15.png">
 </br>
+<img src="../../resources/imgs/study/gitbash16.png">
+</br>
 
 
 
@@ -113,20 +115,27 @@
 <h4>4.3.2 配置完SSH，你就可以使用SSH连接了。</h4>
 <p>注意，你是仓库的主人你才能使用SSH连接，如果你不是仓库主人，只是某个项目的成员，那你只能使用HTTPS连接。</p>
 <p>不管使用哪一种连接方式，都是一样操作，现在我就用SSH链接了。复制红框框里的代码。</p>
+<img src="../../resources/imgs/study/gitbash17.png">
+</br>
 
 <h4>4.3.3 在你的本地仓库打开gitbash。</h4>
 <p>$ git remote add + 名字 + 连接地址</p>
 <p>连接地址就是你刚才复制的那块。</p>
 <p>我下边写的就是添加一个叫origin的远程仓库。</p>
-
-
+<img src="../../resources/imgs/study/gitbash17.png">
+</br>
 <p>名字origin：你在往远程仓库推送的时候，你会说我要推给谁，总得给它起个名字。（你把孩子送去托儿所，你总得告诉司机是哪个托儿所吧）并且你以后可能会一个本地仓库连接多个远程仓库（这是后话），所以必须起名字加以区分。</p>
 <p>补充一下：你的本地仓库可以链接多个原厂仓库，github毕竟是国外的，有时候访问起来会很慢，因此你可以连接到国内的仓库上，比如gitee之类的。详细可以等你学会了这个文章之后，戳一下看这一篇→git bash 连接多个远程仓库</p>
+
 <h4>4.3.4 添加之后没有任何提示，如果你想确定是否成功了，你可以再输一遍，这时候他会提示你刚才已经设置过了。</h4>
+<img src="../../resources/imgs/study/gitbash18.png">
+</br>
 
 <p>上边的方法能用但是比较笨(…•˘_˘•…)，所以你得学个高端一点的。</p>
 <p>$ git remote -v</p>
 <p>测试一下，看到没。显示我已经添加了叫origin的仓库。一个push一个fetch，就是一个把代码推到远程仓库，一个把代码从远程仓库取回来。这两个一定是成对存在的。</p>
+<img src="../../resources/imgs/study/gitbash19.png">
+</br>
 
 <p>补充一点：如果你以后不想连接这个远程仓库了，只需要输入git remote remove + 名字即可。比如我刚才添加的远程仓库代称是origin，那我就要写：git remote remove origin</<p>p>
 
@@ -144,12 +153,18 @@
 <p>git add .，提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件</p>
 <p>…
 <p>git add -A，提交所有变化。git add前几条都可以记不住，这个必须记住！！！</p>
+<img src="../../resources/imgs/study/gitbash20.png">
+</br>
 
 <p>我现在在本地仓库新建一个文件叫readme.md，现在我将它添加到缓存区。（没错虽然图里是read，但是我就是要创建叫readme的文件，往后看就明白了）</p>
+<img src="../../resources/imgs/study/gitbash21.png">
+</br>
 
 
 <h4>4.4.2 git commit 将当前暂存区的文件实际保存到仓库的历史记录中（看不懂没关系，现在来说这个不重要）。你现在可以简单的理解为给你刚才add的东西加一个备注，你上传到远程仓库之后，修改的文件后边会显示这个备注</h4>
 <p>$ git commit -m "修改注释"</p>
+<img src="../../resources/imgs/study/gitbash22.png">
+</br>
 
 <p>一定要加-m，否则会进入vim编辑器，对新手很不友好，所以还是加上-m。</p>
 <h4>4.4.3 git push激动的搓搓小手，终于要把文件推到远程仓库了。</h4>
@@ -157,6 +172,8 @@
 
 <p>仓库名称：刚才我添加连接的时候，给仓库起名叫origin</p>
 <p>分支：你现在只有主分支，所以分支直接写master。以后合作项目的时候，成员之间建了不同的分支，你就可以往你自己的分支上推。</p>
+<img src="../../resources/imgs/study/gitbash23.png">
+</br>
 
 <p>我们第一次推送master分支时，加上 –u参数才会把本地的master分支和远程的master分支关联起来，就是告诉远程仓库的master分支，我的本地仓库和是对着你的哦，不是对着别的分支的哦。</p>
 <p>只有第一次推的时候需要加上-u，以后的推送只输入：</p>
@@ -164,11 +181,15 @@
 <p>还有一个$ git push origin master -f 强制推送，如果你某次推送失败，git bash报错，你懒得处理错误，你就可以用这个。但是有风险，因为报错90%是因为你本地仓库和远程仓库数据发生冲突，使用这个会直接用本地数据覆盖掉远程数据，可能损失数据哦。</p>
 
 <p>现在你去网页版刷新一下，就可以看到你本地仓库的东西都在那里了。并且文件后边写着你在commit步骤中添加的注释。</p>
+<img src="../../resources/imgs/study/gitbash24.png">
+</br>
 
 <h4>4.4.4 其他</h4>
 <p>(눈_눈)我缓缓打出一个问号，我的commit怎么多写了一个e？我文件名字叫readme我怎么就写了read</p>
 <p>先来看看怎么查看自己的提交记录？虽然写错了查看提交记录也没用。我就是单纯想让你们多学一条命令：</p>
 <p>$ git log</p>
+<img src="../../resources/imgs/study/gitbash25.png">
+</br>
 
 <p>提交记录里也显示我就是多写了一个e。</p>
 
@@ -177,12 +198,18 @@
 <p>那怎么抢救一下文件名？</p>
 <p>直接修改文件名重新提交就可以啦。</p>
 <p>git add -A —> git commit -m “修改文件名” —> git push origin master</p>
+<img src="../../resources/imgs/study/gitbash26.png">
+</br>
 
 <p>？push时候报错？</p>
 <p>这是因为github觉得我的本地仓库和远程仓库冲突了：</p>
 因为我刚才在本地修改了上一次的commit信息。（后边详细解释）</p>
 <p>$ git push origin master -f 这个-f就是force，强制推送。</p>
 <p>推完之后看看你的远程仓库，文件名改了，文件名后边的注释也是我第二次commit的注释。上边有个commit选项，</p>
+<img src="../../resources/imgs/study/gitbash27.png">
+</br>
+<img src="../../resources/imgs/study/gitbash28.png">
+</br>
 
 
 
@@ -196,6 +223,8 @@
 
 <p>上次的commit是“新建了readme”，</p>
 <p>使用git log看一下，本地仓库上次的提交注释确实是改变了。</p>
+<img src="../../resources/imgs/study/gitbash29.png">
+</br>
 <p>但是远程仓库上次的commit是“readmee”。</p>
 <p>我修改的是上次的commit，所以我这次推的时候github就认为这次修改之前的本地仓库和远程仓库不一样，因此就会报错说我数据冲突。</p>
 
@@ -207,16 +236,28 @@
 <p>比如我现在跑到我的远程仓库修改了readme：</p>
 
 <p>点要修改的文件，进去之后点击编辑。</p>
+<img src="../../resources/imgs/study/gitbash30.png">
+</br>
 
 <p>写内容</p>
+<img src="../../resources/imgs/study/gitbash31.png">
+</br>
 
 <p>写完内容提交</p>
+<img src="../../resources/imgs/study/gitbash32.png">
+</br>
 
 <p>这时候我已经修改成功了</p>
+<img src="../../resources/imgs/study/gitbash33.png">
+</br>
 
 <p>git pull完成之后打开本地的readme，发现hello world已经进来了嗷。</p>
+<img src="../../resources/imgs/study/gitbash34.png">
+</br>
 
 <p>git log看一下，commit的记录也显示了。</p>
+<img src="../../resources/imgs/study/gitbash35.png">
+</br>
 
 <p>方法2：</p>
 <p>$ git fetch + $ git merge</p>
@@ -224,10 +265,16 @@
 <p>尝试一下，</p>
 
 <p>这次我又在远程仓库加一行字</p>
+<img src="../../resources/imgs/study/gitbash36.png">
+</br>
 
 <p>git fetch，看起来数据也是拉下来了，要 git merge干嘛。然鹅！ 事情是这样的，git fetch之后，我打开本地文件，发现内容没变</p>
+<img src="../../resources/imgs/study/gitbash37.png">
+</br>
 
 <p>那继续git merge，这之后本地文件内容才改变！</p>
+<img src="../../resources/imgs/study/gitbash38.png">
+</br>
 
 <p>我在提示一下，我在fetch之后，不止没有修改本地文件，就连git log也没显示我下拉文件了，但是merge之后就都显示了。我们可以认为 pull = fetch+merge。git fetch 并没更改本地仓库的代码，只是拉取了远程数据，git merge才执行合并数据。</p>
 
@@ -244,6 +291,10 @@
 <p>下拉仓库学会了，那克隆呢？</p>
 <p>克隆就是你本地上没有，你直接把远程仓库的东西搞下来。</p>
 <p>我现在有一个完整仓库，点击右边的绿色按钮。</p>
+<img src="../../resources/imgs/study/gitbash39.png">
+</br>
+<img src="../../resources/imgs/study/gitbash40.png">
+</br>
 
 
 
@@ -253,11 +304,16 @@
 <p>仓库是你自己的，你就使用SSH连接，不是你自己的，你没权限你就切换到HTTPS，再复制地址。</p>
 <p>它克隆下来是一个文件夹，你想把文件夹放哪里就在哪打开gitbash</p>
 <p>$ git clone 加上你刚才的地址</p>
+<img src="../../resources/imgs/study/gitbash41.png">
+</br>
 
 <p>我在E:\code\vue里执行了克隆。</p>
 <p>(｡◕ˇ∀ˇ◕）。下载完成后，打开这个文件夹，就发现里边有个文件夹了。文件夹名字就是远程仓库的名字。</p>
 
 <p>还记得git remote -v吗？用它看一下你下下来的本地仓库连接上那个远程仓库没。</p>
+<img src="../../resources/imgs/study/gitbash42.png">
+</br>
+<p>已经连接了嗷。放心使用吧。</p>
 
 ————————————————
 版权声明：本文为CSDN博主「LolitaAnn」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
