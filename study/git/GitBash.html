@@ -122,19 +122,19 @@
 <p>$ git remote add + 名字 + 连接地址</p>
 <p>连接地址就是你刚才复制的那块。</p>
 <p>我下边写的就是添加一个叫origin的远程仓库。</p>
-<img src="../../resources/imgs/study/gitbash17.png">
+<img src="../../resources/imgs/study/gitbash18.png">
 </br>
 <p>名字origin：你在往远程仓库推送的时候，你会说我要推给谁，总得给它起个名字。（你把孩子送去托儿所，你总得告诉司机是哪个托儿所吧）并且你以后可能会一个本地仓库连接多个远程仓库（这是后话），所以必须起名字加以区分。</p>
 <p>补充一下：你的本地仓库可以链接多个原厂仓库，github毕竟是国外的，有时候访问起来会很慢，因此你可以连接到国内的仓库上，比如gitee之类的。详细可以等你学会了这个文章之后，戳一下看这一篇→git bash 连接多个远程仓库</p>
 
 <h4>4.3.4 添加之后没有任何提示，如果你想确定是否成功了，你可以再输一遍，这时候他会提示你刚才已经设置过了。</h4>
-<img src="../../resources/imgs/study/gitbash18.png">
+<img src="../../resources/imgs/study/gitbash19.png">
 </br>
 
 <p>上边的方法能用但是比较笨(…•˘_˘•…)，所以你得学个高端一点的。</p>
 <p>$ git remote -v</p>
 <p>测试一下，看到没。显示我已经添加了叫origin的仓库。一个push一个fetch，就是一个把代码推到远程仓库，一个把代码从远程仓库取回来。这两个一定是成对存在的。</p>
-<img src="../../resources/imgs/study/gitbash19.png">
+<img src="../../resources/imgs/study/gitbash20.png">
 </br>
 
 <p>补充一点：如果你以后不想连接这个远程仓库了，只需要输入git remote remove + 名字即可。比如我刚才添加的远程仓库代称是origin，那我就要写：git remote remove origin</<p>p>
@@ -153,7 +153,7 @@
 <p>git add .，提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件</p>
 <p>…
 <p>git add -A，提交所有变化。git add前几条都可以记不住，这个必须记住！！！</p>
-<img src="../../resources/imgs/study/gitbash20.png">
+<img src="../../resources/imgs/study/gitbash43.png">
 </br>
 
 <p>我现在在本地仓库新建一个文件叫readme.md，现在我将它添加到缓存区。（没错虽然图里是read，但是我就是要创建叫readme的文件，往后看就明白了）</p>
