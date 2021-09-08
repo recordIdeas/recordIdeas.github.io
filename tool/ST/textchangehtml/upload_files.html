@@ -31,12 +31,9 @@
       </div>
       <div style="margin-top:10px">
         <input type="text" placeholder="sku" class="sku" style="width:6em">
-        <input list="sort" style="width:240px" size=10  placeholder="产品类名(后台上传到此文件夹)">
-        <datalist id="sort" style="width:240px" size=10>
-            <select>
-                <option value="AutoParts">AutoParts</option>
-            </select>
-        </datalist>
+        <div class="sortcontent">
+          <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+        </div>
       </div>
       <div style="margin-top:10px">
         <input type="text" placeholder="序号" class="num" style="width:6em" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
@@ -59,107 +56,152 @@
       </div>
     </div>
     <style>
-.preview{
-  max-width: 1035px;
-  margin-top: 5px;
-  padding: 20px;
-  border: 1px solid #ddd;
-}
-.previewArea2 {
-  font-size: 115%;
-  line-height: 30px;
-  font-family: Gotham, Roboto, Arial, Helvetica, sans-serif
-}
+    *{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        box-sizing: border-box;
+    }
 
-.previewArea2 img {
-  width: 100%;
-}
+    .sortcontent {
+        position: relative;
+        width: 20em;
+        margin: 0 10px;
+        display: inline-block;
+    }
 
-.previewArea2 h1 {
-  font-size: 160%;
-  font-weight: 550;
-  padding: 20px 0 10px 0;
-  margin-bottom: 0;
-}
+    .sortList {
+        display: none;
+        position: absolute;
+        width: 100%;
+        max-height: 20em;
+        overflow: auto;
+        border: 1px solid #767676;
+        border-top: 0;
+    }
 
-@media (max-width: 560px) {
-  .previewArea2 h1 {
-    font-size: 145%;
-  }
-}
+    .sortList li,
+    .sort {
+        width: 100%;
+        padding: 0 5px;
+        font-size: 1em;
+        background: #fff;
+    }
 
-.previewArea2 h2 {
-  font-size: 130%;
-  font-weight: 550;
-  padding: 10px 0 0 0;
-}
+    .sort {
+        line-height: 24px;
+    }
 
-.previewArea2 p {
-  margin: 0;
-  line-height: 2em;
-  padding: 0 0 10px 0;
-}
+    .sortList li {
+        line-height: 2em;
+    }
 
-.previewArea2 ul {
-  padding: 10px 0;
-}
+    .sortList li:hover {
+        background: #ddd;
+    }
 
-.previewArea2 li {
-  list-style: circle outside;
-  margin-left: 20px;
-  width: calc(100% - 20px);
-  padding: 0 5px;
-}
+    .preview{
+      max-width: 1035px;
+      margin-top: 5px;
+      padding: 20px;
+      border: 1px solid #ddd;
+    }
+    .previewArea2 {
+      font-size: 115%;
+      line-height: 30px;
+      font-family: Gotham, Roboto, Arial, Helvetica, sans-serif
+    }
 
-.previewArea2 .specifics_product {
-  display: inline-block;
-  width: calc(100% + 40px);
-  height: auto;
-  margin-left: -20px;
-  padding: 10px 20px;
-  color: #615e53;
-  background: #f5f0da59;
-}
+    .previewArea2 img {
+      width: 100%;
+    }
 
-.previewArea2 .specifics_product ul {
-  column-count: 2;
-}
+    .previewArea2 h1 {
+      font-size: 160%;
+      font-weight: 550;
+      padding: 20px 0 10px 0;
+      margin-bottom: 0;
+    }
 
-@media(max-width:991px) {
-  .previewArea2 .specifics_product ul {
-    column-count: 1;
-  }
-}
+    @media (max-width: 560px) {
+      .previewArea2 h1 {
+        font-size: 145%;
+      }
+    }
 
-.previewArea2 .specifics_product ul li {
-  word-break: break-all;
-}
+    .previewArea2 h2 {
+      font-size: 130%;
+      font-weight: 550;
+      padding: 10px 0 0 0;
+    }
 
-.pr-note {
-  margin-bottom: 20px;
-}
+    .previewArea2 p {
+      margin: 0;
+      line-height: 2em;
+      padding: 0 0 10px 0;
+    }
 
-.previewArea2 .pr-note p {
-  padding-bottom: 0;
-}
+    .previewArea2 ul {
+      padding: 10px 0;
+    }
 
-.pr-note .strong {
-  color: red;
-  font-weight: bold;
-}
+    .previewArea2 li {
+      list-style: circle outside;
+      margin-left: 20px;
+      width: calc(100% - 20px);
+      padding: 0 5px;
+    }
 
-.pr-relate {
-  text-align: center;
-  margin-top: 20px;
-}
+    .previewArea2 .specifics_product {
+      display: inline-block;
+      width: calc(100% + 40px);
+      height: auto;
+      margin-left: -20px;
+      padding: 10px 20px;
+      color: #615e53;
+      background: #f5f0da59;
+    }
 
-.pr-relate h3 {
-  font-size: 120%;
-  font-weight: 500;
-  margin: 10px 0;
-  color: #222;
-}
-    </style>
+    .previewArea2 .specifics_product ul {
+      column-count: 2;
+    }
+
+    @media(max-width:991px) {
+      .previewArea2 .specifics_product ul {
+        column-count: 1;
+      }
+    }
+
+    .previewArea2 .specifics_product ul li {
+      word-break: break-all;
+    }
+
+    .pr-note {
+      margin-bottom: 20px;
+    }
+
+    .previewArea2 .pr-note p {
+      padding-bottom: 0;
+    }
+
+    .pr-note .strong {
+      color: red;
+      font-weight: bold;
+    }
+
+    .pr-relate {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pr-relate h3 {
+      font-size: 120%;
+      font-weight: 500;
+      margin: 10px 0;
+      color: #222;
+    }
+</style>
+
     <script>
       $(".preview2").click(function(){
         $(".previewArea2").html($(".result2").val().replace(/{{media url='/g, "https://eccppautoparts.com/media/").replace(/{{media url="/g, "https://eccppautoparts.com/media/").replace(/}}'/g, "").replace(/}}"/g, ""));
@@ -385,34 +427,64 @@
       /*dataList的select用arr数组项作为option,且按字母排序；dataList对应input的值必须为其保存数据中的一项*/
       var arr1 = ['Wheel Spacers', 'Wheel Hub Bearing', 'Keyless Entry Remote', 'Ignition Coil', 'Head Gasket Set', 'AC Compressor', 'Exhaust Manifold', 'CV Axle Shaft Assembly', 'Brake Rotor And Pads', 'Timing Chain Kit', 'Timing Belt Kit', 'Power Window Regulator', 'Leveling Lift Kit', 'Thermosta Thousing', 'Water Pump', 'Radiators', 'Suspension Kit', 'Door Handle', 'Shock Absorber', 'Complete Struts', 'Fuel Pump', 'O2 Sensor', 'Lift Support', 'Sensor', 'Side Mirror', 'ABS Wheel Speed Sensor', 'Door Lock Actuator', 'Power Window Switch', 'Starter', 'Air Suspension Struts', 'Alternator', 'Radiator Cooling Fan', 'Brake Caliper', 'Fasteners'];
 
-      dataListValue(arr1,"sort");
-      /*使用arr数组项并按字母排序作为dataList的保存数据；input输入值必须存在于对应dataList保存数据中*/
-      function dataListValue(arr,ele){
-          arr.sort(function (s1, s2) {
-              x1 = s1.toUpperCase();
-              x2 = s2.toUpperCase();
-              if (x1 < x2) {
-                  return -1;
-              }
-              if (x1> x2) {
-                  return 1;
-              }
-              return 0;
-          });
-          var temp="";
-          for(var i in arr){
-              temp+=" "+"<option value='"+arr[i]+"'>"+arr[i]+"</option>"+"\n";
-          }
-          $("#"+ele).find("select").append("\n"+temp);
+      dataListValue(arr1,["sort"]);
 
-          $("[list="+ele+"]").blur(function(){
-              if($("#"+ele).find('option[value="'+$(this).val()+'"]').length==0){
-                  $(this).val("");
+      /*使用arr数组项并按字母排序作为dataList的保存数据；input输入值必须存在于对应dataList保存数据中*/
+      function dataListValue(arr,eleArr){
+        arr.sort(function (s1, s2) {
+            x1 = s1.toUpperCase();
+            x2 = s2.toUpperCase();
+            if (x1 < x2) {
+                return -1;
+            }
+            if (x1> x2) {
+                return 1;
+            }
+            return 0;
+        });
+
+        var temp = "<li>AutoParts</li>";
+        for(var i in arr){
+          temp += "<li>"+arr[i]+"</li>";
+        }
+
+        for(var j in eleArr){
+          $("<ul class='sortList'>"+temp+"</ul>").insertAfter("."+eleArr[j]);
+          $("."+eleArr[j]).click(function(){
+              var dis = $(this).next().css("display") == "block" ? "":"block";
+              $(this).next().css("display",dis)
+          });
+
+          $("."+eleArr[j]).on("input propertychange",function(){
+              var sortList = $(this).next().children();
+              for(var i=0; i<sortList.length; i++){
+                  if(sortList.eq(i).text().toUpperCase().indexOf($(this).val().toUpperCase())==-1){
+                      sortList.eq(i).css("display","none");
+                  }else{
+                      sortList.eq(i).css("display","");
+                  }
               }
           });
+        }
+
+        $("html").click(function(e){
+          for(var k in eleArr){
+            if($(e.target).hasClass(eleArr[k])){
+              return;
+            }else if(k == eleArr.length-1){
+              $(".sortList").css("display","");
+            }
+          }
+        });
+
+        $(".sortList li").click(function(){
+          for(var m in eleArr){
+            $("."+eleArr[m]).val($(this).text());
+          }
+        });
       }
 
-      /*******************************autoTextarea（文本框根据输入内容自适应高度）*******************************/
+/*******************************autoTextarea（文本框根据输入内容自适应高度）*******************************/
       /**
       * @param                {HTMLElement}           输入框元素
       * @param                {Number}                设置光标与输入框保持的距离(默认0)
