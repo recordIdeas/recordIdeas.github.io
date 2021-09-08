@@ -449,6 +449,7 @@
         $("<ul class='dataList'>" + temp + "</ul>").insertAfter("." + ele);
 
         $("." + ele).on("input propertychange", function () {
+            $(this).val($(this).val().trim().replace(/\s+/g," "));
             $(this).next().css("display", "block");
             var dataList = $(this).next().children();
             for (var i = 0; i < dataList.length; i++) {
@@ -462,7 +463,7 @@
 
         $("." + ele).blur(function(){
             if($(this).val().replace(/\s/g,"") != ""){
-                if($(".dataList li[value='"+$(this).val().replace(/\s+/g,"_")+"']").length==0){
+                if($(".dataList li[value='"+$(this).val().trim().replace(/\s+/g,"_")+"']").length==0){
                     $("." + ele).val("");
                     $(".dataList").css("display", "");
                     $(".dataList li").css("display", "block");
