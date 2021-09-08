@@ -1361,6 +1361,7 @@
             $("<ul class='dataList'>" + temp + "</ul>").insertAfter("." + ele);
 
             $("." + ele).on("input propertychange", function () {
+                $(this).val($(this).val().trim().replace(/\s+/g," "));
                 $(this).next().css("display", "block");
                 var dataList = $(this).next().children();
                 for (var i = 0; i < dataList.length; i++) {
@@ -1384,7 +1385,7 @@
 
             $("." + ele).click(function () {
                 var dis = $(this).next().css("display") == "block" ? "" : "block";
-                $(this).next().css("display", dis)
+                $(this).next().css("display", dis);
             });
 
             $("html").click(function (e) {
