@@ -59,12 +59,9 @@
                     </div>
                     <div class="detailhtml">
                         <input type="text" placeholder="sku" class="sku1" style="width:6em">
-                        <input list="sort1" style="width:240px" size=10  placeholder="产品类名(后台上传到此文件夹)">
-                        <datalist id="sort1" style="width:240px" size=10>
-                            <select>
-                                <option value="AutoParts">AutoParts</option>
-                            </select>
-                        </datalist>
+                        <div class="sortContent">
+                            <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                          </div>
                         <button class="addpdetail">add product details</button>
                         <button class="addrelate">add relate</button>
                     </div>
@@ -78,12 +75,9 @@
                         <button class="addother">add other</button>
                         <br>
                         <input type="text" placeholder="sku" class="sku" style="width:6em">
-                        <input list="sort" style="width:240px" size=10  placeholder="产品类名(后台上传到此文件夹)">
-                        <datalist id="sort" style="width:240px" size=10>
-                            <select>
-                                <option value="AutoParts">AutoParts</option>
-                            </select>
-                        </datalist>
+                        <div class="sortContent">
+                            <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                          </div>
                         <button class="addmainimg">add main img</button>
                         <button class="addnotep">add note p</button>
                         <button class="addspecificsh2">add specifics h2</button>
@@ -116,6 +110,51 @@
         </div>
     </div>
     <style>
+    *{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        box-sizing: border-box;
+    }
+
+    .sortContent {
+        display: inline-block;
+        position: relative;
+        width: 15em;
+        margin-top: 5px;
+    }
+
+    .dataList {
+        display: none;
+        position: absolute;
+        width: 100%;
+        max-height: 20em;
+        overflow: auto;
+        border: 1px solid #767676;
+        border-top: 0;
+    }
+
+    .dataList li,
+    .sort {
+        width: 100%;
+        padding: 0 5px;
+        font-size: 1em;
+        background: #fff;
+    }
+
+    .sort {
+        line-height: 24px;
+    }
+
+    .dataList li {
+        line-height: 2em;
+    }
+
+    .dataList li:hover {
+        background: #ddd;
+    }
+
+
         .myPrecautions, .textlist {
             margin: 10px;
         }
@@ -146,6 +185,7 @@
 
         .textlist button {
             margin: 5px 0;
+            padding: 0 5px;
             border: 1px solid #9e9e9e;
             border-radius: 5px;
             background: #4caf50;
@@ -465,8 +505,7 @@
         /*dataList的select用arr数组项作为option,且按字母排序；dataList对应input的值必须为其保存数据中的一项*/
         var arr1 = ['Wheel Spacers', 'Wheel Hub Bearing', 'Keyless Entry Remote', 'Ignition Coil', 'Head Gasket Set', 'AC Compressor', 'Exhaust Manifold', 'CV Axle Shaft Assembly', 'Brake Rotor And Pads', 'Timing Chain Kit', 'Timing Belt Kit', 'Power Window Regulator', 'Leveling Lift Kit', 'Thermosta Thousing', 'Water Pump', 'Radiators', 'Suspension Kit', 'Door Handle', 'Shock Absorber', 'Complete Struts', 'Fuel Pump', 'O2 Sensor', 'Lift Support', 'Sensor', 'Side Mirror', 'ABS Wheel Speed Sensor', 'Door Lock Actuator', 'Power Window Switch', 'Starter', 'Air Suspension Struts', 'Alternator', 'Radiator Cooling Fan', 'Brake Caliper', 'Fasteners'];
 
-        dataListValue(arr1,"sort","sort1");
-        dataListValue(arr1,"sort1","sort");
+        dataListValue(arr1,"sort");
 
         /*addbuyPoint按钮：添加产品买点信息*/
         $(".addbuyPoint").click(function () {
@@ -706,16 +745,13 @@
                     var Sku = Textlist.find(".sku");
                     var Sku1 = Textlist.find(".sku1");
                     var Sort = Textlist.find('[list="sort"]');
-                    var Sort1 = Textlist.find('[list="sort1"]');
                     var List = Textlist.find(list);
                     if((Sku.val().replace(/s*/g,"")!="")&&(Sort.val().replace(/s*/g,"")!="")){
                         if(Sku.css("border-color")=="rgb(255, 0, 0)"){
                             Sku.css("border-color","");
-                            Sku1.css("border-color","");
                         }
                         if(Sort.css("border-color")=="rgb(255, 0, 0)"){
                             Sort.css("border-color","");
-                            Sort1.css("border-color","");
                         }
 
                         var TextEdit = $(Textlist).find(textEdit);
@@ -887,7 +923,6 @@
                         }
                         if(Sort.val().replace(/s*/g,"")==""){
                             Sort.css("border-color","red");
-                            Sort1.css("border-color","red");
                         }
                         List.text("请检查是否输入sku号或者产品类名!");
                         List.css("color","red");
@@ -1306,29 +1341,64 @@
         }
 
         /*使用arr数组项并按字母排序作为dataList的保存数据；input输入值必须存在于对应dataList保存数据中*/
-        function dataListValue(arr,ele,ele1){
+        function dataListValue(arr, ele) {
             arr.sort(function (s1, s2) {
                 x1 = s1.toUpperCase();
                 x2 = s2.toUpperCase();
                 if (x1 < x2) {
-                    return -1;
+                return -1;
                 }
-                if (x1> x2) {
-                    return 1;
+                if (x1 > x2) {
+                return 1;
                 }
                 return 0;
             });
-            var temp="";
-            for(var i in arr){
-                temp+=" "+"<option value='"+arr[i]+"'>" + arr[i] + "</option>"+"\n";
-            }
-            $("#"+ele).find("select").append("\n"+temp);
 
-            $("[list="+ele+"]").blur(function(){
-                if($("#"+ele).find('option[value="'+$(this).val()+'"]').length==0){
-                    $(this).val("");
+            var temp = "<li>AutoParts</li>";
+            for (var i in arr) {
+                temp += "<li value=" + arr[i].trim().replace(/\s+/g,"_") + ">" + arr[i].trim().replace(/\s+/g," ") + "</li>";
+            }
+            $("<ul class='dataList'>" + temp + "</ul>").insertAfter("." + ele);
+
+            $("." + ele).on("input propertychange", function () {
+                $(this).next().css("display", "block");
+                var dataList = $(this).next().children();
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList.eq(i).text().toUpperCase().indexOf($(this).val().toUpperCase()) == -1) {
+                        dataList.eq(i).css("display", "none");
+                    } else {
+                        dataList.eq(i).css("display", "");
+                    }
                 }
-                $("[list='"+ele1+"']").val($(this).val());
+            });
+
+            $("." + ele).blur(function(){
+                if($(this).val().replace(/\s/g,"") != ""){
+                    if($(".dataList li[value='"+$(this).val().replace(/\s+/g,"_")+"']").length==0){
+                        $("." + ele).val("");
+                        $(".dataList").css("display", "");
+                        $(".dataList li").css("display", "block");
+                    }
+                }
+            });
+
+            $("." + ele).click(function () {
+                var dis = $(this).next().css("display") == "block" ? "" : "block";
+                $(this).next().css("display", dis)
+            });
+
+            $("html").click(function (e) {
+                for (var k in ele) {
+                if (!$(e.target).hasClass(ele)) {
+                    $(".dataList").css("display", "");
+                }
+                }
+            });
+
+            $(".dataList li").click(function () {
+                if($("." + ele).val() != $(this).text()){
+                $("." + ele).val($(this).text());
+                }
             });
         }
 
