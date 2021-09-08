@@ -456,6 +456,7 @@
           });
 
           $("."+eleArr[j]).on("input propertychange",function(){
+              $(this).next().css("display","block");
               var sortList = $(this).next().children();
               for(var i=0; i<sortList.length; i++){
                   if(sortList.eq(i).text().toUpperCase().indexOf($(this).val().toUpperCase())==-1){
