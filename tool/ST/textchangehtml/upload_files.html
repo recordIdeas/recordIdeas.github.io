@@ -461,10 +461,12 @@
         });
 
         $("." + ele).blur(function(){
-            if($(".dataList li[value='"+$(this).val().replace(/\s+/g,"_")+"']").length==0){
-                $("." + ele).val("");
-                $(this).next().css("display", "");
-                $(".dataList li").css("display", "block");
+            if($(this).val().replace(/\s/g,"") != ""){
+                if($(".dataList li[value='"+$(this).val().replace(/\s+/g,"_")+"']").length==0){
+                    $("." + ele).val("");
+                    $(".dataList").css("display", "");
+                    $(".dataList li").css("display", "block");
+                }
             }
         });
 
