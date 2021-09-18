@@ -6,8 +6,55 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
+  <script type="text/javascript" src="xlsx.core.min.js"></script>
 </head>
+
+<style>
+  .part-fit-radio {
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .part-fit-radio label{
+      order: 1;
+      width: 2em;
+      height: 2em;
+      line-height: 2em;
+      text-align: center;
+  }
+
+  .part-fit-radio label:hover {
+    color: #f50;
+  }
+
+  .part-fit-radio label a {
+    border: 0 !important;
+  }
+
+  .part-fit-radio .part-radio{
+      margin: 0;
+      display: none;
+  }
+   .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab+label{
+      color: #fff;
+      font-weight: bold;
+      background: #999;
+  }
+
+  .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab{
+      display: block;
+  }
+
+  .part-fit-radio .part-tab{
+      display: none;
+      width: 100%;
+      background: #fff;
+  }
+
+  #vehicle_matching:target>div {
+    border: 2px solid #ff5500;
+  }
+</style>
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -179,31 +226,33 @@
             headers.push(key)  //获取表头
           }
           str.sort(function (a, b) {
+            var reA = /[^a-zA-Z]/g;
+            var reN = /[^0-9]/g;
             a.Make = a.Make.toString();
             b.Make = b.Make.toString();
-            var x1 = a.Make.toUpperCase();
-            var y1 = b.Make.toUpperCase();
-            if (x1 < y1) {
-              return -1;
-            } else if (x1 > y1) {
-              return 1;
+            var aA = a.Make.replace(reA, "");
+            var bA = b.Make.replace(reA, "");
+            if (aA === bA) {
+              var aN = parseInt(a.Make.replace(reN, ""), 10);
+              var bN = parseInt(b.Make.replace(reN, ""), 10);
+              return aN === bN ? 0 : aN > bN ? 1 : -1;
             } else {
-              return 0;
+              return aA > bA ? 1 : -1;
             }
           });
           str.sort(function (a, b) {
-            a.Model = a.Make.toString();
-            b.Model = b.Make.toString();
-            var x2 = a.Model.toUpperCase();
-            var y2 = b.Model.toUpperCase();
-            if (a.Make === b.Make) {
-              if (x2 < y2) {
-                return -1;
-              } else if (x2 > y2) {
-                return 1;
-              } else {
-                return 0;
-              }
+            var reA = /[^a-zA-Z]/g;
+            var reN = /[^0-9]/g;
+            a.Model = a.Model.toString();
+            b.Model = b.Model.toString();
+            var aA = a.Model.replace(reA, "");
+            var bA = b.Model.replace(reA, "");
+            if (aA === bA) {
+              var aN = parseInt(a.Model.replace(reN, ""), 10);
+              var bN = parseInt(b.Model.replace(reN, ""), 10);
+              return aN === bN ? 0 : aN > bN ? 1 : -1;
+            } else {
+              return aA > bA ? 1 : -1;
             }
           });
           str.sort(function (a, b) {
