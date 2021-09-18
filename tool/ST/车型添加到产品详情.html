@@ -179,6 +179,8 @@
             headers.push(key)  //获取表头
           }
           str.sort(function (a, b) {
+            a.Make = a.Make.toString();
+            b.Make = b.Make.toString();
             var x1 = a.Make.toUpperCase();
             var y1 = b.Make.toUpperCase();
             if (x1 < y1) {
@@ -190,6 +192,8 @@
             }
           });
           str.sort(function (a, b) {
+            a.Model = a.Make.toString();
+            b.Model = b.Make.toString();
             var x2 = a.Model.toUpperCase();
             var y2 = b.Model.toUpperCase();
             if (a.Make === b.Make) {
