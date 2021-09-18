@@ -8,7 +8,6 @@
   <title>车型转换工具</title>
   <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
 </head>
-
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -180,44 +179,17 @@
             headers.push(key)  //获取表头
           }
           str.sort(function (a, b) {
-            var reA = /[^a-zA-Z]/g;
-            var reN = /[^0-9]/g;
-            a.Make = a.Make.toString();
-            b.Make = b.Make.toString();
-            var aA = a.Make.replace(reA, "");
-            var bA = b.Make.replace(reA, "");
-            if (aA === bA) {
-              var aN = parseInt(a.Make.replace(reN, ""), 10);
-              var bN = parseInt(b.Make.replace(reN, ""), 10);
-              return aN === bN ? 0 : aN > bN ? 1 : -1;
-            } else {
-              return aA > bA ? 1 : -1;
-            }
-          });
-          str.sort(function (a, b) {
-            var reA = /[^a-zA-Z]/g;
-            var reN = /[^0-9]/g;
-            a.Model = a.Model.toString();
-            b.Model = b.Model.toString();
-            var aA = a.Model.replace(reA, "");
-            var bA = b.Model.replace(reA, "");
-            if (a.Make === b.Make) {
-              if (aA === bA) {
-                var aN = parseInt(a.Model.replace(reN, ""), 10);
-                var bN = parseInt(b.Model.replace(reN, ""), 10);
-                return aN === bN ? 0 : aN > bN ? 1 : -1;
-              } else {
-                return aA > bA ? 1 : -1;
-              }
-            }
-          });
-          str.sort(function (a, b) {
             if (a.Make === b.Make) {
               if (a.Model === b.Model) {
                 return a.Year - b.Year;
+              }else{
+                return compareString(a.Model, b.Model);
               }
+            }else{
+              return compareString(a.Make, b.Make);
             }
           });
+
           var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
           for (var i = 1; i < str.length; i++) {
             if (str[i]) {
@@ -484,6 +456,21 @@
     function getModel(arr,k){
       var Model = arr[k].substring(arr[k].indexOf(",")+1);
       return Model.substring(0, Model.indexOf(",")).trim().replace(/\s+/g,"");
+    }
+
+
+    function compareString(a,b){
+      var aVal = a.toString().toLocaleUpperCase().trim().replace(/\s+/g," ");
+      var bVal = b.toString().toLocaleUpperCase().trim().replace(/\s+/g," ");
+      if(parseFloat(aVal) && parseFloat(bVal)){
+        aVal = parseFloat(aVal);
+        bVal = parseFloat(bVal);
+      }else if(aVal.replace(/(\d+)$/g,"") === bVal.replace(/(\d+)$/g,"")){
+        var reg = new RegExp("\\d+$");
+        aVal = parseFloat(aVal.match(reg));
+        bVal = parseFloat(bVal.match(reg));
+      }
+      return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
     }
 
     function handleDetails(ele, str2) {
