@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
+  <script type="text/javascript" src="xlsx.core.min.js"></script>
 </head>
 
 <style>
@@ -557,7 +557,7 @@
           }
           modelStr += "\n</ul>\n</div>";
         }
-        if(str2.indexOf("part-fit")!=-1){
+        if(str2.indexOf('<div class="part-fit">')!=-1){
           var pStr1 = str2.substring(0,str2.indexOf("<h2>"));
           var pStr2 = str2.substring(str2.indexOf("</h2>")+5);
           pStr1=pStr1.substring(0,pStr1.indexOf('<div class="part-fit">'));
