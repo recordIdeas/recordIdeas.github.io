@@ -557,8 +557,16 @@
           }
           modelStr += "\n</ul>\n</div>";
         }
-        var index2 = str2.indexOf("<h2>");
-        ele.innerText = str2.substring(0, index2) + modelStr + "\n" + str2.substring(index2);
+        if(str2.indexOf("part-fit")!=-1){
+          var pStr1 = str2.substring(0,str2.indexOf("<h2>"));
+          var pStr2 = str2.substring(str2.indexOf("</h2>")+5);
+          pStr1=pStr1.substring(0,pStr1.indexOf('<div class="part-fit">'));
+          pStr2=pStr2.substring(pStr2.indexOf('<h2>'));
+          ele.innerText = pStr1 + modelStr + "\n" + pStr2;
+        }else{
+          var index2 = str2.indexOf("<h2>");
+          ele.innerText = str2.substring(0, index2) + modelStr + "\n" + str2.substring(index2);
+        }
       }else{
         ele.innerText = ele.previousElementSibling.innerText;
       }
