@@ -458,19 +458,23 @@
       return Model.substring(0, Model.indexOf(",")).trim().replace(/\s+/g,"");
     }
 
-
     function compareString(a,b){
       var aVal = a.toString().toLocaleUpperCase().trim().replace(/\s+/g," ");
       var bVal = b.toString().toLocaleUpperCase().trim().replace(/\s+/g," ");
       if(parseFloat(aVal) && parseFloat(bVal)){
         aVal = parseFloat(aVal);
         bVal = parseFloat(bVal);
+        return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
       }else if(aVal.replace(/(\d+)$/g,"") === bVal.replace(/(\d+)$/g,"")){
         var reg = new RegExp("\\d+$");
         aVal = parseFloat(aVal.match(reg));
         bVal = parseFloat(bVal.match(reg));
+        return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
+      }else{
+        var aVal0 = aVal.replace(/(\d+)$/g,"");
+        var bVal0 = bVal.replace(/(\d+)$/g,"");
+        return aVal0 === bVal0 ? 0 : aVal0 > bVal0 ? 1 : -1;
       }
-      return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
     }
 
     function handleDetails(ele, str2) {
