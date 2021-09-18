@@ -532,7 +532,7 @@
         var strArr1 = str1.split(";");
         var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
         if (strArr1.length > 20) {
-          modelStr += '<div class="part-fit-radio">';
+          modelStr += '\n<div class="part-fit-radio">';
           for(var i=0; i<strArr1.length; i+=10){
             var mIndex = parseInt(i / 10) + 1;
             modelStr += '\n<input ';
