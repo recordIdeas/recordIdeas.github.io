@@ -204,7 +204,7 @@
             if (a.Make === b.Make) {
               if (aA === bA) {
                 var aN = parseInt(a.Model.replace(reN, ""), 10);
-                var bN = parseInt(b.replace(reN, ""), 10);
+                var bN = parseInt(b.Model.replace(reN, ""), 10);
                 return aN === bN ? 0 : aN > bN ? 1 : -1;
               } else {
                 return aA > bA ? 1 : -1;
