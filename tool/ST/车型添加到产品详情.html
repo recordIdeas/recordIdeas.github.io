@@ -6,8 +6,55 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
+  <script type="text/javascript" src="xlsx.core.min.js"></script>
 </head>
+
+<style>
+  .part-fit-radio {
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .part-fit-radio label{
+      order: 1;
+      width: 2em;
+      height: 2em;
+      line-height: 2em;
+      text-align: center;
+  }
+
+  .part-fit-radio label:hover {
+    color: #f50;
+  }
+
+  .part-fit-radio label a {
+    border: 0 !important;
+  }
+
+  .part-fit-radio .part-radio{
+      margin: 0;
+      display: none;
+  }
+   .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab+label{
+      color: #fff;
+      font-weight: bold;
+      background: #999;
+  }
+
+  .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab{
+      display: block;
+  }
+
+  .part-fit-radio .part-tab{
+      display: none;
+      width: 100%;
+      background: #fff;
+  }
+
+  #vehicle_matching:target>div {
+    border: 2px solid #ff5500;
+  }
+</style>
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -481,7 +528,6 @@
       ele.previousElementSibling.innerText = str2;
       var str1 = ele.previousElementSibling.previousElementSibling.innerText;
       if(str1.replace(/\s/g,"")){
-        var index2 = str2.indexOf("<h2>");
         str1 = str1.trim().replace(/\s+/g, " ");
         var strArr1 = str1.split(";");
         var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
@@ -501,7 +547,7 @@
             }
             modelStr += '\n</ul>\n</div>\n<label for="part-radio' + mIndex+'">'+ mIndex +'</label>';
           }
-          modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>';
+          modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
         } else {
           modelStr += '\n<ul>';
           for (var i in strArr1) {
@@ -511,6 +557,7 @@
           }
           modelStr += "\n</ul>\n</div>";
         }
+        var index2 = str2.indexOf("<h2>");
         ele.innerText = str2.substring(0, index2) + modelStr + "\n" + str2.substring(index2);
       }else{
         ele.innerText = ele.previousElementSibling.innerText;
