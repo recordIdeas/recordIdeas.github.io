@@ -6,8 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
+  <script type="text/javascript" src="../../JS/xlsx.core.min.js"></script>
 </head>
+
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -178,21 +179,21 @@
           for (var key in str[0]) {
             headers.push(key)  //获取表头
           }
-          function sortAlphaNum(a, b) {
+          str.sort(function (a, b) {
             var reA = /[^a-zA-Z]/g;
             var reN = /[^0-9]/g;
-            a = a.toString();
-            b = b.toString();
-            var aA = a.replace(reA, "");
-            var bA = b.replace(reA, "");
+            a.Make = a.Make.toString();
+            b.Make = b.Make.toString();
+            var aA = a.Make.replace(reA, "");
+            var bA = b.Make.replace(reA, "");
             if (aA === bA) {
-              var aN = parseInt(a.replace(reN, ""), 10);
-              var bN = parseInt(b.replace(reN, ""), 10);
+              var aN = parseInt(a.Make.replace(reN, ""), 10);
+              var bN = parseInt(b.Make.replace(reN, ""), 10);
               return aN === bN ? 0 : aN > bN ? 1 : -1;
             } else {
               return aA > bA ? 1 : -1;
             }
-          }
+          });
           str.sort(function (a, b) {
             var reA = /[^a-zA-Z]/g;
             var reN = /[^0-9]/g;
@@ -203,7 +204,7 @@
             if (a.Make === b.Make) {
               if (aA === bA) {
                 var aN = parseInt(a.Model.replace(reN, ""), 10);
-                var bN = parseInt(b.Model.replace(reN, ""), 10);
+                var bN = parseInt(b.replace(reN, ""), 10);
                 return aN === bN ? 0 : aN > bN ? 1 : -1;
               } else {
                 return aA > bA ? 1 : -1;
