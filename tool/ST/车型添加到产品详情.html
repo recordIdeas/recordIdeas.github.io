@@ -178,6 +178,21 @@
           for (var key in str[0]) {
             headers.push(key)  //获取表头
           }
+          function sortAlphaNum(a, b) {
+            var reA = /[^a-zA-Z]/g;
+            var reN = /[^0-9]/g;
+            a = a.toString();
+            b = b.toString();
+            var aA = a.replace(reA, "");
+            var bA = b.replace(reA, "");
+            if (aA === bA) {
+              var aN = parseInt(a.replace(reN, ""), 10);
+              var bN = parseInt(b.replace(reN, ""), 10);
+              return aN === bN ? 0 : aN > bN ? 1 : -1;
+            } else {
+              return aA > bA ? 1 : -1;
+            }
+          }
           str.sort(function (a, b) {
             var reA = /[^a-zA-Z]/g;
             var reN = /[^0-9]/g;
@@ -194,18 +209,18 @@
             }
           });
           str.sort(function (a, b) {
-            var reA = /[^a-zA-Z]/g;
-            var reN = /[^0-9]/g;
             a.Model = a.Model.toString();
             b.Model = b.Model.toString();
             var aA = a.Model.replace(reA, "");
             var bA = b.Model.replace(reA, "");
-            if (aA === bA) {
-              var aN = parseInt(a.Model.replace(reN, ""), 10);
-              var bN = parseInt(b.Model.replace(reN, ""), 10);
-              return aN === bN ? 0 : aN > bN ? 1 : -1;
-            } else {
-              return aA > bA ? 1 : -1;
+            if (a.Make === b.Make) {
+              if (aA === bA) {
+                var aN = parseInt(a.Model.replace(reN, ""), 10);
+                var bN = parseInt(b.Model.replace(reN, ""), 10);
+                return aN === bN ? 0 : aN > bN ? 1 : -1;
+              } else {
+                return aA > bA ? 1 : -1;
+              }
             }
           });
           str.sort(function (a, b) {
