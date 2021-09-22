@@ -362,8 +362,8 @@
         }
         document.getElementById(importExcel).querySelector("tbody").innerHTML = dataTable2;
         var importDetals = document.getElementById(importExcel).querySelectorAll("tbody .details-result");
-        for (var k in importDetals) {
-          if(importDetals[k].previousElementSibling){
+        for(var k=0; k<importDetals.length; k++){
+          if(importDetals[k]){
             var str2 = importDetals[k].previousElementSibling.innerHTML;
             handleDetails(importDetals[k], str2);
           }
