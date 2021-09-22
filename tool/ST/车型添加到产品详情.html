@@ -363,8 +363,10 @@
         document.getElementById(importExcel).querySelector("tbody").innerHTML = dataTable2;
         var importDetals = document.getElementById(importExcel).querySelectorAll("tbody .details-result");
         for (var k in importDetals) {
-          var str2 = importDetals[k].previousElementSibling.innerHTML;
-          handleDetails(importDetals[k], str2);
+          if(importDetals[k].previousElementSibling){
+            var str2 = importDetals[k].previousElementSibling.innerHTML;
+            handleDetails(importDetals[k], str2);
+          }
         }
       }
       document.getElementById(importExcel).nextElementSibling.style.display = "block";
