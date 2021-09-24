@@ -8,6 +8,7 @@
   <title>车型转换工具</title>
   <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
 </head>
+
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -216,12 +217,20 @@
           }
           var allArr = allStr.split(";<br>");
           if(allArr.length>60){
+            var maxYear = Math.max.apply(Math, str.map(function(o) {return o.Year}));
+            var minYear = Math.min.apply(Math, str.map(function(o) {return o.Year}));
+            var searchNum = maxYear - Math.ceil((maxYear + minYear)/2) + 3;
+            var startYear = Math.ceil((maxYear + minYear)/2);
+            if(searchNum>30){
+              startYear = maxYear - 30;
+              searchNum = 30;
+            }
             var allBrr = [];
             var allCrr = [];
             allCrr = allArr;
-            sortUpdateYear(str,60,1990,30);
-            if(allArr.length<41){
-              allArr = allCrr;
+            sortUpdateYear(str,60,startYear,searchNum);
+            if(allArr.length<60){
+              console.log(str[0][headers[0]])
             }
             var len = allArr.length > 60 ? 60 : allArr.length;
             for (var n = 0; n < len; n++) {
@@ -250,37 +259,31 @@
           function sortUpdateYear(str,maxLen,Year,num,flag) {
             if(num>0){
               num--;
+              sortByYear(str,Year);
               if(allArr.length != maxLen){
                 if(allArr.length > maxLen){
-                  if(!flag){
-                    flag = "default";
-                  }else if(flag == "default"){
-                    flag = "del-1";
-                  }else if(flag == "add-1"){
-                    flag = "del-2";
-                  }else if(flag == "add-2"){
-                    return allArr;
+                  if(!flag || flag == "add"){
+                    flag = "add";
+                  }else{
+                    return;
                   }
                   Year++;
                 }else{
-                  if(!flag){
-                    flag = "default";
-                  }else if(flag == "default"){
-                    flag = "add-1";
-                  }else if(flag == "del-1"){
-                    flag = "add-2";
-                  }else if(flag == "del-2"){
-                    return allArr;
+                  if(!flag || flag == "del"){
+                    flag = "del";
+                  }else if(flag == "add"){
+                    flag = "del-1";
+                  }else{
+                    return;
                   }
                   Year--;
                 }
-                sortByYear(str,Year);
                 sortUpdateYear(str,maxLen,Year,num,flag);
               }else{
-                return allArr;
+                return;
               }
             }else{
-              return allArr;
+              return;
             }
           }
 
