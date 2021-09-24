@@ -268,7 +268,9 @@
                     return;
                   }
                 }else{
-                  flag = "del";
+                  if(!flag){
+                    flag = "del";
+                  }
                   Year--;
                 }
                 sortUpdateYear(str,maxLen,Year,num,flag);
