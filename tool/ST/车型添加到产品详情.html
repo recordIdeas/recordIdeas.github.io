@@ -217,6 +217,7 @@
           }
           var allArr = allStr.split(";<br>");
           if(allArr.length>60){
+            var allBrr = allArr;
             var maxYear = Math.max.apply(Math, str.map(function(o) {return o.Year}));
             var minYear = Math.min.apply(Math, str.map(function(o) {return o.Year}));
             var searchNum = maxYear - Math.ceil((maxYear + minYear)/2) + 3;
@@ -225,26 +226,17 @@
               startYear = maxYear - 30;
               searchNum = 30;
             }
-            var allBrr = [];
-            var allCrr = [];
-            allCrr = allArr;
             sortUpdateYear(str,60,startYear,searchNum);
-            if(allArr.length<60){
-              console.log(str[0][headers[0]])
-            }
             var len = allArr.length > 60 ? 60 : allArr.length;
-            for (var n = 0; n < len; n++) {
-              allBrr[n] = allArr[n];
-            }
-            for(var b = 0; b < allBrr.length; b++){
-              for(var c=0; c < allCrr.length; c++){
-                if(getMake(allBrr,b) == getMake(allCrr,c) && getModel(allBrr,b) == getModel(allCrr,c)){
-                  allBrr[b] = allCrr[c];
+            allArr.splice(len);
+            for(var a = 0; a < allArr.length; a++){
+              for(var b =0; b < allBrr.length; b++){
+                if(getMake(allArr,a) == getMake(allBrr,b) && getModel(allArr,a) == getModel(allBrr,b)){
+                  allArr[a] = allBrr[b];
                   break;
                 }
               }
             }
-            allArr = allBrr;
             yearAsBegin(allArr);
           }else{
             yearAsBegin(allArr);
