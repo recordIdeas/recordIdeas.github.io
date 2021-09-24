@@ -262,20 +262,13 @@
               sortByYear(str,Year);
               if(allArr.length != maxLen){
                 if(allArr.length > maxLen){
-                  if(!flag || flag == "add"){
-                    flag = "add";
+                  if(!flag){
+                    Year++;
                   }else{
                     return;
                   }
-                  Year++;
                 }else{
-                  if(!flag || flag == "del"){
-                    flag = "del";
-                  }else if(flag == "add"){
-                    flag = "del-1";
-                  }else{
-                    return;
-                  }
+                  flag = "del";
                   Year--;
                 }
                 sortUpdateYear(str,maxLen,Year,num,flag);
