@@ -9,6 +9,26 @@
   <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
 </head>
 
+<style>
+  .btn {
+    width: 1.5em;
+    height: 1.5em;
+    margin: 0 10px 20px 0;
+  }
+
+  .model-items {
+    margin-bottom: 20px;
+  }
+
+  .model-item {
+    padding-bottom: 10px;
+    display: flex;
+  }
+
+  .model-item input{
+    margin: 0 10px;
+  }
+</style>
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -59,6 +79,39 @@
       </div>
       <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('totalExcel')" value="导出" /></div>
     </div>
+    <input type="radio" name="tabs" id="tabthree">
+    <label for="tabthree">特殊车型处理</label>
+    <div class="tab">
+      <div class="special-model">
+        <button id="add-special-model" class="btn">+</button>
+        <button id="del-special-model" class="btn">-</button>
+        <div class="model-item">
+          Make : <input type="text">
+          Model: <input type="text">
+        </div>
+      </div>
+      <div class="up_btn">导入特殊车型表：
+        <input type="file" id="xFile" name=""
+          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          onchange="showfile3(this,'specialExcel')" onclick="this.value=''" ;>
+      </div>
+      <div id="specialExcel">
+        <table border='1'>
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Data</th>
+              <th>product Details</th>
+              <th>result</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('specialExcel')" value="导出" /></div>
+    </div>
+
   </div>
 
   <style>
@@ -147,7 +200,11 @@
       width: 100%;
     }
   </style>
+
   <script>
+    addItem(document.getElementById("add-special-model"),  document.querySelector(".model-item"), document.querySelector(".special-model"));
+    delItem(document.getElementById("del-special-model"), ".model-item", document.querySelector(".special-model"));
+
     document.body.addEventListener("click", function (e) {
       var e = e || window.event;
       var target = e.target;
@@ -194,21 +251,17 @@
           var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
           for (var i = 1; i < str.length; i++) {
             if (str[i]) {
-              if (str[i][headers[2]] == str[i - 1][headers[2]]) {
-                if (str[i][headers[3]] == str[i - 1][headers[3]]) {
-                  if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                    if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                      if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                        allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                      } else {
-                        allStr += "-" + str[i][headers[1]];
-                      }
+              if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
+                if (str[i][headers[1]] != str[i - 1][headers[1]]) {
+                  if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
+                    if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
+                      allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
                     } else {
-                      allStr += "," + str[i][headers[1]];
+                      allStr += "-" + str[i][headers[1]];
                     }
+                  } else {
+                    allStr += "," + str[i][headers[1]];
                   }
-                } else {
-                  allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
                 }
               } else {
                 allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
@@ -230,7 +283,7 @@
             var len = allArr.length > 60 ? 60 : allArr.length;
             allArr.splice(len);
             for(var a = 0; a < allArr.length; a++){
-              for(var b =0; b < allBrr.length; b++){
+              for(var b = 0; b < allBrr.length; b++){
                 if(getMake(allArr,a) == getMake(allBrr,b) && getModel(allArr,a) == getModel(allBrr,b)){
                   allArr[a] = allBrr[b];
                   break;
@@ -276,21 +329,17 @@
             allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
             for (var i = 1; i < str.length; i++) {
               if (str[i] && Number(str[i][headers[1]].toString())>Year) {
-                if (str[i][headers[2]] == str[i - 1][headers[2]]) {
-                  if (str[i][headers[3]] == str[i - 1][headers[3]]) {
-                    if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                      if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                        if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                          allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                        } else {
-                          allStr += "-" + str[i][headers[1]];
-                        }
+                if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
+                  if (str[i][headers[1]] != str[i - 1][headers[1]]) {
+                    if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
+                      if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
+                        allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
                       } else {
-                        allStr += "," + str[i][headers[1]];
+                        allStr += "-" + str[i][headers[1]];
                       }
+                    } else {
+                      allStr += "," + str[i][headers[1]];
                     }
-                  } else {
-                    allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
                   }
                 } else {
                   allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
@@ -359,6 +408,139 @@
       }
       document.getElementById(importExcel).nextElementSibling.style.display = "block";
     }
+
+    // 读取文件的内容
+    function showfile3(obj, importExcel) {
+      var excelFile;
+      document.getElementById(importExcel).nextElementSibling.style.display = "";
+      if (!obj.files) {
+        return;
+      }
+      document.getElementById(importExcel).querySelector("tbody").innerHTML = "";
+      for (var k = 0; k < obj.files.length; k++) {
+        var f = obj.files[k];
+        var reader = new FileReader();
+        reader.readAsBinaryString(f);
+        reader.onload = function (e) {
+          var data = e.target.result;
+          excelFile = XLSX.read(data, {
+            type: 'binary'
+          });
+          var headers = new Array();
+          var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+          for (var key in str[0]) {
+            headers.push(key)  //获取表头
+          }
+
+          var specialModels = document.querySelectorAll(".special-model .model-item");
+          var specialModelObj = [];
+          for(var m=0; m<specialModels.length; m++){
+            if(specialModels[m].getElementsByTagName("input")[0].value.trim() && specialModels[m].getElementsByTagName("input")[1].value.trim()){
+              specialModelObj[m] = specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase()
+                               + specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase();
+            }
+          }
+          str = str.filter(function (e) {
+            var content = e.Make.toString().trim().replace(/\s+/g," ").toLowerCase() + e.Model.toString().trim().replace(/\s+/g," ").toLowerCase();
+            return specialModelObj.indexOf(content)>-1;
+          });
+
+          str.sort(function (a, b) {
+            if (a.Make === b.Make) {
+              if (a.Model === b.Model) {
+                return a.Year - b.Year;
+              }else{
+                return compareString(a.Model, b.Model);
+              }
+            }else{
+              return compareString(a.Make, b.Make);
+            }
+          });
+
+          var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
+          for (var i = 1; i < str.length; i++) {
+            if (str[i]) {
+              if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
+                if (str[i][headers[1]] != str[i - 1][headers[1]]) {
+                  if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
+                    if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
+                      allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
+                    } else {
+                      allStr += "-" + str[i][headers[1]];
+                    }
+                  } else {
+                    allStr += "," + str[i][headers[1]];
+                  }
+                }
+              } else {
+                allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
+              }
+            }
+          }
+          var allArr = allStr.split(";<br>");
+          yearAsBegin(allArr);
+
+          allStr = allArr.join(";<br>");
+          document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
+                + str[0][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;")
+               + '</td><td contenteditable="true">' + allStr
+              + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
+
+          function sortUpdateYear(str,maxLen,Year,num,flag) {
+            if(num>0){
+              num--;
+              sortByYear(str,Year);
+              if(allArr.length != maxLen){
+                if(allArr.length > maxLen){
+                  if(!flag){
+                    Year++;
+                  }else{
+                    return;
+                  }
+                }else{
+                  if(!flag){
+                    flag = "del";
+                  }
+                  Year--;
+                }
+                sortUpdateYear(str,maxLen,Year,num,flag);
+              }else{
+                return;
+              }
+            }else{
+              return;
+            }
+          }
+
+          function sortByYear(str,Year) {
+            allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
+            for (var i = 1; i < str.length; i++) {
+              if (str[i] && Number(str[i][headers[1]].toString())>Year) {
+                if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
+                  if (str[i][headers[1]] != str[i - 1][headers[1]]) {
+                    if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
+                      if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
+                        allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
+                      } else {
+                        allStr += "-" + str[i][headers[1]];
+                      }
+                    } else {
+                      allStr += "," + str[i][headers[1]];
+                    }
+                  }
+                } else {
+                  allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
+                }
+              }
+            }
+            allArr = allStr.split(";<br>");
+          }
+        }
+      }
+      document.getElementById(importExcel).nextElementSibling.style.display = "block";
+    }
+
+
 
     function btn_export(importExcel) {
       var table = document.getElementById(importExcel).querySelector("table");
@@ -433,7 +615,7 @@
           var s1 = allArr[m].substr(0, allArr[m].indexOf(","));
           var s2 = allArr[m].substr(allArr[m].indexOf(",") + 1);
           var s3 = s2.substr(s2.indexOf(",") + 1);
-          var s2 = s2.substr(0, s2.indexOf(",")).replace(/\s+/g, " ");
+          s2 = s2.substr(0, s2.indexOf(",")).replace(/\s+/g, " ");
           allArr[m] = s3 + " " + s1 + " " + s2;
         }
       }
@@ -519,6 +701,21 @@
       }else{
         ele.innerText = ele.previousElementSibling.innerText;
       }
+    }
+
+    function addItem(btn, item, container) {
+      btn.addEventListener("click",function () {
+        container.appendChild(item.cloneNode(true));
+      });
+    }
+
+    function delItem(btn, itemSelector, container) {
+      btn.addEventListener("click",function () {
+        var itemList = container.querySelectorAll(itemSelector);
+        if(itemList.length>1){
+          container.removeChild(itemList[itemList.length-1])
+        }
+      });
     }
   </script>
 </body>
