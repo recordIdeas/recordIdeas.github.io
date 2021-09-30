@@ -434,16 +434,59 @@
 
           var specialModels = document.querySelectorAll(".special-model .model-item");
           var specialModelObj = [];
+          var objIndex = 0;
           for(var m=0; m<specialModels.length; m++){
-            if(specialModels[m].getElementsByTagName("input")[0].value.trim() && specialModels[m].getElementsByTagName("input")[1].value.trim()){
-              specialModelObj[m] = specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase()
-                               + specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase();
+            if(specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase() || specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase()){
+              specialModelObj[objIndex] = {
+                Make: specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase(),
+                Model: specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase()
+              }
+              objIndex++;
             }
           }
-          str = str.filter(function (e) {
-            var content = e.Make.toString().trim().replace(/\s+/g," ").toLowerCase() + e.Model.toString().trim().replace(/\s+/g," ").toLowerCase();
-            return specialModelObj.indexOf(content)>-1;
+
+          specialModelObj.sort(function (a, b) {
+            if (a.Make === b.Make) {
+              if(a.Model === ""){
+                return -1;
+              }else if(b.Model === ""){
+                return 1;
+              }else {
+                return b.Model - a.Model;
+              }
+            }else{
+              if(a.Make === ""){
+                return -1;
+              }else if(b.Make === ""){
+                return 1;
+              }else {
+                return b.Make - a.Make;
+              }
+            }
           });
+          var strN = [];
+          for(var p=0; p<str.length; p++){
+            var MakeVal = str[p].Make.toString().trim().replace(/\s+/g," ").toLowerCase();
+            var ModelVal = str[p].Model.toString().trim().replace(/\s+/g," ").toLowerCase();
+            for(var n=0; n<specialModelObj.length; n++){
+              if(specialModelObj[n].Make != ""){
+                if(specialModelObj[n].Make  == MakeVal){
+                  if(specialModelObj[n].Model != ""){
+                    if(specialModelObj[n].Model  == ModelVal){
+                      strN.push(str[p]);
+                    }
+                  }else{
+                    strN.push(str[p]);
+                  }
+                }
+              }else{
+                if(specialModelObj[n].Model != "" && specialModelObj[n].Model  == ModelVal){
+                  strN.push(str[p]);
+                }
+              }
+            }
+          }
+          str = strN;
 
           str.sort(function (a, b) {
             if (a.Make === b.Make) {
