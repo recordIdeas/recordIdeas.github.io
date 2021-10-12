@@ -236,6 +236,16 @@
           for (var key in str[0]) {
             headers.push(key)  //获取表头
           }
+          
+          var otherSku = str.filter(function(i){
+            return i.SKU != str[0].SKU;
+          })
+
+          if(otherSku.length>0){
+            document.getElementById(importExcel).nextElementSibling.style.display = "none";
+            return;
+          }
+          
           str.sort(function (a, b) {
             if (a.Make === b.Make) {
               if (a.Model === b.Model) {
@@ -432,6 +442,15 @@
             headers.push(key)  //获取表头
           }
 
+          var otherSku = str.filter(function(i){
+            return i.SKU != str[0].SKU;
+          })
+
+          if(otherSku.length>0){
+            document.getElementById(importExcel).nextElementSibling.style.display = "none";
+            return;
+          }
+          
           var specialModels = document.querySelectorAll(".special-model .model-item");
           var specialModelObj = [];
           var objIndex = 0;
