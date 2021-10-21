@@ -420,21 +420,17 @@
     }
 
     // 读取文件的内容
-    function showfile3(obj, importExcel) { 
-      var specialModels = document.querySelectorAll(".special-model .model-item");
-      var specialModelObj = [];
-      var objIndex = 0;
-      for(var m=0; m<specialModels.length; m++){
-        if(specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase() || specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase()){
-          specialModelObj[objIndex] = {
-            Make: specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase(),
-            Model: specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase()
-          }
-          objIndex++;
+    function showfile3(obj, importExcel) {
+      var modelItems = document.querySelectorAll(".special-model .model-item");
+      var filterFlag = false;
+      for(var m=0; m<modelItems.length; m++){
+        if(modelItems[m].getElementsByTagName("input")[0].value.trim() || modelItems[m].getElementsByTagName("input")[1].value.trim()){
+          filterFlag = true;
+          break;
         }
       }
 
-      if(specialModelObj.length==0){
+      if(!filterFlag){
         showfile1(obj, importExcel);
       }else{
         var excelFile;
@@ -458,72 +454,91 @@
               headers.push(key)  //获取表头
             }
 
-            var otherSku = str.filter(function(i){
+            var otherSku = str.find(function(i){
               return i.SKU != str[0].SKU;
             })
 
-            if(otherSku.length>0){
+            if(otherSku){
               document.getElementById(importExcel).nextElementSibling.style.display = "none";
               return;
             }
 
-            var specialModels = document.querySelectorAll(".special-model .model-item");
-            var specialModelObj = [];
-            var objIndex = 0;
-            for(var m=0; m<specialModels.length; m++){
-              if(specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase() || specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase()){
-                specialModelObj[objIndex] = {
-                  Make: specialModels[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase(),
-                  Model: specialModels[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase()
-                }
-                objIndex++;
-              }
-            }
+            var modelItems = document.querySelectorAll(".special-model .model-item");
+            var specialModelCount = [];
+            for(var m=0; m<modelItems.length; m++){
+              var input_Make = modelItems[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase();
+              var input_Model = modelItems[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase();
+              if(input_Make || input_Model){
+                var same_Make_Model = specialModelCount.find(function(item){
+                  return item.Make == input_Make && item.Model == input_Model;
+                });
 
-            specialModelObj.sort(function (a, b) {
-              if (a.Make === b.Make) {
-                if(a.Model === ""){
-                  return -1;
-                }else if(b.Model === ""){
-                  return 1;
-                }else {
-                  return b.Model - a.Model;
-                }
-              }else{
-                if(a.Make === ""){
-                  return -1;
-                }else if(b.Make === ""){
-                  return 1;
-                }else {
-                  return b.Make - a.Make;
-                }
-              }
-            });
-            var strN = [];
-            for(var p=0; p<str.length; p++){
-              var MakeVal = str[p].Make.toString().trim().replace(/\s+/g," ").toLowerCase();
-              var ModelVal = str[p].Model.toString().trim().replace(/\s+/g," ").toLowerCase();
-              for(var n=0; n<specialModelObj.length; n++){
-                if(specialModelObj[n].Make != ""){
-                  if(specialModelObj[n].Make  == MakeVal){
-                    if(specialModelObj[n].Model != ""){
-                      if(specialModelObj[n].Model  == ModelVal){
-                        strN.push(str[p]);
+                if(!same_Make_Model){
+                  var same_Make = specialModelCount.find(function(item){
+                    return item.Make == input_Make && input_Make != "";
+                  });
+
+                  if(same_Make){
+                    if(!input_Model){
+                      specialModelCount = specialModelCount.filter(function(item){
+                        return item.Make != input_Make;
+                      });
+
+                      specialModelCount.push({
+                        Make: input_Make,
+                        Model: input_Model
+                      });
+                    }else{
+                      var empty_Model = specialModelCount.find(function(item){
+                        return item.Make == input_Make && item.Model == "";
+                      });
+
+                      if(!empty_Model){
+                        specialModelCount.push({
+                          Make: input_Make,
+                          Model: input_Model
+                        });
+                      }
+                    }
+                  }else{
+                    var same_Model = specialModelCount.find(function(item){
+                      return item.Model == input_Model && input_Model != "";
+                    });
+
+                    if(same_Model){
+                      if(!input_Make){
+                        specialModelCount = specialModelCount.filter(function(item){
+                          return item.Model != input_Model;
+                        });
+
+                        specialModelCount.push({
+                          Make: input_Make,
+                          Model: input_Model
+                        });
+                      }else{
+                        var empty_Make = specialModelCount.find(function(item){
+                          return item.Model == input_Model && item.Make == "";
+                        });
+
+                        if(!empty_Make){
+                          specialModelCount.push({
+                            Make: input_Make,
+                            Model: input_Model
+                          });
+                        }
                       }
                     }else{
-                      strN.push(str[p]);
+                      specialModelCount.push({
+                        Make: input_Make,
+                        Model: input_Model
+                      });
                     }
-                  }
-                }else{
-                  if(specialModelObj[n].Model != "" && specialModelObj[n].Model  == ModelVal){
-                    strN.push(str[p]);
                   }
                 }
               }
             }
-            str = strN;
 
-            str.sort(function (a, b) {
+            specialModelCount.sort(function (a, b) {
               if (a.Make === b.Make) {
                 if (a.Model === b.Model) {
                   return a.Year - b.Year;
@@ -535,65 +550,39 @@
               }
             });
 
-            var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
-            for (var i = 1; i < str.length; i++) {
-              if (str[i]) {
-                if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
-                  if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                    if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                      if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                        allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                      } else {
-                        allStr += "-" + str[i][headers[1]];
-                      }
-                    } else {
-                      allStr += "," + str[i][headers[1]];
-                    }
-                  }
-                } else {
-                  allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
+            str = str.filter(function(item){
+              var flag = specialModelCount.find(function(obj){
+                var objMake = obj.Make.toString().trim().replace(/\s+/g," ").toLowerCase();
+                var objModel = obj.Model.toString().trim().replace(/\s+/g," ").toLowerCase();
+                var itemMake = item.Make.toString().trim().replace(/\s+/g," ").toLowerCase();
+                var itemModel = item.Model.toString().trim().replace(/\s+/g," ").toLowerCase();
+                if(objMake == itemMake){
+                  return objModel == itemModel || objModel == "";
+                }else if(objModel == itemModel){
+                  return objMake == itemMake || objMake == "";
                 }
+              });
+              if(flag){
+                return item;
               }
-            }
-            var allArr = allStr.split(";<br>");
-            yearAsBegin(allArr);
+            });
 
-            allStr = allArr.join(";<br>");
-            document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-                  + str[0][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;")
-                + '</td><td contenteditable="true">' + allStr
-                + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
-
-            function sortUpdateYear(str,maxLen,Year,num,flag) {
-              if(num>0){
-                num--;
-                sortByYear(str,Year);
-                if(allArr.length != maxLen){
-                  if(allArr.length > maxLen){
-                    if(!flag){
-                      Year++;
-                    }else{
-                      return;
-                    }
+            if(str.length>0){
+              str.sort(function (a, b) {
+                if (a.Make === b.Make) {
+                  if (a.Model === b.Model) {
+                    return a.Year - b.Year;
                   }else{
-                    if(!flag){
-                      flag = "del";
-                    }
-                    Year--;
+                    return compareString(a.Model, b.Model);
                   }
-                  sortUpdateYear(str,maxLen,Year,num,flag);
                 }else{
-                  return;
+                  return compareString(a.Make, b.Make);
                 }
-              }else{
-                return;
-              }
-            }
+              });
 
-            function sortByYear(str,Year) {
-              allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
+              var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
               for (var i = 1; i < str.length; i++) {
-                if (str[i] && Number(str[i][headers[1]].toString())>Year) {
+                if (str[i]) {
                   if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
                     if (str[i][headers[1]] != str[i - 1][headers[1]]) {
                       if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
@@ -611,15 +600,70 @@
                   }
                 }
               }
-              allArr = allStr.split(";<br>");
+              var allArr = allStr.split(";<br>");
+              yearAsBegin(allArr);
+
+              allStr = allArr.join(";<br>");
+              document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
+                    + str[0][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;")
+                  + '</td><td contenteditable="true">' + allStr
+                  + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
+
+              function sortUpdateYear(str,maxLen,Year,num,flag) {
+                if(num>0){
+                  num--;
+                  sortByYear(str,Year);
+                  if(allArr.length != maxLen){
+                    if(allArr.length > maxLen){
+                      if(!flag){
+                        Year++;
+                      }else{
+                        return;
+                      }
+                    }else{
+                      if(!flag){
+                        flag = "del";
+                      }
+                      Year--;
+                    }
+                    sortUpdateYear(str,maxLen,Year,num,flag);
+                  }else{
+                    return;
+                  }
+                }else{
+                  return;
+                }
+              }
+
+              function sortByYear(str,Year) {
+                allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
+                for (var i = 1; i < str.length; i++) {
+                  if (str[i] && Number(str[i][headers[1]].toString())>Year) {
+                    if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
+                      if (str[i][headers[1]] != str[i - 1][headers[1]]) {
+                        if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
+                          if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
+                            allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
+                          } else {
+                            allStr += "-" + str[i][headers[1]];
+                          }
+                        } else {
+                          allStr += "," + str[i][headers[1]];
+                        }
+                      }
+                    } else {
+                      allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
+                    }
+                  }
+                }
+                allArr = allStr.split(";<br>");
+              }
+              document.getElementById(importExcel).nextElementSibling.style.display = "block";
             }
           }
         }
-        document.getElementById(importExcel).nextElementSibling.style.display = "block";
       }
     }
-
-
 
     function btn_export(importExcel) {
       var table = document.getElementById(importExcel).querySelector("table");
