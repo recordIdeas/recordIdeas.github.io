@@ -827,8 +827,12 @@
     }
 
     function addItem(btn, item, container) {
+      var itemHtml = item.innerHTML;
       btn.addEventListener("click",function () {
-        container.appendChild(item.cloneNode(true));
+        var itemNode = document.createElement("div");
+        itemNode.className = item.className;
+        itemNode.innerHTML = itemHtml;
+        container.appendChild(itemNode);
       });
     }
 
