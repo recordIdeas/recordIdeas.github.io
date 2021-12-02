@@ -836,12 +836,9 @@
       }
       $(this).parent().removeClass("active");
     });
-
-
+    
     $(".export-model").click(function(){
-      var exportStr = "<thead><tr><th>序号</th><th>sku</th><th>产品类名</th><th>产品卖点</th>";
-      exportStr += "<th>产品详情-第一张大图(sku-main-1.jpg)</th><th>产品详情-标题</th><th>产品详情-详细描述</th><th>产品详情-Features</th><th>产品详情-Note</th><th>产品详情-Product Specifics</th>";
-      exportStr += "<th>产品详情-相关内容1行1栏-标题</th><th>产品详情-相关内容1行1栏-正文</th><th>产品详情-相关内容1行1栏-图片描述(sku-r-01.jpg)</th><th>产品详情-相关内容1行2栏-标题</th><th>产品详情-相关内容1行2栏-正文</th><th>产品详情-相关内容1行2栏-图片描述(sku-r-02.jpg)</th><th>产品详情-相关内容1行3栏-标题</th><th>产品详情-相关内容1行3栏-正文</th><th>产品详情-相关内容1行3栏-图片描述(sku-r-03.jpg)</th><th>产品详情-相关内容1行4栏-标题</th><th>产品详情-相关内容1行4栏-正文</th><th>产品详情-相关内容1行4栏-图片描述(sku-r-04.jpg)</th></tr></thead><tbody>";
+      var exportStr = "";
       var num = 0;
       $(this).prev().find(".edit-item").each(function(){
         if($(this).find(".sku").val().trim()!="" && $(this).find(".sort").val().trim()!=""){
@@ -863,22 +860,24 @@
         }
       });
 
-      exportStr += "</tbody>";
-      $(this).next().html(exportStr);
+      if(exportStr != "") {
+        exportStr = "<thead><tr><th>序号</th><th>sku</th><th>产品类名</th><th>产品卖点</th><th>产品详情-第一张大图(sku-main-1.jpg)</th><th>产品详情-标题</th><th>产品详情-详细描述</th><th>产品详情-Features</th><th>产品详情-Note</th><th>产品详情-Product Specifics</th><th>产品详情-相关内容1行1栏-标题</th><th>产品详情-相关内容1行1栏-正文</th><th>产品详情-相关内容1行1栏-图片描述(sku-r-01.jpg)</th><th>产品详情-相关内容1行2栏-标题</th><th>产品详情-相关内容1行2栏-正文</th><th>产品详情-相关内容1行2栏-图片描述(sku-r-02.jpg)</th><th>产品详情-相关内容1行3栏-标题</th><th>产品详情-相关内容1行3栏-正文</th><th>产品详情-相关内容1行3栏-图片描述(sku-r-03.jpg)</th><th>产品详情-相关内容1行4栏-标题</th><th>产品详情-相关内容1行4栏-正文</th><th>产品详情-相关内容1行4栏-图片描述(sku-r-04.jpg)</th></tr></thead><tbody>" + exportStr + "</tbody>";
+        $(this).next().html(exportStr);
 
-      var table = $(this).next()[0];
-      var sheet = XLSX.utils.table_to_sheet(table); //将一个table对象转换成一个sheet对象
-      var wb = sheet2blob(sheet);
-      if ('ie' == getExplorer()) {
-        window.navigator.msSaveOrOpenBlob(wb, 'excel.xlsx');
-      }
-      else {
-        var oa = document.createElement('a');
-        oa.href = URL.createObjectURL(wb);
-        oa.download = 'excel.xlsx';
-        document.body.appendChild(oa);
-        oa.click();
-        document.body.removeChild(oa);
+        var table = $(this).next()[0];
+        var sheet = XLSX.utils.table_to_sheet(table); //将一个table对象转换成一个sheet对象
+        var wb = sheet2blob(sheet);
+        if ('ie' == getExplorer()) {
+          window.navigator.msSaveOrOpenBlob(wb, 'excel.xlsx');
+        }
+        else {
+          var oa = document.createElement('a');
+          oa.href = URL.createObjectURL(wb);
+          oa.download = 'excel.xlsx';
+          document.body.appendChild(oa);
+          oa.click();
+          document.body.removeChild(oa);
+        }
       }
     });
 
