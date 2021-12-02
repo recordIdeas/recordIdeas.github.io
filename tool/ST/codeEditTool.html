@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>代码编辑工具</title>
+  <title>tool</title>
   <!-- 新 Bootstrap4 核心 CSS 文件 -->
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 
@@ -39,11 +39,11 @@
               <button class="popups-item">+</button>
               <div class="wait-edit popups-box">
                 <div class="popups-container">
+                  <input class="sku" type="text" placeholder="sku">
+                  <div class="sortContent">
+                    <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                  </div>
                   <div class="popups-content">
-                    <input class="sku" type="text" placeholder="sku">
-                    <div class="sortContent">
-                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
-                    </div>
                     <div class="popups-content-item">
                       <div class="import">
                         <div class="import-item">
@@ -108,8 +108,6 @@
                               <textarea class="p_3"></textarea>
                               <textarea class="p_4"></textarea>
                             </div>
-                            <button class="decrease">-</button>
-                            <button class="increase">+</button>
                           </div>
                         </div>
                       </div>
@@ -167,6 +165,25 @@
           <label for="tab-13">批量导表</label>
           <div class="tab">
             <div class="edit">
+              <div class="download-example">
+                <button class="popups-item">下载示例文件</button>
+                <div class="popups-box">
+                  <div class="popups-container">
+                    <div class="popups-content">
+                      <div>你确定下载这个文件吗？</div>
+                      <button>
+                        <label for="file-cancel">No</label>
+                      </button>
+                      <a href="/resources/file/upload_textchangehtml.xlsx" download="code_edit_example.xlsx">
+                        <button>
+                          <label>yes</label>
+                        </button>
+                      </a>
+                    </div>
+                    <button id="file-cancel" class="close-popups" hidden></button>
+                  </div>
+                </div>
+              </div>
               <input type="file" id="batchFile"
               accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               onchange="batchImport(this,5000)" onclick="this.value=''" ;>
@@ -176,11 +193,11 @@
               <button class="popups-item">+</button>
               <div class="wait-edit popups-box">
                 <div class="popups-container">
+                  <input class="sku" type="text" placeholder="sku">
+                  <div class="sortContent">
+                    <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                  </div>
                   <div class="popups-content">
-                    <input class="sku" type="text" placeholder="sku">
-                    <div class="sortContent">
-                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
-                    </div>
                     <div class="popups-content-item">
                       <div class="import">
                         <div class="import-item">
@@ -459,6 +476,14 @@
       transform: translateX(50%);
     }
 
+    .download-example .popups-container {
+      height: auto;
+    }
+
+    .download-example .popups-container .popups-content {
+      overflow: visible;
+    }
+
     /*自定义*/
     .edit-item {
       margin: 10px 0;
@@ -643,28 +668,28 @@
         $("body").removeClass("pop-ups");
       }
       if($(target).hasClass("clear")) {
-        $(target).prev().find("input").val("");
-        $(target).prev().find("textarea").val("");
+        $(target).parent().find("input").val("");
+        $(target).parent().find("textarea").val("");
         autoTextarea($(target).prev().find("textarea"));
       }
       if($(target).hasClass("transform")) {
         var importItem = $(target).prev().children();
         var str = "";
-        var skuVal = $(target).parent().parent().find(".sku").val().trim().replace(/\s+/g," ");
-        var sortVal = $(target).parent().parent().find(".sort").val().trim().replace(/\s+/g," ");
+        var skuVal = $(target).parent().parent().parent().find(".sku").val().trim().replace(/\s+/g," ");
+        var sortVal = $(target).parent().parent().parent().find(".sort").val().trim().replace(/\s+/g," ");
         var backupAlt = 0;
-        var backupIndex = 0;
+        var backupIndex = "";
         for(var m=0; m<importItem.length; m++) {
           if(importItem.eq(m).find(".tip").text().trim()) {
             var tip = importItem.eq(m).find(".tip").text().replace(/add/g,"").replace(/:/g,"").trim();
             var textareaVal = importItem.eq(m).find("textarea").val();
-            if(tip === "main img") {
+            if(tip === "main img" && skuVal!="" && sortVal!="") {
               var str2 = textareaVal.trim().replace(/\s+/g," ");
               if(str2 === "") {
                 str2 = backupAlt;
               }
               str += '<img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-main-1.jpg"}}" alt="' + str2 + '">\n';
-            }else if(tip === "relate"){
+            }else if(tip === "relate" && skuVal!="" && sortVal!="") {
               var arrAlt = importItem.eq(m).find(".relatealt textarea");
               var arrH3 = importItem.eq(m).find(".relateh3 textarea");
               var arrP = importItem.eq(m).find(".relatep textarea");
@@ -712,16 +737,16 @@
                 }
                 str += '<div class="pr-relate">\n  <div class="row">' + relateStr + '\n  </div>\n</div>';
               }
-            } else if(tip === "note p"){
+            } else if(tip === "note p" && textareaVal.trim()!=""){
               setExtraHtml("p", "pr-note", '<p class="strong">Note:</p>');
-            } else if(tip === "specifics li span"){
+            } else if(tip === "specifics li span" && textareaVal.trim()!=""){
               setExtraHtml("li", "specifics_product", "<h2>Product Specifics</h2>", "span");
-            } else if(tip === "feature li"){
+            } else if(tip === "feature li" && textareaVal.trim()!=""){
               str += '<h2>Features</h2>\n' + setHtml("li");
             } else if(tip === "li span") {
               str += setHtml("li", "span");
             }else if(tip === "h1") {
-              str += setHtml(label,mark);
+              str += setHtml("h1");
               if(backupIndex == 0) {
                 backupIndex = 1;
                 backupAlt = textareaVal.replace(/\s+/g," ");
@@ -747,31 +772,33 @@
 
             function setHtml(label,mark){
               var strN = "";
-              var arrN = textareaVal.split("\n");
-              for(var s=0; s<arrN.length; s++) {
-                if(arrN[s].trim() != "") {
-                  arrN[s] = arrN[s].trim().replace(/\s+/g," ");
-                  if(mark) {
-                    if(arrN[s].indexOf(":")!=-1 || arrN[s].indexOf("：")!=-1) {
-                      if(arrN[s].indexOf(":")!=-1 && arrN[s].indexOf("：")!=-1) {
-                        var pos = arrN[s].indexOf(":") > arrN[s].indexOf("：") ? arrN[s].indexOf("：") : arrN[s].indexOf(":");
-                      }else if(arrN[s].indexOf(":")!=-1){
-                        var pos = arrN[s].indexOf(":");
-                      }else if(arrN[s].indexOf("：")!=-1){
-                        var pos = arrN[s].indexOf("：");
+              if(textareaVal != "") {
+                var arrN = textareaVal.split("\n");
+                for(var s=0; s<arrN.length; s++) {
+                  if(arrN[s].trim() != "") {
+                    arrN[s] = arrN[s].trim().replace(/\s+/g," ");
+                    if(mark) {
+                      if(arrN[s].indexOf(":")!=-1 || arrN[s].indexOf("：")!=-1) {
+                        if(arrN[s].indexOf(":")!=-1 && arrN[s].indexOf("：")!=-1) {
+                          var pos = arrN[s].indexOf(":") > arrN[s].indexOf("：") ? arrN[s].indexOf("：") : arrN[s].indexOf(":");
+                        }else if(arrN[s].indexOf(":")!=-1){
+                          var pos = arrN[s].indexOf(":");
+                        }else if(arrN[s].indexOf("：")!=-1){
+                          var pos = arrN[s].indexOf("：");
+                        }
+                        arrN[s] = "<"+mark+">" + arrN[s].substr(0,pos+1) + " </"+mark+">" + arrN[s].substr(pos+1).trim();
                       }
-                      arrN[s] = "<"+mark+">" + arrN[s].substr(0,pos+1) + " </"+mark+">" + arrN[s].substr(pos+1).trim();
+                    }
+                    if(label === "li") {
+                      strN += "  <"+label+">" + arrN[s] + "</"+label+">\n";
+                    }else {
+                      strN += "<"+label+">" + arrN[s] + "</"+label+">\n";
                     }
                   }
-                  if(label === "li") {
-                    strN += "  <"+label+">" + arrN[s] + "</"+label+">\n";
-                  }else {
-                    strN += "<"+label+">" + arrN[s] + "</"+label+">\n";
-                  }
                 }
-              }
-              if(label === "li") {
-                strN = "<ul>\n" + strN +"</ul>\n";
+                if(label === "li") {
+                  strN = "<ul>\n" + strN +"</ul>\n";
+                }
               }
               return strN;
             }
@@ -794,8 +821,8 @@
     });
 
     $(".wait-edit .submit").click(function () {
-      var skuVal = $(this).prev().find(".popups-content .sku").val().trim().replace(/\s+/g, " ");
-      var sortVal = $(this).prev().find(".popups-content .sort").val().trim().replace(/\s+/g, " ");
+      var skuVal = $(this).prev().find(".sku").val().trim().replace(/\s+/g, " ");
+      var sortVal = $(this).prev().find(".sort").val().trim().replace(/\s+/g, " ");
       if (skuVal && sortVal) {
         var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-item">' + skuVal + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
         var readyEdit = $(this).parent().parent().find(".ready-edit");
