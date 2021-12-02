@@ -378,13 +378,26 @@
     /*category*/
     .sku-sort {
       position: absolute;
-      top: 0;
+      top: 10px;
+      left: 50px;
+      right: 55px;
     }
 
     .sortContent {
       position: relative;
-      margin: 10px 0;
       display: inline-block;
+      width: 20em;
+    }
+
+    .sku,
+    .sortContent {
+      max-width: 100%;
+      margin-top: 5px;
+    }
+
+    .sku,
+    .sort {
+      height: 30px;
     }
 
     .dataList {
@@ -446,7 +459,7 @@
       width: 100%;
       max-width: 1200px;
       background: #fff;
-      padding: 40px 0 50px 50px;
+      padding: 75px 0 50px 50px;
       height: 100%;
     }
 
@@ -464,8 +477,8 @@
 
     .popups-box .popups-container .close-popups {
       position: absolute;
-      top: 0;
-      right: 5px;
+      top: 10px;
+      right: 15px;
     }
 
     .popups-box .popups-container .clear {
@@ -660,23 +673,35 @@
       }
     });
 
+    /*dataList的select用arr数组项作为option,且按字母排序；dataList对应input的值必须为其保存数据中的一项*/
+    var arr1 = ['Wheel Spacers', 'Wheel Hub Bearing', 'Keyless Entry Remote', 'Ignition Coil', 'Head Gasket Set', 'AC Compressor', 'Exhaust Manifold', 'CV Axle Shaft Assembly', 'Brake Rotor And Pads', 'Timing Chain Kit', 'Timing Belt Kit', 'Power Window Regulator', 'Leveling Lift Kit', 'Thermosta Thousing', 'Water Pump', 'Radiators', 'Suspension Kit', 'Door Handle', 'Shock Absorber', 'Complete Struts', 'Fuel Pump', 'O2 Sensor', 'Lift Support', 'Sensor', 'Side Mirror', 'ABS Wheel Speed Sensor', 'Door Lock Actuator', 'Power Window Switch', 'Starter', 'Air Suspension Struts', 'Alternator', 'Radiator Cooling Fan', 'Brake Caliper', 'Fasteners'];
+    dataListValue(arr1, "sort");
+
     /*自定义*/
     $(".edit").click(function (e) {
       var target = e.target;
+
+      /*弹窗开启*/
       if ($(target).hasClass("popups-item")) {
         $(target).next().addClass("active");
         $("body").addClass("pop-ups");
         autoTextarea($(target).next().find("textarea"));
       }
+
+      /*弹窗关闭*/
       if ($(target).hasClass("close-popups")) {
         $(target).parent().parent().removeClass("active");
         $("body").removeClass("pop-ups");
       }
+
+      /*清空编辑框*/
       if($(target).hasClass("clear")) {
         $(target).parent().find("input").val("");
         $(target).parent().find("textarea").val("");
         autoTextarea($(target).prev().find("textarea"));
       }
+
+      /*编辑框内容转换为代码*/
       if($(target).hasClass("transform")) {
         var importItem = $(target).prev().children();
         var str = "";
@@ -814,6 +839,7 @@
       }
     });
 
+    /*删除编辑框*/
     $(".ready-edit").click(function (e) {
       var target = e.target;
       if ($(target).hasClass("del-popups")) {
@@ -821,10 +847,12 @@
       }
     });
 
+    /*删除最后一个编辑框*/
     $(".del-ready").click(function () {
       $(this).prev().prev().children().last().remove();
     });
 
+    /*添加编辑框*/
     $(".wait-edit .submit").click(function () {
       var skuVal = $(this).prev().find(".sku").val().trim().replace(/\s+/g, " ");
       var sortVal = $(this).prev().find(".sort").val().trim().replace(/\s+/g, " ");
@@ -836,7 +864,8 @@
       }
       $(this).parent().removeClass("active");
     });
-    
+
+    /*导出*/
     $(".export-model").click(function(){
       var exportStr = "";
       var num = 0;
@@ -881,16 +910,12 @@
       }
     });
 
-    /*dataList的select用arr数组项作为option,且按字母排序；dataList对应input的值必须为其保存数据中的一项*/
-    var arr1 = ['Wheel Spacers', 'Wheel Hub Bearing', 'Keyless Entry Remote', 'Ignition Coil', 'Head Gasket Set', 'AC Compressor', 'Exhaust Manifold', 'CV Axle Shaft Assembly', 'Brake Rotor And Pads', 'Timing Chain Kit', 'Timing Belt Kit', 'Power Window Regulator', 'Leveling Lift Kit', 'Thermosta Thousing', 'Water Pump', 'Radiators', 'Suspension Kit', 'Door Handle', 'Shock Absorber', 'Complete Struts', 'Fuel Pump', 'O2 Sensor', 'Lift Support', 'Sensor', 'Side Mirror', 'ABS Wheel Speed Sensor', 'Door Lock Actuator', 'Power Window Switch', 'Starter', 'Air Suspension Struts', 'Alternator', 'Radiator Cooling Fan', 'Brake Caliper', 'Fasteners'];
-
-    dataListValue(arr1, "sort");
-
     /*预览产品详情*/
     $(".preview2").click(function () {
       $(".previewArea2").html($(".result2").val().replace(/{{media url='/g, "https://eccppautoparts.com/media/").replace(/{{media url="/g, "https://eccppautoparts.com/media/").replace(/}}'/g, "").replace(/}}"/g, ""));
     });
 
+    /*批量导表*/
     function batchImport(obj, maxNum) {
       if (obj.files.length == 0) {
         return;
@@ -1381,7 +1406,6 @@
       }
       return '';
     }
-
 </script>
 
 </body>
