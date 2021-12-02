@@ -168,6 +168,13 @@
               <div class="download-example">
                 <button class="popups-item">下载示例文件</button>
                 <div class="popups-box">
+                  <label for="file-cancel" style="
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                  "></label>
                   <div class="popups-container">
                     <div class="popups-content">
                       <div>你确定下载这个文件吗？</div>
@@ -281,21 +288,6 @@
           </div>
         </div>
       </div>
-      <input id="tab-2" type="radio" name="tab" hidden>
-      <label for="tab-2">模板2</label>
-      <div class="tab">
-        <div class="tabs">
-          <input id="tab-11" type="radio" name="tab-model2" checked hidden>
-          <label for="tab-11">自定义</label>
-          <div class="tab">10</div>
-          <input id="tab-12" type="radio" name="tab-model2" hidden>
-          <label for="tab-12">导入表单</label>
-          <div class="tab">20</div>
-          <input id="tab-13" type="radio" name="tab-model2" hidden>
-          <label for="tab-13">批量导表</label>
-          <div class="tab">30</div>
-        </div>
-      </div>
     </div>
   </div>
   <style>
@@ -344,20 +336,20 @@
       justify-content: flex-start;
     }
 
-    .tabs input[name="tab-model1"]+label+.tab {
-      position: relative;
-      margin-top: -1px;
-      border: 1px solid #ccc;
-    }
-
     .tabs input[name="tab"]:checked+label {
       color: #fff;
       background: #2196f3;
     }
 
+    .tabs input[name="tab-model1"]+label+.tab,
+    .tabs input[name="tab-model2"]+label+.tab {
+      position: relative;
+      margin-top: -1px;
+      border: 1px solid #ccc;
+    }
+
     .tabs input[name="tab-model1"]:checked+label,
-    .tabs input[name="tab-model2"]:checked+label,
-    .tabs input[name="tab-model3"]:checked+label {
+    .tabs input[name="tab-model2"]:checked+label {
       position: relative;
       z-index: 1;
       margin: 0;
@@ -366,16 +358,14 @@
     }
 
     input[name="tab"]+label+div,
-    input[name="tab-model1"]+label+div,
-    input[name="tab-model2"]+label+div,
-    input[name="tab-model3"]+label+div {
+    input[name="tab-model1"]+label+div ,
+    input[name="tab-model2"]+label+div {
       display: none;
     }
 
     input[name="tab"]:checked+label+div,
     input[name="tab-model1"]:checked+label+div,
-    input[name="tab-model2"]:checked+label+div,
-    input[name="tab-model3"]:checked+label+div {
+    input[name="tab-model2"]:checked+label+div {
       display: block;
     }
 
@@ -474,6 +464,10 @@
       bottom: 5px;
       left: 50%;
       transform: translateX(50%);
+    }
+
+    .download-example {
+      margin-bottom: 30px;
     }
 
     .download-example .popups-container {
