@@ -34,14 +34,17 @@
           <div class="tab">
             <div class="edit">
               <div class="ready-edit"></div>
-              <button class="export-model1">导出</button>
+              <button class="export-model">导出</button>
+              <table hidden></table>
               <button class="del-ready">-</button>
               <button class="popups-item">+</button>
               <div class="wait-edit popups-box">
                 <div class="popups-container">
-                  <input class="sku" type="text" placeholder="sku">
-                  <div class="sortContent">
-                    <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                  <div class="sku-sort">
+                    <input class="sku" type="text" placeholder="sku">
+                    <div class="sortContent">
+                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                    </div>
                   </div>
                   <div class="popups-content">
                     <div class="popups-content-item">
@@ -195,14 +198,17 @@
               accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               onchange="batchImport(this,5000)" onclick="this.value=''" ;>
               <div class="ready-edit"></div>
-              <button class="export-model1">导出</button>
+              <button class="export-model">导出</button>
+              <table hidden></table>
               <button class="del-ready">-</button>
               <button class="popups-item">+</button>
               <div class="wait-edit popups-box">
                 <div class="popups-container">
-                  <input class="sku" type="text" placeholder="sku">
-                  <div class="sortContent">
-                    <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                  <div class="sku-sort">
+                    <input class="sku" type="text" placeholder="sku">
+                    <div class="sortContent">
+                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                    </div>
                   </div>
                   <div class="popups-content">
                     <div class="popups-content-item">
@@ -370,6 +376,11 @@
     }
 
     /*category*/
+    .sku-sort {
+      position: absolute;
+      top: 0;
+    }
+
     .sortContent {
       position: relative;
       margin: 10px 0;
@@ -671,8 +682,8 @@
         var str = "";
         var skuVal = $(target).parent().parent().parent().find(".sku").val().trim().replace(/\s+/g," ");
         var sortVal = $(target).parent().parent().parent().find(".sort").val().trim().replace(/\s+/g," ");
-        var backupAlt = 0;
-        var backupIndex = "";
+        var backupAlt = "";
+        var backupIndex = 0;
         for(var m=0; m<importItem.length; m++) {
           if(importItem.eq(m).find(".tip").text().trim()) {
             var tip = importItem.eq(m).find(".tip").text().replace(/add/g,"").replace(/:/g,"").trim();
@@ -824,6 +835,51 @@
         $(this).prev().clone().appendTo(readyEdit.children().last().find(".popups-box"));
       }
       $(this).parent().removeClass("active");
+    });
+
+
+    $(".export-model").click(function(){
+      var exportStr = "<thead><tr><th>序号</th><th>sku</th><th>产品类名</th><th>产品卖点</th>";
+      exportStr += "<th>产品详情-第一张大图(sku-main-1.jpg)</th><th>产品详情-标题</th><th>产品详情-详细描述</th><th>产品详情-Features</th><th>产品详情-Note</th><th>产品详情-Product Specifics</th>";
+      exportStr += "<th>产品详情-相关内容1行1栏-标题</th><th>产品详情-相关内容1行1栏-正文</th><th>产品详情-相关内容1行1栏-图片描述(sku-r-01.jpg)</th><th>产品详情-相关内容1行2栏-标题</th><th>产品详情-相关内容1行2栏-正文</th><th>产品详情-相关内容1行2栏-图片描述(sku-r-02.jpg)</th><th>产品详情-相关内容1行3栏-标题</th><th>产品详情-相关内容1行3栏-正文</th><th>产品详情-相关内容1行3栏-图片描述(sku-r-03.jpg)</th><th>产品详情-相关内容1行4栏-标题</th><th>产品详情-相关内容1行4栏-正文</th><th>产品详情-相关内容1行4栏-图片描述(sku-r-04.jpg)</th></tr></thead><tbody>";
+      var num = 0;
+      $(this).prev().find(".edit-item").each(function(){
+        if($(this).find(".sku").val().trim()!="" && $(this).find(".sort").val().trim()!=""){
+          num++;
+          exportStr += "<tr>"+"<td>"+num+"</td><td>"+$(this).find(".sku").val().trim()+"</td><td>"+$(this).find(".sort").val().trim();
+          $(this).find(".import-item").each(function(){
+            if($(this).find(".tip").text().trim()!="add relate:") {
+              exportStr += "</td><td>" + $(this).find("textarea").val();
+            }else {
+              var arrAlt = $(this).find(".relatealt textarea");
+              var arrH3 = $(this).find(".relateh3 textarea");
+              var arrP = $(this).find(".relatep textarea");
+              for(var e=0; e<4; e++){
+                exportStr += "</td><td>" + arrH3.eq(e).val().trim() + "</td><td>" + arrP.eq(e).val().trim() + "</td><td>" + arrAlt.eq(e).val().trim();
+              }
+            }
+          });
+          exportStr += "</td></tr>";
+        }
+      });
+
+      exportStr += "</tbody>";
+      $(this).next().html(exportStr);
+
+      var table = $(this).next()[0];
+      var sheet = XLSX.utils.table_to_sheet(table); //将一个table对象转换成一个sheet对象
+      var wb = sheet2blob(sheet);
+      if ('ie' == getExplorer()) {
+        window.navigator.msSaveOrOpenBlob(wb, 'excel.xlsx');
+      }
+      else {
+        var oa = document.createElement('a');
+        oa.href = URL.createObjectURL(wb);
+        oa.download = 'excel.xlsx';
+        document.body.appendChild(oa);
+        oa.click();
+        document.body.removeChild(oa);
+      }
     });
 
     /*dataList的select用arr数组项作为option,且按字母排序；dataList对应input的值必须为其保存数据中的一项*/
@@ -1276,6 +1332,57 @@
         $(this).css("overflow-y","");
       });
     }
+
+    // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
+    function sheet2blob(sheet, sheetName) {
+      try {
+        new Uint8Array([1, 2]).slice(0, 2);
+      } catch (e) {
+        console.log("[Uint8Array" + e.description + "]这里使用【Array.slice】。");
+        //IE或有些浏览器不支持Uint8Array.slice()方法。改成使用Array.slice()方法
+        Uint8Array.prototype.slice = Array.prototype.slice;
+      }
+      sheetName = sheetName || 'sheet1';
+      var workbook = {
+        SheetNames: [sheetName],
+        Sheets: {}
+      };
+      workbook.Sheets[sheetName] = sheet;
+      // 生成excel的配置项
+      var wopts = {
+        bookType: 'xlsx', // 要生成的文件类型
+        bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
+        type: 'binary'
+      };
+      var wbout = XLSX.write(workbook, wopts);
+      var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+      // 字符串转ArrayBuffer
+      function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+      }
+      return blob;
+    }
+
+    function getExplorer() {
+      var explorer = window.navigator.userAgent;
+      //ie
+      if (explorer.indexOf("MSIE") >= 0) {
+        return 'ie';
+      }
+      //Edge
+      if (explorer.indexOf("Edge") >= 0) {
+        return 'ie';
+      }
+      //Trident
+      if (explorer.indexOf("Trident") >= 0) {
+        return 'ie';
+      }
+      return '';
+    }
+
 </script>
 
 </body>
