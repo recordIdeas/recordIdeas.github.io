@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>代码编辑工具</title>
+  <!-- 新 Bootstrap4 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+
+  <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="../../js/xlsx.full.min.js"></script>
+  <script src="../../js/babel.min.js"></script>
+</head>
+
+<body>
+  <div class="tool">
+    <div class="tabs">
+      <input id="tab-1" type="radio" name="tab" checked hidden>
+      <label for="tab-1">模板1</label>
+      <div class="tab">
+        <div class="tabs">
+          <input id="tab-11" type="radio" name="tab-model1" checked hidden>
+          <label for="tab-11">自定义</label>
+          <div class="tab">
+            <div class="edit">
+              <div class="ready-edit"></div>
+              <button class="export-model1">导出</button>
+              <button class="del-ready">-</button>
+              <button class="popups-item">+</button>
+              <div class="wait-edit popups-box">
+                <div class="popups-container">
+                  <div class="popups-content">
+                    <input class="sku" type="text" placeholder="sku">
+                    <div class="sortContent">
+                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                    </div>
+                    <div class="popups-content-item">
+                      <div class="import">
+                        <div class="import-item">
+                          <span class="tip">add li:</span>
+                          <textarea class="textarea"></textarea>
+                        </div>
+                      </div>
+                      <button class="transform">转换</button>
+                      <div class="export">
+                        <span>买点</span>
+                        <textarea></textarea>
+                      </div>
+                    </div>
+                    <div class="popups-content-item">
+                      <div class="import">
+                        <div class="import-item">
+                          <span class="tip">add main img:</span>
+                          <textarea class="textarea" placeholder="product detail 的主图描述信息"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add h1:</span>
+                          <textarea class="textarea" placeholder="产品名称"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add p:</span>
+                          <textarea class="textarea" placeholder="产品描述"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add feature li:</span>
+                          <textarea class="textarea" placeholder="产品的Features"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add note p:</span>
+                          <textarea class="textarea">1.
+2.</textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add specifics li span:</span>
+                          <textarea class="textarea" placeholder="Specifics名: Specifics值"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add relate:</span>
+                          <div class="textarea border-0">
+                            <span class="relatetip">alt:</span>
+                            <div class="relatealt">
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_1"></textarea>
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_2"></textarea>
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_3"></textarea>
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_4"></textarea>
+                            </div>
+                            <span class="relatetip">h3:</span>
+                            <div class="relateh3">
+                              <textarea class="h3_1"></textarea>
+                              <textarea class="h3_2"></textarea>
+                              <textarea class="h3_3"></textarea>
+                              <textarea class="h3_4"></textarea>
+                            </div>
+                            <span class="relatetip">p:</span>
+                            <div class="relatep">
+                              <textarea class="p_1"></textarea>
+                              <textarea class="p_2"></textarea>
+                              <textarea class="p_3"></textarea>
+                              <textarea class="p_4"></textarea>
+                            </div>
+                            <button class="decrease">-</button>
+                            <button class="increase">+</button>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="transform">转换</button>
+                      <div class="export">
+                        <span>产品详情</span>
+                        <textarea></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="clear">清空</button>
+                  <button class="close-popups">×</button>
+                </div>
+                <button class="submit">提交</button>
+              </div>
+            </div>
+          </div>
+          <input id="tab-12" type="radio" name="tab-model1" hidden>
+          <label for="tab-12">导入表单</label>
+          <div class="tab">
+            <div style="margin:10px">
+              <div class="myPrecautions">
+                注意事项：<br>
+                1. 必须输入sku和分类名<br>
+              </div>
+              <div style="margin-top:10px">
+                <input type="text" placeholder="sku" class="sku" style="width:6em">
+                <div class="sortContent">
+                  <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                </div>
+              </div>
+              <div style="margin-top:10px">
+                <input type="text" placeholder="序号" class="num" style="width:6em"
+                  onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                <input type="file" id="reviewFile"
+                  accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  onchange="showfile(this,5000)" onclick="this.value=''" ;>
+              </div>
+              <div style="margin-top:10px">
+                产品卖点：<br>
+                <textarea class="result1"></textarea>
+              </div>
+              <div style="margin-top:10px">
+                产品详情：<br>
+                <textarea class="result2"></textarea>
+                <br>
+                <button class="preview2">预览产品详情</button>
+                <div class="preview">
+                  <div class="previewArea2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input id="tab-13" type="radio" name="tab-model1" hidden>
+          <label for="tab-13">批量导表</label>
+          <div class="tab">
+            <div class="edit">
+              <input type="file" id="batchFile"
+              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              onchange="batchImport(this,5000)" onclick="this.value=''" ;>
+              <div class="ready-edit"></div>
+              <button class="export-model1">导出</button>
+              <button class="del-ready">-</button>
+              <button class="popups-item">+</button>
+              <div class="wait-edit popups-box">
+                <div class="popups-container">
+                  <div class="popups-content">
+                    <input class="sku" type="text" placeholder="sku">
+                    <div class="sortContent">
+                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+                    </div>
+                    <div class="popups-content-item">
+                      <div class="import">
+                        <div class="import-item">
+                          <span class="tip">add li:</span>
+                          <textarea class="textarea"></textarea>
+                        </div>
+                      </div>
+                      <button class="transform">转换</button>
+                      <div class="export">
+                        <span>买点</span>
+                        <textarea></textarea>
+                      </div>
+                    </div>
+                    <div class="popups-content-item">
+                      <div class="import">
+                        <div class="import-item">
+                          <span class="tip">add main img:</span>
+                          <textarea class="textarea" placeholder="product detail 的主图描述信息"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add h1:</span>
+                          <textarea class="textarea" placeholder="产品名称"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add p:</span>
+                          <textarea class="textarea" placeholder="产品描述"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add feature li:</span>
+                          <textarea class="textarea" placeholder="产品的Features"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add note p:</span>
+                          <textarea class="textarea">1.
+2.</textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add specifics li span:</span>
+                          <textarea class="textarea" placeholder="Specifics名: Specifics值"></textarea>
+                        </div>
+                        <div class="import-item">
+                          <span class="tip">add relate:</span>
+                          <div class="textarea border-0">
+                            <span class="relatetip">alt:</span>
+                            <div class="relatealt">
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_1"></textarea>
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_2"></textarea>
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_3"></textarea>
+                              <textarea placeholder="相关内容的图片描述信息" class="alt_4"></textarea>
+                            </div>
+                            <span class="relatetip">h3:</span>
+                            <div class="relateh3">
+                              <textarea class="h3_1"></textarea>
+                              <textarea class="h3_2"></textarea>
+                              <textarea class="h3_3"></textarea>
+                              <textarea class="h3_4"></textarea>
+                            </div>
+                            <span class="relatetip">p:</span>
+                            <div class="relatep">
+                              <textarea class="p_1"></textarea>
+                              <textarea class="p_2"></textarea>
+                              <textarea class="p_3"></textarea>
+                              <textarea class="p_4"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="transform">转换</button>
+                      <div class="export">
+                        <span>产品详情</span>
+                        <textarea></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="clear">清空</button>
+                  <button class="close-popups">×</button>
+                </div>
+                <button class="submit">提交</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input id="tab-2" type="radio" name="tab" hidden>
+      <label for="tab-2">模板2</label>
+      <div class="tab">
+        <div class="tabs">
+          <input id="tab-11" type="radio" name="tab-model2" checked hidden>
+          <label for="tab-11">自定义</label>
+          <div class="tab">10</div>
+          <input id="tab-12" type="radio" name="tab-model2" hidden>
+          <label for="tab-12">导入表单</label>
+          <div class="tab">20</div>
+          <input id="tab-13" type="radio" name="tab-model2" hidden>
+          <label for="tab-13">批量导表</label>
+          <div class="tab">30</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin: 5px 0;
+      padding: 1px 6px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0 5px;
+      overflow-y: hidden;
+      resize: none;
+    }
+
+    .tool {
+      padding: 5px;
+      max-width: 1200px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tabs label {
+      order: -1;
+      margin: 0;
+      padding: 5px 10px;
+    }
+
+    .tabs .tab {
+      width: 100%;
+      padding: 5px 10px;
+    }
+
+    .tab .tabs {
+      justify-content: flex-start;
+    }
+
+    .tabs input[name="tab-model1"]+label+.tab {
+      position: relative;
+      margin-top: -1px;
+      border: 1px solid #ccc;
+    }
+
+    .tabs input[name="tab"]:checked+label {
+      color: #fff;
+      background: #2196f3;
+    }
+
+    .tabs input[name="tab-model1"]:checked+label,
+    .tabs input[name="tab-model2"]:checked+label,
+    .tabs input[name="tab-model3"]:checked+label {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      border: 1px solid #ccc;
+      border-bottom-color: #fff;
+    }
+
+    input[name="tab"]+label+div,
+    input[name="tab-model1"]+label+div,
+    input[name="tab-model2"]+label+div,
+    input[name="tab-model3"]+label+div {
+      display: none;
+    }
+
+    input[name="tab"]:checked+label+div,
+    input[name="tab-model1"]:checked+label+div,
+    input[name="tab-model2"]:checked+label+div,
+    input[name="tab-model3"]:checked+label+div {
+      display: block;
+    }
+
+    /*category*/
+    .sortContent {
+      position: relative;
+      margin: 10px 0;
+      display: inline-block;
+    }
+
+    .dataList {
+      display: none;
+      position: absolute;
+      width: 100%;
+      max-height: 20em;
+      overflow: auto;
+      border: 1px solid #767676;
+      border-top: 0;
+    }
+
+    .dataList li,
+    .sort {
+      width: 100%;
+      padding: 0 5px;
+      font-size: 1em;
+      background: #fff;
+    }
+
+    .sort {
+      line-height: 24px;
+    }
+
+    .dataList li {
+      line-height: 2em;
+    }
+
+    .dataList li:hover {
+      background: #ddd;
+    }
+
+    /*弹窗*/
+    body.pop-ups {
+      overflow: hidden;
+    }
+
+    .popups-box {
+      visibility: hidden;
+      position: fixed;
+    }
+
+    .popups-box.active {
+      visibility: visible;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .popups-box .popups-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      background: #fff;
+      padding: 40px 0 50px 50px;
+      height: 100%;
+    }
+
+    .popups-box .popups-container .popups-content {
+      overflow-y: scroll;
+      height: 100%;
+      padding-right: 40px;
+    }
+
+    .popups-content-item {
+      margin-top: 10px;
+      border: 2px dashed #ccc;
+      padding: 5px 10px;
+    }
+
+    .popups-box .popups-container .close-popups {
+      position: absolute;
+      top: 0;
+      right: 5px;
+    }
+
+    .popups-box .popups-container .clear {
+      position: absolute;
+      margin: auto;
+      margin-left: 10px;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(50%);
+    }
+
+    /*自定义*/
+    .edit-item {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px dotted #999;
+    }
+
+    .ready-edit .popups-item {
+      border: 2px solid #212121;
+      padding: 1px 6px;
+      line-height: 24px;
+      margin: 5px 0;
+      display: inline-block;
+    }
+
+    .ready-edit .popups-item:hover {
+      background: #2196f3;
+      color: #fff;
+    }
+
+    .wait-edit {
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px dashed #999;
+    }
+
+    .wait-edit .submit {
+      position: absolute;
+      bottom: 10px;
+    }
+
+    .import-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .import-item .textarea>div {
+      width: 100%;
+      display: flex;
+    }
+
+    .import-item .textarea>div>textarea {
+      flex: 1;
+    }
+
+    .import-item .textarea>div>textarea:not(:last-of-type) {
+      margin-right: 5px;
+    }
+
+    .export {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 0;
+    }
+
+    .export span {
+      padding: 5px 0;
+    }
+
+    /*导入表单*/
+    .preview {
+      max-width: 1035px;
+      margin-top: 5px;
+      padding: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .previewArea2 {
+      font-size: 115%;
+      line-height: 30px;
+      font-family: Gotham, Roboto, Arial, Helvetica, sans-serif
+    }
+
+    .previewArea2 img {
+      width: 100%;
+    }
+
+    .previewArea2 h1 {
+      font-size: 160%;
+      font-weight: 550;
+      padding: 20px 0 10px 0;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 560px) {
+      .previewArea2 h1 {
+        font-size: 145%;
+      }
+    }
+
+    .previewArea2 h2 {
+      font-size: 130%;
+      font-weight: 550;
+      padding: 10px 0 0 0;
+    }
+
+    .previewArea2 p {
+      margin: 0;
+      line-height: 2em;
+      padding: 0 0 10px 0;
+    }
+
+    .previewArea2 ul {
+      padding: 10px 0;
+    }
+
+    .previewArea2 li {
+      list-style: circle outside;
+      margin-left: 20px;
+      width: calc(100% - 20px);
+      padding: 0 5px;
+    }
+
+    .previewArea2 .specifics_product {
+      display: inline-block;
+      width: calc(100% + 40px);
+      height: auto;
+      margin-left: -20px;
+      padding: 10px 20px;
+      color: #615e53;
+      background: #f5f0da59;
+    }
+
+    .previewArea2 .specifics_product ul {
+      column-count: 2;
+    }
+
+    @media(max-width:991px) {
+      .previewArea2 .specifics_product ul {
+        column-count: 1;
+      }
+    }
+
+    .previewArea2 .specifics_product ul li {
+      word-break: break-all;
+    }
+
+    .pr-note {
+      margin-bottom: 20px;
+    }
+
+    .previewArea2 .pr-note p {
+      padding-bottom: 0;
+    }
+
+    .pr-note .strong {
+      color: red;
+      font-weight: bold;
+    }
+
+    .pr-relate {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pr-relate h3 {
+      font-size: 120%;
+      font-weight: 500;
+      margin: 10px 0;
+      color: #222;
+    }
+  </style>
+  <script>
+    autoTextarea($("textarea"));
+    $(".tool").on("input propertychange", function (e) {
+      var target = e.target;
+      if(target.tagName.toLocaleLowerCase() === "textarea") {
+        autoTextarea($(target));
+      }
+    });
+
+    /*自定义*/
+    $(".edit").click(function (e) {
+      var target = e.target;
+      if ($(target).hasClass("popups-item")) {
+        $(target).next().addClass("active");
+        $("body").addClass("pop-ups");
+        autoTextarea($(target).next().find("textarea"));
+      }
+      if ($(target).hasClass("close-popups")) {
+        $(target).parent().parent().removeClass("active");
+        $("body").removeClass("pop-ups");
+      }
+      if($(target).hasClass("clear")) {
+        $(target).prev().find("input").val("");
+        $(target).prev().find("textarea").val("");
+        autoTextarea($(target).prev().find("textarea"));
+      }
+      if($(target).hasClass("transform")) {
+        var importItem = $(target).prev().children();
+        var str = "";
+        var skuVal = $(target).parent().parent().find(".sku").val().trim().replace(/\s+/g," ");
+        var sortVal = $(target).parent().parent().find(".sort").val().trim().replace(/\s+/g," ");
+        var backupAlt = 0;
+        var backupIndex = 0;
+        for(var m=0; m<importItem.length; m++) {
+          if(importItem.eq(m).find(".tip").text().trim()) {
+            var tip = importItem.eq(m).find(".tip").text().replace(/add/g,"").replace(/:/g,"").trim();
+            var textareaVal = importItem.eq(m).find("textarea").val();
+            if(tip === "main img") {
+              var str2 = textareaVal.trim().replace(/\s+/g," ");
+              if(str2 === "") {
+                str2 = backupAlt;
+              }
+              str += '<img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-main-1.jpg"}}" alt="' + str2 + '">\n';
+            }else if(tip === "relate"){
+              var arrAlt = importItem.eq(m).find(".relatealt textarea");
+              var arrH3 = importItem.eq(m).find(".relateh3 textarea");
+              var arrP = importItem.eq(m).find(".relatep textarea");
+              var column = 0;
+              var relateStr = "";
+              for(var r=0; r<4; r++){
+                if(arrAlt.eq(r).val().trim()!="" || arrH3.eq(r).val().trim()!="" || arrP.eq(r).val().trim()!=""){
+                  column++;
+                }
+              }
+              if(column>0) {
+                var grid = "";
+                var rowNum = 0;
+                if (column == 1) {
+                  grid = "col-lg-12 col-md-12 col-xs-12";
+                } else if (column == 2) {
+                  grid = "col-lg-6 col-md-6 col-xs-12";
+                } else if (column == 3) {
+                  grid = "col-lg-4 col-md-4 col-xs-12";
+                } else if (column == 4) {
+                  grid = "col-lg-3 col-md-3 col-sm-6 col-xs-12";
+                }
+
+                for(var t=0; t<4; t++) {
+                  if(arrAlt.eq(t).val().trim()!="" || arrH3.eq(t).val().trim()!="" || arrP.eq(t).val().trim()!=""){
+                    relateStr += '\n    <div class=' + grid + '>';
+                    rowNum++;
+                    if(arrAlt.eq(t).val().trim()!="") {
+                      var strAlt = arrAlt.eq(t).val().trim().replace(/\s+/g," ");
+                      relateStr += '\n      <img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-r-0' + rowNum + '.jpg"}}" alt="' + strAlt + '">';
+                    }else {
+                      var strAlt = arrAlt.eq(t).val().trim().replace(/\s+/g," ");
+                      relateStr += '\n      <img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-r-0' + rowNum + '.jpg"}}" alt="' + backupAlt + '">';
+                    }
+                    if(arrH3.eq(t).val().trim()!="") {
+                      var strH3 = arrH3.eq(t).val().trim().replace(/\s+/g," ");
+                      relateStr += '\n      <h3>' + strH3 + '</h3>';
+                    }
+                    if(arrP.eq(t).val().trim()!="") {
+                      var strP = arrP.eq(t).val().trim().replace(/\s+/g," ");
+                      relateStr += '\n      <h3>' + strP + '</h3>';
+                    }
+                    relateStr += '\n    </div>';
+                  }
+                }
+                str += '<div class="pr-relate">\n  <div class="row">' + relateStr + '\n  </div>\n</div>';
+              }
+            } else if(tip === "note p"){
+              setExtraHtml("p", "pr-note", '<p class="strong">Note:</p>');
+            } else if(tip === "specifics li span"){
+              setExtraHtml("li", "specifics_product", "<h2>Product Specifics</h2>", "span");
+            } else if(tip === "feature li"){
+              str += '<h2>Features</h2>\n' + setHtml("li");
+            } else if(tip === "li span") {
+              str += setHtml("li", "span");
+            }else if(tip === "h1") {
+              str += setHtml(label,mark);
+              if(backupIndex == 0) {
+                backupIndex = 1;
+                backupAlt = textareaVal.replace(/\s+/g," ");
+              }
+            }else {
+              setCommonHtml("h2");
+              setCommonHtml("h3");
+              setCommonHtml("p");
+              setCommonHtml("li");
+            }
+
+            function setCommonHtml(label,mark){
+              if(tip === label) {
+                str += setHtml(label,mark);
+              }
+            }
+
+            function setExtraHtml(label,className, extra, mark){
+              str += '<div class="'+className+'">';
+              var strExtra = '\n'+extra+'\n' + setHtml(label,mark);
+              str += strExtra.replace(/(\s*$)/g,"").replace(/\n/g,"\n  ") + '\n</div>\n';
+            }
+
+            function setHtml(label,mark){
+              var strN = "";
+              var arrN = textareaVal.split("\n");
+              for(var s=0; s<arrN.length; s++) {
+                if(arrN[s].trim() != "") {
+                  arrN[s] = arrN[s].trim().replace(/\s+/g," ");
+                  if(mark) {
+                    if(arrN[s].indexOf(":")!=-1 || arrN[s].indexOf("：")!=-1) {
+                      if(arrN[s].indexOf(":")!=-1 && arrN[s].indexOf("：")!=-1) {
+                        var pos = arrN[s].indexOf(":") > arrN[s].indexOf("：") ? arrN[s].indexOf("：") : arrN[s].indexOf(":");
+                      }else if(arrN[s].indexOf(":")!=-1){
+                        var pos = arrN[s].indexOf(":");
+                      }else if(arrN[s].indexOf("：")!=-1){
+                        var pos = arrN[s].indexOf("：");
+                      }
+                      arrN[s] = "<"+mark+">" + arrN[s].substr(0,pos+1) + " </"+mark+">" + arrN[s].substr(pos+1).trim();
+                    }
+                  }
+                  if(label === "li") {
+                    strN += "  <"+label+">" + arrN[s] + "</"+label+">\n";
+                  }else {
+                    strN += "<"+label+">" + arrN[s] + "</"+label+">\n";
+                  }
+                }
+              }
+              if(label === "li") {
+                strN = "<ul>\n" + strN +"</ul>\n";
+              }
+              return strN;
+            }
+          }
+        }
+        $(target).next().find("textarea").val(str);
+        autoTextarea($(target).next().find("textarea"));
+      }
+    });
+
+    $(".ready-edit").click(function (e) {
+      var target = e.target;
+      if ($(target).hasClass("del-popups")) {
+        $(target).parent().remove();
+      }
+    });
+
+    $(".del-ready").click(function () {
+      $(this).prev().prev().children().last().remove();
+    });
+
+    $(".wait-edit .submit").click(function () {
+      var skuVal = $(this).prev().find(".popups-content .sku").val().trim().replace(/\s+/g, " ");
+      var sortVal = $(this).prev().find(".popups-content .sort").val().trim().replace(/\s+/g, " ");
+      if (skuVal && sortVal) {
+        var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-item">' + skuVal + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
+        var readyEdit = $(this).parent().parent().find(".ready-edit");
+        readyEdit.append(newEditItem);
+        $(this).prev().clone().appendTo(readyEdit.children().last().find(".popups-box"));
+      }
+      $(this).parent().removeClass("active");
+    });
+
+    /*dataList的select用arr数组项作为option,且按字母排序；dataList对应input的值必须为其保存数据中的一项*/
+    var arr1 = ['Wheel Spacers', 'Wheel Hub Bearing', 'Keyless Entry Remote', 'Ignition Coil', 'Head Gasket Set', 'AC Compressor', 'Exhaust Manifold', 'CV Axle Shaft Assembly', 'Brake Rotor And Pads', 'Timing Chain Kit', 'Timing Belt Kit', 'Power Window Regulator', 'Leveling Lift Kit', 'Thermosta Thousing', 'Water Pump', 'Radiators', 'Suspension Kit', 'Door Handle', 'Shock Absorber', 'Complete Struts', 'Fuel Pump', 'O2 Sensor', 'Lift Support', 'Sensor', 'Side Mirror', 'ABS Wheel Speed Sensor', 'Door Lock Actuator', 'Power Window Switch', 'Starter', 'Air Suspension Struts', 'Alternator', 'Radiator Cooling Fan', 'Brake Caliper', 'Fasteners'];
+
+    dataListValue(arr1, "sort");
+
+    /*预览产品详情*/
+    $(".preview2").click(function () {
+      $(".previewArea2").html($(".result2").val().replace(/{{media url='/g, "https://eccppautoparts.com/media/").replace(/{{media url="/g, "https://eccppautoparts.com/media/").replace(/}}'/g, "").replace(/}}"/g, ""));
+    });
+
+    function batchImport(obj, maxNum) {
+      if (obj.files.length == 0) {
+        return;
+      }
+
+      var f = obj.files[0];
+      var reader = new FileReader();
+      reader.readAsBinaryString(f);
+      reader.onload = function (e) {
+        var data = e.target.result;
+        excelFile = XLSX.read(data, {
+          type: 'binary'
+        });
+
+        //只展示第一个表
+        var headers = new Array();
+        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+        for (var key in str[0]) {
+          headers.push(key);  //获取表头
+        }
+
+        var dataTable1 = "";
+        var dataTable2 = "";
+        //这里显示前maxNum行
+        if (maxNum > str.length) {
+          maxNum = str.length;
+        }
+
+        for(var i=0; i<maxNum; i++){
+          var json = str[i];
+          if (json != undefined && json[headers[1]]) {
+            getData(json);
+          }
+        }
+
+        function getData(json) {
+          dataTable1 = productPoint(json[headers[3]]);
+
+          dataTable2 = productdetail(json[headers[1]], json[headers[2]], json[headers[4]], json[headers[5]], json[headers[6]], json[headers[7]], json[headers[8]], json[headers[9]]);
+
+          var rowNum = 0;
+          for (var m = 10; m < headers.length; m += 12) {
+            if (isEmpty(m, 12)) {
+              var cellNum = 1;
+              var strN = "";
+              var col = "";
+              var rIndex = 0;
+              for (var n = m; n < m + 12; n += 3) {
+                if ((json[headers[n]] && json[headers[n]].trim() != "") || (json[headers[n + 1]] && json[headers[n + 1]].trim() != "") || (json[headers[n + 2]] && json[headers[n + 2]].trim() != "")) {
+                  rIndex++;
+                }
+              }
+              if (rIndex == 1) {
+                col = "col-lg-12 col-md-12 col-xs-12";
+              } else if (rIndex == 2) {
+                col = "col-lg-6 col-md-6 col-xs-12";
+              } else if (rIndex == 3) {
+                col = "col-lg-4 col-md-4 col-xs-12";
+              } else if (rIndex == 4) {
+                col = "col-lg-3 col-md-3 col-sm-6 col-xs-12";
+              }
+
+              for (var n = m; n < m + 12; n += 3) {
+                if (isEmpty(n, 3)) {
+                  strN += '\n    <div class=' + col + '>';
+                  if (json[headers[n + 2]] && json[headers[n + 2]].trim() != "") {
+                    strN += '\n      <img src="{{media url="wysiwyg/products-images/' + json[headers[2]].trim().replace(/\s+/g, "_") + "/" + json[headers[1]].trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[n + 2]].trim() + '">';
+                  } else if (json[headers[5]] && json[headers[5]].trim() != "") {
+                    strN += '\n      <img src="{{media url="wysiwyg/products-images/' + json[headers[2]].trim().replace(/\s+/g, "_") + "/" + json[headers[1]].trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[5]].trim() + '">';
+                  }
+                  if (json[headers[n]] && json[headers[n]].trim() != "") {
+                    strN += '\n      <h3>' + json[headers[n]].trim() + '</h3>';
+                  }
+                  if (json[headers[n + 1]] && json[headers[n + 1]].trim() != "") {
+                    strN += '\n      <p>' + json[headers[n + 1]].trim() + '</p>';
+                  }
+                  strN += '\n    </div>';
+                  cellNum++;
+                }
+              }
+              strN = '\n<div class="pr-relate">\n  <div class="row">' + strN + '\n  </div>\n</div>';
+              dataTable2 += strN;
+              rowNum++;
+            }
+          }
+
+          $(obj).parent().find(".wait-edit .sku").val(json[headers[1]]);
+          $(obj).parent().find(".wait-edit .sort").val(json[headers[2]]);
+          var point = $(obj).parent().find(".wait-edit .popups-content-item").eq(0);
+          point.find(".export textarea").eq(0).val(dataTable1);
+          point.find(".import-item").eq(0).find("textarea").val(json[headers[3]]);
+
+          var detail = $(obj).parent().find(".wait-edit .popups-content-item").eq(1);
+          detail.find(".export textarea").eq(0).val(dataTable2);
+          detail.find(".import-item").eq(0).find("textarea").val(json[headers[4]]);
+          detail.find(".import-item").eq(1).find("textarea").val(json[headers[5]]);
+          detail.find(".import-item").eq(2).find("textarea").val(json[headers[6]]);
+          detail.find(".import-item").eq(3).find("textarea").val(json[headers[7]]);
+          detail.find(".import-item").eq(4).find("textarea").val(json[headers[8]]);
+          detail.find(".import-item").eq(5).find("textarea").val(json[headers[9]]);
+          for(var h=0; h<4; h++) {
+            detail.find(".import-item").eq(6).find(".relatealt").find("textarea").eq(h).val(json[headers[12+3*h]]);
+            detail.find(".import-item").eq(6).find(".relateh3").find("textarea").eq(h).val(json[headers[10+3*h]]);
+            detail.find(".import-item").eq(6).find(".relatep").find("textarea").eq(h).val(json[headers[11+3*h]]);
+          }
+
+          var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-item">' + json[headers[1]] + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
+          var readyEdit = $(obj).parent().find(".ready-edit");
+          readyEdit.append(newEditItem);
+          $(obj).parent().find(".wait-edit .popups-container").clone().appendTo(readyEdit.children().last().find(".popups-box"));
+
+          function isEmpty(base, len) {
+            for (var t = 0; t < len; t++) {
+              if (!(json[headers[base + t]] && json[headers[base + t]].trim() != "")) {
+                if (t == len - 1) {
+                  return false;
+                }
+              } else {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    /*导入表单*/
+    function showfile(obj, maxNum) {
+      var sku = $(obj).parent().prev().find(".sku");
+      var sort = $(obj).parent().prev().find('[list="sort"]');
+      if (sku.val() != "" && sort.val() != "") {
+        $(".previewArea2").html("");
+        if (obj.files.length == 0) {
+          return;
+        }
+        var f = obj.files[0];
+        var reader = new FileReader();
+        reader.readAsBinaryString(f);
+        reader.onload = function (e) {
+          var data = e.target.result;
+          excelFile = XLSX.read(data, {
+            type: 'binary'
+          });
+
+          //只展示第一个表
+          var headers = new Array();
+          var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+          for (var key in str[0]) {
+            headers.push(key);  //获取表头
+          }
+
+          var dataTable1 = "";
+          var dataTable2 = "";
+          //这里显示前maxNum行
+          if (maxNum > str.length) {
+            maxNum = str.length;
+          }
+          if ($(".num").val()) {
+            var num = $(".num").val();
+            var json = str[num - 1];
+            if (json != undefined && json[headers[1]] == sku.val().trim() && json[headers[2]] == sort.val().trim()) {
+              getData(json);
+            } else {
+              for (var i = 0; i < maxNum; i++) {
+                var json = str[i];
+                if (json != undefined && json[headers[1]] == sku.val().trim() && json[headers[2]] == sort.val().trim()) {
+                  getData(json);
+                  break;
+                } else {
+                  if (i == maxNum - 1) {
+                    alert("请输入正确的sku和分类名");
+                  }
+                }
+              }
+            }
+          } else {
+            for (var i = 0; i < maxNum; i++) {
+              var json = str[i];
+              if (json != undefined && json[headers[1]] == sku.val().trim() && json[headers[2]] == sort.val().trim()) {
+                getData(json);
+                break;
+              } else {
+                if (i == maxNum - 1) {
+                  alert("请输入正确的sku和分类名");
+                }
+              }
+            }
+          }
+
+          function getData(json) {
+            dataTable1 = productPoint(json[headers[3]]);
+
+            dataTable2 = productdetail(sku.val(), sort.val(), json[headers[4]], json[headers[5]], json[headers[6]], json[headers[7]], json[headers[8]], json[headers[9]]);
+
+            var rowNum = 0;
+            for (var m = 10; m < headers.length; m += 12) {
+              if (isEmpty(m, 12)) {
+                var cellNum = 1;
+                var strN = "";
+                var col = "";
+                var rIndex = 0;
+                for (var n = m; n < m + 12; n += 3) {
+                  if ((json[headers[n]] && json[headers[n]].trim() != "") || (json[headers[n + 1]] && json[headers[n + 1]].trim() != "") || (json[headers[n + 2]] && json[headers[n + 2]].trim() != "")) {
+                    rIndex++;
+                  }
+                }
+                if (rIndex == 1) {
+                  col = "col-lg-12 col-md-12 col-xs-12";
+                } else if (rIndex == 2) {
+                  col = "col-lg-6 col-md-6 col-xs-12";
+                } else if (rIndex == 3) {
+                  col = "col-lg-4 col-md-4 col-xs-12";
+                } else if (rIndex == 4) {
+                  col = "col-lg-3 col-md-3 col-sm-6 col-xs-12";
+                }
+
+                for (var n = m; n < m + 12; n += 3) {
+                  if (isEmpty(n, 3)) {
+                    strN += '\n    <div class=' + col + '>';
+                    if (json[headers[n + 2]] && json[headers[n + 2]].trim() != "") {
+                      strN += '\n      <img src="{{media url="wysiwyg/products-images/' + sort.val().trim().replace(/\s+/g, "_") + "/" + sku.val().trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[n + 2]].trim() + '">';
+                    } else if (json[headers[5]] && json[headers[5]].trim() != "") {
+                      strN += '\n      <img src="{{media url="wysiwyg/products-images/' + sort.val().trim().replace(/\s+/g, "_") + "/" + sku.val().trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[5]].trim() + '">';
+                    }
+                    if (json[headers[n]] && json[headers[n]].trim() != "") {
+                      strN += '\n      <h3>' + json[headers[n]].trim() + '</h3>';
+                    }
+                    if (json[headers[n + 1]] && json[headers[n + 1]].trim() != "") {
+                      strN += '\n      <p>' + json[headers[n + 1]].trim() + '</p>';
+                    }
+                    strN += '\n    </div>';
+                    cellNum++;
+                  }
+                }
+                strN = '\n<div class="pr-relate">\n  <div class="row">' + strN + '\n  </div>\n</div>';
+                dataTable2 += strN;
+                rowNum++;
+              }
+            }
+
+            function isEmpty(base, len) {
+              for (var t = 0; t < len; t++) {
+                if (!(json[headers[base + t]] && json[headers[base + t]].trim() != "")) {
+                  if (t == len - 1) {
+                    return false;
+                  }
+                } else {
+                  return true;
+                }
+              }
+            }
+          }
+
+          $(".result1").val(dataTable1);
+          $(".result2").val(dataTable2);
+
+          autoTextarea($(".result1"));
+          autoTextarea($(".result2"));
+        }
+      } else {
+        if (sku.val()) {
+          alert("分类名不能为空");
+        } else if ($('[list="sort"').val()) {
+          alert("sku号不能为空");
+        } else {
+          alert("sku号和分类名不能为空");
+        }
+      }
+    }
+
+    /*******************************productPoint (转换买点)*******************************/
+    function productPoint(sellpoint) {
+      //产品卖点
+      if (sellpoint && sellpoint.trim() != "") {
+        var arr = sellpoint.trim().replace(/\r\n/g, "\n").split("\n");
+        var str = "";
+        for (var i = 0; i < arr.length; i++) {
+          arr[i] = arr[i].toString().trim();
+          if (arr[i]) {
+            str += "\n  <li>" + arr[i] + "</li>";
+          }
+        }
+        str = "<ul>" + str + "\n</ul>";
+        return str;
+      }
+    }
+
+    /*******************************productdetail (转换产品详情)*******************************/
+    function productdetail(skuVal, sortVal, mainImg, title, description, feature, note, specifics) {
+      var data = "";
+      //产品详情
+      if (mainImg && mainImg.trim() != "") {
+        data += '<img src="{{media url="wysiwyg/products-images/' + sortVal.trim().replace(/\s+/g, "_") + "/" + skuVal.trim() + '-main-1.jpg"}}" alt="' + mainImg.trim() + '">';
+      } else if (title && title.trim() != "") {
+        data += '<img src="{{media url="wysiwyg/products-images/' + sortVal.trim().replace(/\s+/g, "_") + "/" + skuVal.trim() + '-main-1.jpg"}}" alt="' + title.trim() + '">';
+      }
+
+      if (title && title.trim() != "") {
+        data += '\n<h1>' + title.trim() + '</h1>';
+      }
+
+      if (description && description.trim() != "") {
+        var arr6 = description.trim().replace(/\r\n/g, "\n").split("\n");
+        for (var i = 0; i < arr6.length; i++) {
+          arr6[i] = arr6[i].toString().trim();
+          if (arr6[i]) {
+            data += "\n<p>" + arr6[i] + "</p>";
+          }
+        }
+      }
+
+      if (feature && feature.trim() != "") {
+        data += '\n<h2>Features</h2>';
+        var arr7 = feature.trim().replace(/\r\n/g, "\n").split("\n");
+        var str7 = "";
+        for (var i = 0; i < arr7.length; i++) {
+          arr7[i] = arr7[i].toString().trim();
+          if (arr7[i]) {
+            str7 += "\n  <li>" + arr7[i] + "</li>";
+          }
+        }
+        data += "\n<ul>" + str7 + "\n</ul>";
+      }
+
+      if (note && note.trim() != "") {
+        var arr8 = note.trim().replace(/\r\n/g, "\n").split("\n");
+        var str8 = "";
+        str8 += '\n  <p class="strong">Note:</p>';
+        for (var i = 0; i < arr8.length; i++) {
+          arr8[i] = arr8[i].toString().trim();
+          if (arr8[i]) {
+            str8 += "\n  <p>" + arr8[i] + "</p>";
+          }
+        }
+        data += '\n<div class="pr-note">' + str8 + '\n</div>';
+      }
+
+      if (specifics && specifics.trim() != "") {
+        var arr9 = specifics.trim().replace(/\r\n/g, "\n").split("\n");
+        var str9 = "";
+        str9 += '\n  <h2>Product Specifics</h2>\n  <ul>';
+        for (var i = 0; i < arr9.length; i++) {
+          arr9[i] = arr9[i].toString().trim();
+          if (arr9[i]) {
+            if (arr9[i].indexOf(":") != -1) {
+              arr9[i] = "<span>" + arr9[i].slice(0, arr9[i].indexOf(":")).trim() + ": </span>" + arr9[i].slice(arr9[i].indexOf(":") + 1).trim();
+            } else if (arr9[i].indexOf("：") != -1) {
+              arr9[i] = "<span>" + arr9[i].slice(0, arr9[i].indexOf("：")).trim() + ": </span>" + arr9[i].slice(arr9[i].indexOf("：") + 1).trim();
+            }
+            str9 += "\n    <li>" + arr9[i] + "</li>";
+          }
+        }
+        str9 += "\n  </ul>";
+        data += '\n<div class="specifics_product">' + str9 + '\n</div>';
+      }
+      return data;
+    }
+
+    /*使用arr数组项并按字母排序作为dataList的保存数据；input输入值必须存在于对应dataList保存数据中*/
+    function dataListValue(arr, ele) {
+      arr.sort(function (s1, s2) {
+        x1 = s1.toUpperCase();
+        x2 = s2.toUpperCase();
+        if (x1 < x2) {
+          return -1;
+        }
+        if (x1 > x2) {
+          return 1;
+        }
+        return 0;
+      });
+
+      var temp = "<li>AutoParts</li>";
+      for (var i in arr) {
+        temp += "<li value=" + arr[i].trim().replace(/\s+/g, "_") + ">" + arr[i].trim().replace(/\s+/g, " ") + "</li>";
+      }
+      $("<ul class='dataList'>" + temp + "</ul>").insertAfter("." + ele);
+
+      $(".tool").on("input propertychange", function (e) {
+        var target = e.target;
+        if ($(target).hasClass(ele)) {
+          $(target).val($(target).val().trim().replace(/\s+/g, " "));
+          $(target).next().css("display", "block");
+          var dataList = $(target).next().children();
+          for (var i = 0; i < dataList.length; i++) {
+            if (dataList.eq(i).text().toUpperCase().indexOf($(target).val().toUpperCase()) == -1) {
+              dataList.eq(i).css("display", "none");
+            } else {
+              dataList.eq(i).css("display", "");
+            }
+          }
+        }
+      });
+
+      $(".tool").blur(function (e) {
+        var target = e.target;
+        if ($(target).hasClass(ele)) {
+          if ($(target).val().replace(/\s/g, "") != "") {
+            if ($(".dataList li[value='" + $(target).val().trim().replace(/\s+/g, "_") + "']").length == 0) {
+              $("." + ele).val("");
+              $(".dataList").css("display", "");
+              $(".dataList li").css("display", "block");
+            }
+          }
+        }
+      });
+
+      $(".tool").click(function (e) {
+        var target = e.target;
+        if ($(target).hasClass(ele)) {
+          var dis = $(target).next().css("display") == "block" ? "" : "block";
+          $(target).next().css("display", dis);
+        }
+
+        if ($(target).parent().hasClass("dataList")) {
+          if ($(target).parent().prev().val() != $(target).text()) {
+            $(target).parent().prev().val($(target).text());
+          }
+        }
+      });
+
+      $("html").click(function (e) {
+        for (var k in ele) {
+          if (!$(e.target).hasClass(ele)) {
+            $(".dataList").css("display", "");
+          }
+        }
+      });
+    }
+
+    /*textarea 高度自适应*/
+    function autoTextarea(jqueryDom){
+      jqueryDom.each(function(){
+        $(this).css("overflow-y","scroll");
+        $(this).css("overflow-y","scroll");
+        $(this).css("height","50px");
+        $(this).css("height",this.scrollHeight>50 ? this.scrollHeight:50 + "px");
+        $(this).css("overflow-y","");
+      });
+    }
+</script>
+
+</body>
+
+</html>
