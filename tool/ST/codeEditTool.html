@@ -45,7 +45,7 @@
                   <button>
                     <label for="file-cancel">取消</label>
                   </button>
-                    <a href="/resources/file/upload_textchangehtml.xlsx" download="product_info_example.xlsx">
+                    <a href="https://recordideas.github.io/resources/file/upload_textchangehtml.xlsx" download="product_info_example.xlsx">
                       <button>
                         <label>下载</label>
                       </button>
@@ -1110,11 +1110,11 @@
         }
       });
 
-      $(".tool").blur(function (e) {
+      $(".tool").click(function (e) {
         var target = e.target;
-        if ($(target).hasClass(ele)) {
-          if ($(target).val().replace(/\s/g, "") != "") {
-            if ($(".dataList li[value='" + $(target).val().trim().replace(/\s+/g, "_") + "']").length == 0) {
+        if($(target).hasClass(ele)!=true || $(target).parent().hasClass("dataList")!=true) {
+          if ($("."+ele).val().replace(/\s/g, "") != "") {
+            if ($(".dataList li[value='" + $("."+ele).val().trim().replace(/\s+/g, "_") + "']").length == 0) {
               $("." + ele).val("");
               $(".dataList").css("display", "");
               $(".dataList li").css("display", "block");
