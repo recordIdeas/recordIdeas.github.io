@@ -45,7 +45,7 @@
                   <button>
                     <label for="file-cancel">取消</label>
                   </button>
-                    <a href="https://recordideas.github.io/resources/file/upload_textchangehtml.xlsx" download="product_info_example.xlsx">
+                    <a href="/resources/file/upload_textchangehtml.xlsx" download="product_info_example.xlsx">
                       <button>
                         <label>下载</label>
                       </button>
@@ -1112,27 +1112,32 @@
 
       $(".tool").click(function (e) {
         var target = e.target;
-        if($(target).hasClass(ele)!=true || $(target).parent().hasClass("dataList")!=true) {
+        if ($(target).hasClass(ele)) {
+          var dis = $(target).next().css("display") == "block" ? "" : "block";
+          $(target).next().css("display", dis);
+
+          if(dis == "block") {
+            $(target).val($(target).val().trim().replace(/\s+/g, " "));
+            var dataList = $(target).next().children();
+            for (var i = 0; i < dataList.length; i++) {
+              if (dataList.eq(i).text().toUpperCase().indexOf($(target).val().toUpperCase()) == -1) {
+                dataList.eq(i).css("display", "none");
+              } else {
+                dataList.eq(i).css("display", "");
+              }
+            }
+          }
+        }else if ($(target).parent().prev().hasClass(ele)) {
+          if ($(target).parent().prev().val() != $(target).text()) {
+            $(target).parent().prev().val($(target).text());
+          }
+        }else {
           if ($("."+ele).val().replace(/\s/g, "") != "") {
             if ($(".dataList li[value='" + $("."+ele).val().trim().replace(/\s+/g, "_") + "']").length == 0) {
               $("." + ele).val("");
               $(".dataList").css("display", "");
               $(".dataList li").css("display", "block");
             }
-          }
-        }
-      });
-
-      $(".tool").click(function (e) {
-        var target = e.target;
-        if ($(target).hasClass(ele)) {
-          var dis = $(target).next().css("display") == "block" ? "" : "block";
-          $(target).next().css("display", dis);
-        }
-
-        if ($(target).parent().hasClass("dataList")) {
-          if ($(target).parent().prev().val() != $(target).text()) {
-            $(target).parent().prev().val($(target).text());
           }
         }
       });
