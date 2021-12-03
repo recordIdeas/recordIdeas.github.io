@@ -188,6 +188,7 @@
       padding: 0 5px;
       overflow-y: hidden;
       resize: none;
+      font-size: 13px;
     }
 
     .tool {
@@ -441,6 +442,7 @@
       margin-top: 5px;
       padding: 20px;
       border: 1px solid #ddd;
+      font-size: 13px;
     }
 
     .previewArea {
@@ -1125,8 +1127,8 @@
       jqueryDom.each(function(){
         $(this).css("overflow-y","scroll");
         $(this).css("overflow-y","scroll");
-        $(this).css("height","50px");
-        $(this).css("height",this.scrollHeight>50 ? this.scrollHeight:50 + "px");
+        $(this).css("height","30px");
+        $(this).css("height",this.scrollHeight>30 ? this.scrollHeight:30 + "px");
         $(this).css("overflow-y","");
       });
     }
