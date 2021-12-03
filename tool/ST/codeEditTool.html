@@ -26,271 +26,140 @@
   <div class="tool">
     <div class="tabs">
       <input id="tab-1" type="radio" name="tab" checked hidden>
-      <label for="tab-1">模板1</label>
+      <label for="tab-1">产品卖点/产品详情</label>
       <div class="tab">
-        <div class="tabs">
-          <input id="tab-11" type="radio" name="tab-model1" checked hidden>
-          <label for="tab-11">自定义</label>
-          <div class="tab">
-            <div class="edit">
-              <div class="ready-edit"></div>
-              <button class="export-model">导出</button>
-              <table hidden></table>
-              <button class="del-ready">-</button>
-              <button class="popups-item">+</button>
-              <div class="wait-edit popups-box">
-                <div class="popups-container">
-                  <div class="sku-sort">
-                    <input class="sku" type="text" placeholder="sku">
-                    <div class="sortContent">
-                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
-                    </div>
-                  </div>
-                  <div class="popups-content">
-                    <div class="popups-content-item">
-                      <div class="import">
-                        <div class="import-item">
-                          <span class="tip">add li:</span>
-                          <textarea class="textarea"></textarea>
-                        </div>
-                      </div>
-                      <button class="transform">转换</button>
-                      <div class="export">
-                        <span>买点</span>
-                        <textarea></textarea>
-                      </div>
-                    </div>
-                    <div class="popups-content-item">
-                      <div class="import">
-                        <div class="import-item">
-                          <span class="tip">add main img:</span>
-                          <textarea class="textarea" placeholder="product detail 的主图描述信息"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add h1:</span>
-                          <textarea class="textarea" placeholder="产品名称"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add p:</span>
-                          <textarea class="textarea" placeholder="产品描述"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add feature li:</span>
-                          <textarea class="textarea" placeholder="产品的Features"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add note p:</span>
-                          <textarea class="textarea">1.
-2.</textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add specifics li span:</span>
-                          <textarea class="textarea" placeholder="Specifics名: Specifics值"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add relate:</span>
-                          <div class="textarea border-0">
-                            <span class="relatetip">alt:</span>
-                            <div class="relatealt">
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_1"></textarea>
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_2"></textarea>
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_3"></textarea>
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_4"></textarea>
-                            </div>
-                            <span class="relatetip">h3:</span>
-                            <div class="relateh3">
-                              <textarea class="h3_1"></textarea>
-                              <textarea class="h3_2"></textarea>
-                              <textarea class="h3_3"></textarea>
-                              <textarea class="h3_4"></textarea>
-                            </div>
-                            <span class="relatetip">p:</span>
-                            <div class="relatep">
-                              <textarea class="p_1"></textarea>
-                              <textarea class="p_2"></textarea>
-                              <textarea class="p_3"></textarea>
-                              <textarea class="p_4"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <button class="transform">转换</button>
-                      <div class="export">
-                        <span>产品详情</span>
-                        <textarea></textarea>
-                      </div>
-                    </div>
-                  </div>
-                  <button class="clear">清空</button>
-                  <button class="close-popups">×</button>
+        <div class="edit">
+          <div class="download-example">
+            <button class="popups-item">下载示例文件</button>
+            <div class="popups-box">
+              <label for="file-cancel" style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+              "></label>
+              <div class="popups-container">
+                <div class="popups-content">
+                  <div>你确定下载这个文件吗？</div>
+                  <button>
+                    <label for="file-cancel">取消</label>
+                  </button>
+                  <a href="/resources/file/upload_textchangehtml.xlsx" download="code_edit_example.xlsx">
+                    <button>
+                      <label>下载</label>
+                    </button>
+                  </a>
                 </div>
-                <button class="submit">提交</button>
+                <button id="file-cancel" class="close-popups" hidden></button>
               </div>
             </div>
           </div>
-          <input id="tab-12" type="radio" name="tab-model1" hidden>
-          <label for="tab-12">导入表单</label>
-          <div class="tab">
-            <div style="margin:10px">
-              <div class="myPrecautions">
-                注意事项：<br>
-                1. 必须输入sku和分类名<br>
-              </div>
-              <div style="margin-top:10px">
-                <input type="text" placeholder="sku" class="sku" style="width:6em">
+          <input type="text" placeholder="序号" class="num" style="width:6em"
+            onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+          <input type="file" id="batchFile"
+          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          onchange="batchImport(this,5000)" onclick="this.value=''" ;>
+          <div class="ready-edit"></div>
+          <button class="export-model">导出</button>
+          <table hidden></table>
+          <button class="del-ready">-</button>
+          <button class="popups-item">+</button>
+          <div class="wait-edit popups-box">
+            <div class="popups-container">
+              <div class="sku-sort">
+                <input class="sku" type="text" placeholder="sku">
                 <div class="sortContent">
                   <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
                 </div>
               </div>
-              <div style="margin-top:10px">
-                <input type="text" placeholder="序号" class="num" style="width:6em"
-                  onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
-                <input type="file" id="reviewFile"
-                  accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                  onchange="showfile(this,5000)" onclick="this.value=''" ;>
-              </div>
-              <div style="margin-top:10px">
-                产品卖点：<br>
-                <textarea class="result1"></textarea>
-              </div>
-              <div style="margin-top:10px">
-                产品详情：<br>
-                <textarea class="result2"></textarea>
-                <br>
-                <button class="preview2">预览产品详情</button>
-                <div class="preview">
-                  <div class="previewArea2"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <input id="tab-13" type="radio" name="tab-model1" hidden>
-          <label for="tab-13">批量导表</label>
-          <div class="tab">
-            <div class="edit">
-              <div class="download-example">
-                <button class="popups-item">下载示例文件</button>
-                <div class="popups-box">
-                  <label for="file-cancel" style="
-                      position: absolute;
-                      top: 0;
-                      left: 0;
-                      width: 100%;
-                      height: 100%;
-                  "></label>
-                  <div class="popups-container">
-                    <div class="popups-content">
-                      <div>你确定下载这个文件吗？</div>
-                      <button>
-                        <label for="file-cancel">取消</label>
-                      </button>
-                      <a href="/resources/file/upload_textchangehtml.xlsx" download="code_edit_example.xlsx">
-                        <button>
-                          <label>下载</label>
-                        </button>
-                      </a>
-                    </div>
-                    <button id="file-cancel" class="close-popups" hidden></button>
-                  </div>
-                </div>
-              </div>
-              <input type="file" id="batchFile"
-              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              onchange="batchImport(this,5000)" onclick="this.value=''" ;>
-              <div class="ready-edit"></div>
-              <button class="export-model">导出</button>
-              <table hidden></table>
-              <button class="del-ready">-</button>
-              <button class="popups-item">+</button>
-              <div class="wait-edit popups-box">
-                <div class="popups-container">
-                  <div class="sku-sort">
-                    <input class="sku" type="text" placeholder="sku">
-                    <div class="sortContent">
-                      <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
+              <div class="popups-content">
+                <div class="popups-content-item">
+                  <div class="import">
+                    <div class="import-item">
+                      <span class="tip">add li:</span>
+                      <textarea class="textarea"></textarea>
                     </div>
                   </div>
-                  <div class="popups-content">
-                    <div class="popups-content-item">
-                      <div class="import">
-                        <div class="import-item">
-                          <span class="tip">add li:</span>
-                          <textarea class="textarea"></textarea>
-                        </div>
-                      </div>
-                      <button class="transform">转换</button>
-                      <div class="export">
-                        <span>买点</span>
-                        <textarea></textarea>
-                      </div>
+                  <button class="transform">转换</button>
+                  <div class="export">
+                    <span>买点</span>
+                    <textarea></textarea>
+                  </div>
+                </div>
+                <div class="popups-content-item">
+                  <div class="import">
+                    <div class="import-item">
+                      <span class="tip">add main img:</span>
+                      <textarea class="textarea" placeholder="product detail 的主图描述信息"></textarea>
                     </div>
-                    <div class="popups-content-item">
-                      <div class="import">
-                        <div class="import-item">
-                          <span class="tip">add main img:</span>
-                          <textarea class="textarea" placeholder="product detail 的主图描述信息"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add h1:</span>
-                          <textarea class="textarea" placeholder="产品名称"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add p:</span>
-                          <textarea class="textarea" placeholder="产品描述"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add feature li:</span>
-                          <textarea class="textarea" placeholder="产品的Features"></textarea>
-                        </div>
-                        <div class="import-item">
-                          <span class="tip">add note p:</span>
-                          <textarea class="textarea">1.
+                    <div class="import-item">
+                      <span class="tip">add h1:</span>
+                      <textarea class="textarea" placeholder="产品名称"></textarea>
+                    </div>
+                    <div class="import-item">
+                      <span class="tip">add p:</span>
+                      <textarea class="textarea" placeholder="产品描述"></textarea>
+                    </div>
+                    <div class="import-item">
+                      <span class="tip">add feature li:</span>
+                      <textarea class="textarea" placeholder="产品的Features"></textarea>
+                    </div>
+                    <div class="import-item">
+                      <span class="tip">add note p:</span>
+                      <textarea class="textarea">1.
 2.</textarea>
+                    </div>
+                    <div class="import-item">
+                      <span class="tip">add specifics li span:</span>
+                      <textarea class="textarea" placeholder="Specifics名: Specifics值"></textarea>
+                    </div>
+                    <div class="import-item">
+                      <span class="tip">add relate:</span>
+                      <div class="textarea border-0">
+                        <span class="relatetip">alt:</span>
+                        <div class="relatealt">
+                          <textarea placeholder="相关内容的图片描述信息" class="alt_1"></textarea>
+                          <textarea placeholder="相关内容的图片描述信息" class="alt_2"></textarea>
+                          <textarea placeholder="相关内容的图片描述信息" class="alt_3"></textarea>
+                          <textarea placeholder="相关内容的图片描述信息" class="alt_4"></textarea>
                         </div>
-                        <div class="import-item">
-                          <span class="tip">add specifics li span:</span>
-                          <textarea class="textarea" placeholder="Specifics名: Specifics值"></textarea>
+                        <span class="relatetip">h3:</span>
+                        <div class="relateh3">
+                          <textarea class="h3_1"></textarea>
+                          <textarea class="h3_2"></textarea>
+                          <textarea class="h3_3"></textarea>
+                          <textarea class="h3_4"></textarea>
                         </div>
-                        <div class="import-item">
-                          <span class="tip">add relate:</span>
-                          <div class="textarea border-0">
-                            <span class="relatetip">alt:</span>
-                            <div class="relatealt">
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_1"></textarea>
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_2"></textarea>
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_3"></textarea>
-                              <textarea placeholder="相关内容的图片描述信息" class="alt_4"></textarea>
-                            </div>
-                            <span class="relatetip">h3:</span>
-                            <div class="relateh3">
-                              <textarea class="h3_1"></textarea>
-                              <textarea class="h3_2"></textarea>
-                              <textarea class="h3_3"></textarea>
-                              <textarea class="h3_4"></textarea>
-                            </div>
-                            <span class="relatetip">p:</span>
-                            <div class="relatep">
-                              <textarea class="p_1"></textarea>
-                              <textarea class="p_2"></textarea>
-                              <textarea class="p_3"></textarea>
-                              <textarea class="p_4"></textarea>
-                            </div>
-                          </div>
+                        <span class="relatetip">p:</span>
+                        <div class="relatep">
+                          <textarea class="p_1"></textarea>
+                          <textarea class="p_2"></textarea>
+                          <textarea class="p_3"></textarea>
+                          <textarea class="p_4"></textarea>
                         </div>
-                      </div>
-                      <button class="transform">转换</button>
-                      <div class="export">
-                        <span>产品详情</span>
-                        <textarea></textarea>
                       </div>
                     </div>
+                    <div class="action-relate">
+                      <button class="del-relate">-</button>
+                      <button class="add-relate">+</button>
+                    </div>
                   </div>
-                  <button class="clear">清空</button>
-                  <button class="close-popups">×</button>
+                  <button class="transform">转换</button>
+                  <div class="export">
+                    <span>产品详情</span>
+                    <textarea></textarea>
+                  </div>
+                  <button class="previewDetail">预览产品详情</button>
+                  <div class="preview">
+                    <div class="previewArea"></div>
+                  </div>
                 </div>
-                <button class="submit">提交</button>
               </div>
+              <button class="clear">清空</button>
+              <button class="close-popups">×</button>
             </div>
+            <button class="submit">提交</button>
           </div>
         </div>
       </div>
@@ -307,6 +176,11 @@
     button {
       margin: 5px 0;
       padding: 1px 6px;
+    }
+
+    button:hover {
+      color: #fff;
+      background: #2196f3;
     }
 
     textarea {
@@ -491,7 +365,7 @@
     }
 
     .download-example {
-      margin-bottom: 30px;
+      display: inline-block;
     }
 
     .download-example .popups-container {
@@ -569,17 +443,17 @@
       border: 1px solid #ddd;
     }
 
-    .previewArea2 {
+    .previewArea {
       font-size: 115%;
       line-height: 30px;
       font-family: Gotham, Roboto, Arial, Helvetica, sans-serif
     }
 
-    .previewArea2 img {
+    .previewArea img {
       width: 100%;
     }
 
-    .previewArea2 h1 {
+    .previewArea h1 {
       font-size: 160%;
       font-weight: 550;
       padding: 20px 0 10px 0;
@@ -587,35 +461,35 @@
     }
 
     @media (max-width: 560px) {
-      .previewArea2 h1 {
+      .previewArea h1 {
         font-size: 145%;
       }
     }
 
-    .previewArea2 h2 {
+    .previewArea h2 {
       font-size: 130%;
       font-weight: 550;
       padding: 10px 0 0 0;
     }
 
-    .previewArea2 p {
+    .previewArea p {
       margin: 0;
       line-height: 2em;
       padding: 0 0 10px 0;
     }
 
-    .previewArea2 ul {
+    .previewArea ul {
       padding: 10px 0;
     }
 
-    .previewArea2 li {
+    .previewArea li {
       list-style: circle outside;
       margin-left: 20px;
       width: calc(100% - 20px);
       padding: 0 5px;
     }
 
-    .previewArea2 .specifics_product {
+    .previewArea .specifics_product {
       display: inline-block;
       width: calc(100% + 40px);
       height: auto;
@@ -625,17 +499,17 @@
       background: #f5f0da59;
     }
 
-    .previewArea2 .specifics_product ul {
+    .previewArea .specifics_product ul {
       column-count: 2;
     }
 
     @media(max-width:991px) {
-      .previewArea2 .specifics_product ul {
+      .previewArea .specifics_product ul {
         column-count: 1;
       }
     }
 
-    .previewArea2 .specifics_product ul li {
+    .previewArea .specifics_product ul li {
       word-break: break-all;
     }
 
@@ -643,7 +517,7 @@
       margin-bottom: 20px;
     }
 
-    .previewArea2 .pr-note p {
+    .previewArea .pr-note p {
       padding-bottom: 0;
     }
 
@@ -701,6 +575,11 @@
         autoTextarea($(target).prev().find("textarea"));
       }
 
+      /*预览产品详情*/
+      if($(target).hasClass("previewDetail")) {
+        $(target).next().find(".previewArea").html($(target).prev().find("textarea").val().replace(/{{media url='/g, "https://eccppautoparts.com/media/").replace(/{{media url="/g, "https://eccppautoparts.com/media/").replace(/}}'/g, "").replace(/}}"/g, ""));
+      }
+
       /*编辑框内容转换为代码*/
       if($(target).hasClass("transform")) {
         var importItem = $(target).prev().children();
@@ -709,6 +588,7 @@
         var sortVal = $(target).parent().parent().parent().find(".sort").val().trim().replace(/\s+/g," ");
         var backupAlt = "";
         var backupIndex = 0;
+        var relateNum = 0;
         for(var m=0; m<importItem.length; m++) {
           if(importItem.eq(m).find(".tip").text().trim()) {
             var tip = importItem.eq(m).find(".tip").text().replace(/add/g,"").replace(/:/g,"").trim();
@@ -745,14 +625,14 @@
 
                 for(var t=0; t<4; t++) {
                   if(arrAlt.eq(t).val().trim()!="" || arrH3.eq(t).val().trim()!="" || arrP.eq(t).val().trim()!=""){
-                    relateStr += '\n    <div class=' + grid + '>';
+                    relateStr += '\n    <div class="' + grid + '">';
                     rowNum++;
                     if(arrAlt.eq(t).val().trim()!="") {
                       var strAlt = arrAlt.eq(t).val().trim().replace(/\s+/g," ");
-                      relateStr += '\n      <img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-r-0' + rowNum + '.jpg"}}" alt="' + strAlt + '">';
+                      relateStr += '\n      <img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-r-' + relateNum + rowNum + '.jpg"}}" alt="' + strAlt + '">';
                     }else {
                       var strAlt = arrAlt.eq(t).val().trim().replace(/\s+/g," ");
-                      relateStr += '\n      <img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-r-0' + rowNum + '.jpg"}}" alt="' + backupAlt + '">';
+                      relateStr += '\n      <img src="{{media url="wysiwyg/products-images/' + sortVal + "/" + skuVal + '-r-' + relateNum + rowNum + '.jpg"}}" alt="' + backupAlt + '">';
                     }
                     if(arrH3.eq(t).val().trim()!="") {
                       var strH3 = arrH3.eq(t).val().trim().replace(/\s+/g," ");
@@ -766,6 +646,7 @@
                   }
                 }
                 str += '<div class="pr-relate">\n  <div class="row">' + relateStr + '\n  </div>\n</div>';
+                relateNum++;
               }
             } else if(tip === "note p" && textareaVal.trim()!=""){
               setExtraHtml("p", "pr-note", '<p class="strong">Note:</p>');
@@ -837,6 +718,21 @@
         $(target).next().find("textarea").val(str);
         autoTextarea($(target).next().find("textarea"));
       }
+
+      //增加relate编辑框
+      if($(target).hasClass("add-relate")) {
+        if($(target).parent().prev().find(".tip").text() == "add relate:") {
+          $(target).parent().prev().clone().insertAfter($(target).parent().prev());
+          $(target).parent().prev().find("textarea").val("");
+        }
+      }
+
+      //删除relate编辑框
+      if($(target).hasClass("del-relate")) {
+        if($(target).parent().prev().prev().find(".tip").text() == "add relate:") {
+          $(target).parent().prev().remove();
+        }
+      }
     });
 
     /*删除编辑框*/
@@ -849,7 +745,7 @@
 
     /*删除最后一个编辑框*/
     $(".del-ready").click(function () {
-      $(this).prev().prev().children().last().remove();
+      $(this).prev().prev().prev().children().last().remove();
     });
 
     /*添加编辑框*/
@@ -910,11 +806,6 @@
       }
     });
 
-    /*预览产品详情*/
-    $(".preview2").click(function () {
-      $(".previewArea2").html($(".result2").val().replace(/{{media url='/g, "https://eccppautoparts.com/media/").replace(/{{media url="/g, "https://eccppautoparts.com/media/").replace(/}}'/g, "").replace(/}}"/g, ""));
-    });
-
     /*批量导表*/
     function batchImport(obj, maxNum) {
       if (obj.files.length == 0) {
@@ -944,10 +835,18 @@
           maxNum = str.length;
         }
 
-        for(var i=0; i<maxNum; i++){
-          var json = str[i];
-          if (json != undefined && json[headers[1]]) {
+        if ($(".num").val()) {
+          var num = $(".num").val();
+          var json = str[num - 1];
+          if (json != undefined) {
             getData(json);
+          }
+        } else {
+          for(var i=0; i<maxNum; i++){
+            var json = str[i];
+            if (json != undefined && json[headers[1]]) {
+              getData(json);
+            }
           }
         }
 
@@ -980,7 +879,7 @@
 
               for (var n = m; n < m + 12; n += 3) {
                 if (isEmpty(n, 3)) {
-                  strN += '\n    <div class=' + col + '>';
+                  strN += '\n    <div class="' + col + '">';
                   if (json[headers[n + 2]] && json[headers[n + 2]].trim() != "") {
                     strN += '\n      <img src="{{media url="wysiwyg/products-images/' + json[headers[2]].trim().replace(/\s+/g, "_") + "/" + json[headers[1]].trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[n + 2]].trim() + '">';
                   } else if (json[headers[5]] && json[headers[5]].trim() != "") {
@@ -1016,12 +915,19 @@
           detail.find(".import-item").eq(3).find("textarea").val(json[headers[7]]);
           detail.find(".import-item").eq(4).find("textarea").val(json[headers[8]]);
           detail.find(".import-item").eq(5).find("textarea").val(json[headers[9]]);
-          for(var h=0; h<4; h++) {
-            detail.find(".import-item").eq(6).find(".relatealt").find("textarea").eq(h).val(json[headers[12+3*h]]);
-            detail.find(".import-item").eq(6).find(".relateh3").find("textarea").eq(h).val(json[headers[10+3*h]]);
-            detail.find(".import-item").eq(6).find(".relatep").find("textarea").eq(h).val(json[headers[11+3*h]]);
+          detail.find(".import-item").slice(7).remove();
+          for (var h = 10; h < headers.length; h += 12) {
+            if (isEmpty(h, 12)) {
+              if(h>21) {
+                detail.find(".add-relate").click();
+              }
+              for (var k = 0; k < 4; k ++) {
+                detail.find(".import-item").last().find(".relateh3").find("textarea").eq(k).val(json[headers[h+3*k]]);
+                detail.find(".import-item").last().find(".relatep").find("textarea").eq(k).val(json[headers[h+1+3*k]]);
+                detail.find(".import-item").last().find(".relatealt").find("textarea").eq(k).val(json[headers[h+2+3*k]]);
+              }
+            }
           }
-
           var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-item">' + json[headers[1]] + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
           var readyEdit = $(obj).parent().find(".ready-edit");
           readyEdit.append(newEditItem);
@@ -1038,150 +944,6 @@
               }
             }
           }
-        }
-      }
-    }
-
-    /*导入表单*/
-    function showfile(obj, maxNum) {
-      var sku = $(obj).parent().prev().find(".sku");
-      var sort = $(obj).parent().prev().find('[list="sort"]');
-      if (sku.val() != "" && sort.val() != "") {
-        $(".previewArea2").html("");
-        if (obj.files.length == 0) {
-          return;
-        }
-        var f = obj.files[0];
-        var reader = new FileReader();
-        reader.readAsBinaryString(f);
-        reader.onload = function (e) {
-          var data = e.target.result;
-          excelFile = XLSX.read(data, {
-            type: 'binary'
-          });
-
-          //只展示第一个表
-          var headers = new Array();
-          var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
-          for (var key in str[0]) {
-            headers.push(key);  //获取表头
-          }
-
-          var dataTable1 = "";
-          var dataTable2 = "";
-          //这里显示前maxNum行
-          if (maxNum > str.length) {
-            maxNum = str.length;
-          }
-          if ($(".num").val()) {
-            var num = $(".num").val();
-            var json = str[num - 1];
-            if (json != undefined && json[headers[1]] == sku.val().trim() && json[headers[2]] == sort.val().trim()) {
-              getData(json);
-            } else {
-              for (var i = 0; i < maxNum; i++) {
-                var json = str[i];
-                if (json != undefined && json[headers[1]] == sku.val().trim() && json[headers[2]] == sort.val().trim()) {
-                  getData(json);
-                  break;
-                } else {
-                  if (i == maxNum - 1) {
-                    alert("请输入正确的sku和分类名");
-                  }
-                }
-              }
-            }
-          } else {
-            for (var i = 0; i < maxNum; i++) {
-              var json = str[i];
-              if (json != undefined && json[headers[1]] == sku.val().trim() && json[headers[2]] == sort.val().trim()) {
-                getData(json);
-                break;
-              } else {
-                if (i == maxNum - 1) {
-                  alert("请输入正确的sku和分类名");
-                }
-              }
-            }
-          }
-
-          function getData(json) {
-            dataTable1 = productPoint(json[headers[3]]);
-
-            dataTable2 = productdetail(sku.val(), sort.val(), json[headers[4]], json[headers[5]], json[headers[6]], json[headers[7]], json[headers[8]], json[headers[9]]);
-
-            var rowNum = 0;
-            for (var m = 10; m < headers.length; m += 12) {
-              if (isEmpty(m, 12)) {
-                var cellNum = 1;
-                var strN = "";
-                var col = "";
-                var rIndex = 0;
-                for (var n = m; n < m + 12; n += 3) {
-                  if ((json[headers[n]] && json[headers[n]].trim() != "") || (json[headers[n + 1]] && json[headers[n + 1]].trim() != "") || (json[headers[n + 2]] && json[headers[n + 2]].trim() != "")) {
-                    rIndex++;
-                  }
-                }
-                if (rIndex == 1) {
-                  col = "col-lg-12 col-md-12 col-xs-12";
-                } else if (rIndex == 2) {
-                  col = "col-lg-6 col-md-6 col-xs-12";
-                } else if (rIndex == 3) {
-                  col = "col-lg-4 col-md-4 col-xs-12";
-                } else if (rIndex == 4) {
-                  col = "col-lg-3 col-md-3 col-sm-6 col-xs-12";
-                }
-
-                for (var n = m; n < m + 12; n += 3) {
-                  if (isEmpty(n, 3)) {
-                    strN += '\n    <div class=' + col + '>';
-                    if (json[headers[n + 2]] && json[headers[n + 2]].trim() != "") {
-                      strN += '\n      <img src="{{media url="wysiwyg/products-images/' + sort.val().trim().replace(/\s+/g, "_") + "/" + sku.val().trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[n + 2]].trim() + '">';
-                    } else if (json[headers[5]] && json[headers[5]].trim() != "") {
-                      strN += '\n      <img src="{{media url="wysiwyg/products-images/' + sort.val().trim().replace(/\s+/g, "_") + "/" + sku.val().trim() + '-r-' + rowNum + cellNum + '.jpg"}}" alt="' + json[headers[5]].trim() + '">';
-                    }
-                    if (json[headers[n]] && json[headers[n]].trim() != "") {
-                      strN += '\n      <h3>' + json[headers[n]].trim() + '</h3>';
-                    }
-                    if (json[headers[n + 1]] && json[headers[n + 1]].trim() != "") {
-                      strN += '\n      <p>' + json[headers[n + 1]].trim() + '</p>';
-                    }
-                    strN += '\n    </div>';
-                    cellNum++;
-                  }
-                }
-                strN = '\n<div class="pr-relate">\n  <div class="row">' + strN + '\n  </div>\n</div>';
-                dataTable2 += strN;
-                rowNum++;
-              }
-            }
-
-            function isEmpty(base, len) {
-              for (var t = 0; t < len; t++) {
-                if (!(json[headers[base + t]] && json[headers[base + t]].trim() != "")) {
-                  if (t == len - 1) {
-                    return false;
-                  }
-                } else {
-                  return true;
-                }
-              }
-            }
-          }
-
-          $(".result1").val(dataTable1);
-          $(".result2").val(dataTable2);
-
-          autoTextarea($(".result1"));
-          autoTextarea($(".result2"));
-        }
-      } else {
-        if (sku.val()) {
-          alert("分类名不能为空");
-        } else if ($('[list="sort"').val()) {
-          alert("sku号不能为空");
-        } else {
-          alert("sku号和分类名不能为空");
         }
       }
     }
