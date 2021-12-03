@@ -189,6 +189,20 @@
       overflow-y: hidden;
       resize: none;
       font-size: 13px;
+      line-height: 20px;
+    }
+
+    input, span, button {
+      font-size: 13px;
+      line-height: 24px;
+    }
+
+    span,button,input {
+      vertical-align: middle;
+    }
+
+    input {
+      height: 30px;
     }
 
     .tool {
@@ -264,7 +278,6 @@
       width: 20em;
     }
 
-    .sku,
     .sortContent {
       max-width: 100%;
       margin-top: 5px;
@@ -334,7 +347,7 @@
       width: 100%;
       max-width: 1200px;
       background: #fff;
-      padding: 75px 0 50px 50px;
+      padding: 85px 0 40px 50px;
       height: 100%;
     }
 
@@ -345,7 +358,7 @@
     }
 
     .popups-content-item {
-      margin-top: 10px;
+      margin-bottom: 10px;
       border: 2px dashed #ccc;
       padding: 5px 10px;
     }
@@ -1127,8 +1140,8 @@
       jqueryDom.each(function(){
         $(this).css("overflow-y","scroll");
         $(this).css("overflow-y","scroll");
-        $(this).css("height","30px");
-        $(this).css("height",this.scrollHeight>30 ? this.scrollHeight:30 + "px");
+        $(this).css("height","40px");
+        $(this).css("height",this.scrollHeight>40 ? this.scrollHeight:40 + "px");
         $(this).css("overflow-y","");
       });
     }
