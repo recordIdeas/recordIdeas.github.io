@@ -921,7 +921,7 @@
             if($(".search-sku").val()) {
               for(var k=0; k<searchStr.length; k++){
                 var json = searchStr[k];
-                if (json != undefined && $(".search-sku").val() == json[headers[1]].toString().trim()) {
+                if ($(".search-sku").val() == json[headers[1]].toString().trim()) {
                   skuStr.push(searchStr[k]);
                 }
               }
@@ -936,7 +936,7 @@
             if($(".search-sort").val()) {
               for(var r=0; r<searchStr.length; r++){
                 var json = searchStr[r];
-                if (json != undefined && $(".search-sort").val() == json[headers[2]]) {
+                if ($(".search-sort").val() == json[headers[2]]) {
                   sortStr.push(searchStr[r]);
                 }
               }
@@ -944,12 +944,9 @@
               sortStr = searchStr;
             }
             searchStr = sortStr;
-          }
 
-          for(var i=0; i<searchStr.length; i++){
-            var json = searchStr[i];
-            if (json != undefined && json[headers[1]] && json[headers[2]]) {
-              getData(json);
+            for(var i=0; i<searchStr.length; i++){
+              getData(searchStr[i]);
             }
           }
         } else {
