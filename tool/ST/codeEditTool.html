@@ -910,7 +910,7 @@
           for(var n=0; n<numStr.length; n++){
             var json = numStr[n];
             if (json != undefined && json[headers[1]] && json[headers[2]]) {
-              json[headers[1]] = json[headers[1]].toString().trim();
+              json[headers[1]] = json[headers[1]].toString().replace(/\s/g,"");
               json[headers[2]] = json[headers[2]].toString().trim();
               searchStr.push(json);
             }
@@ -961,8 +961,6 @@
         function getData(json) {
           json[headers[2]] = json[headers[2]].toString().trim().replace(/\s+/g," ");
           if($(obj).parent().find(".wait-edit .dataList li[value='"+json[headers[2]].replace(/\s+/g, "_")+"']").length>0) {
-            $(obj).parent().find(".wait-edit .sort").val(json[headers[2]]);
-
             for(var j=0; j<headers.length; j++) {
               if(json[headers[j]]) {
                 json[headers[j]] = json[headers[j]].toString().trim();
@@ -970,7 +968,9 @@
             }
             json[headers[1]] = json[headers[1]].replace(/\s+/g,"");
 
+            $(obj).parent().find(".wait-edit .clear").click();
             $(obj).parent().find(".wait-edit .sku").val(json[headers[1]]);
+            $(obj).parent().find(".wait-edit .sort").val(json[headers[2]]);
             var point = $(obj).parent().find(".wait-edit .popups-content-item").eq(0);
             point.find(".import-item").eq(0).find("textarea").val(json[headers[3]]);
 
