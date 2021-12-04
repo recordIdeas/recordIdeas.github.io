@@ -898,8 +898,6 @@
         }
 
         if ($(".search-num").val() || $(".search-sku").val() || $(".search-sort").val()) {
-          var searchStr = [];
-
           var numStr = [];
           if($(".search-num").val()) {
             var num = $(".search-num").val();
@@ -907,6 +905,8 @@
           }else {
             numStr = str;
           }
+
+          var searchStr = [];
           for(var n=0; n<numStr.length; n++){
             var json = numStr[n];
             if (json != undefined && json[headers[1]] && json[headers[2]]) {
@@ -922,13 +922,11 @@
               for(var k=0; k<searchStr.length; k++){
                 var json = searchStr[k];
                 if ($(".search-sku").val() == json[headers[1]].toString().trim()) {
-                  skuStr.push(searchStr[k]);
+                  skuStr.push(json);
                 }
               }
-            }else {
-              skuStr = searchStr;
+              searchStr = skuStr;
             }
-            searchStr = skuStr;
           }
 
           if(searchStr.length>0){
@@ -937,13 +935,11 @@
               for(var r=0; r<searchStr.length; r++){
                 var json = searchStr[r];
                 if ($(".search-sort").val() == json[headers[2]]) {
-                  sortStr.push(searchStr[r]);
+                  sortStr.push(json);
                 }
               }
-            }else {
-              sortStr = searchStr;
+              searchStr = sortStr;
             }
-            searchStr = sortStr;
 
             for(var i=0; i<searchStr.length; i++){
               getData(searchStr[i]);
