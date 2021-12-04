@@ -29,8 +29,8 @@
       <label for="tab-1">产品卖点/产品详情</label>
       <div class="tab">
         <div class="edit">
-          <div class="download-example">
-            <button class="popups-item">下载示例文件</button>
+          <div class="popups">
+            <button class="popups-open">下载示例文件</button>
             <div class="popups-box">
               <label for="file-cancel" style="
                   position: absolute;
@@ -51,20 +51,50 @@
                       </button>
                     </a>
                 </div>
-                <button id="file-cancel" class="close-popups" hidden></button>
+                <button id="file-cancel" class="popups-close" hidden></button>
               </div>
             </div>
           </div>
-          <input type="text" placeholder="序号" class="num" style="width:6em"
-            onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+          <div class="advanced-search">
+            <input type="text" placeholder="序号" class="search-num" style="width:6em"
+              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+            <input type="text" placeholder="sku" class="search-sku" style="width:6em"
+                onkeyup="value=value.trim();">
+            <div class="sortContent">
+              <input type="text" list="sort" class="sort search-sort" placeholder="产品类名(后台上传到此文件夹)">
+            </div>
+          </div>
           <input type="file" id="batchFile"
           accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           onchange="batchImport(this,5000)" onclick="this.value=''" ;>
           <div class="ready-edit"></div>
-          <button class="export-model">导出</button>
+          <div class="popups">
+            <button class="popups-open">导出</button>
+            <div class="popups-box">
+              <label for="export-cancel" style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+              "></label>
+              <div class="popups-container">
+                <div class="popups-content">
+                  <div>你确定导出这个文件吗？</div>
+                  <button>
+                    <label for="export-cancel">取消</label>
+                  </button>
+                  <button class="export-model">
+                    <label>导出</label>
+                  </button>
+                </div>
+                <button id="export-cancel" class="popups-close" hidden></button>
+              </div>
+            </div>
+          </div>
           <table hidden></table>
           <button class="del-ready">-</button>
-          <button class="popups-item">+</button>
+          <button class="popups-open">+</button>
           <div class="wait-edit popups-box">
             <div class="popups-container">
               <div class="sku-sort">
@@ -157,7 +187,7 @@
                 </div>
               </div>
               <button class="clear">清空</button>
-              <button class="close-popups">×</button>
+              <button class="popups-close">×</button>
             </div>
             <button class="submit">提交</button>
           </div>
@@ -363,7 +393,7 @@
       padding: 5px 10px;
     }
 
-    .popups-box .popups-container .close-popups {
+    .popups-box .popups-container .popups-close {
       position: absolute;
       top: 10px;
       right: 15px;
@@ -378,15 +408,21 @@
       transform: translateX(50%);
     }
 
-    .download-example {
+    .popups,
+    .advanced-search{
       display: inline-block;
     }
 
-    .download-example .popups-container {
-      height: auto;
+    .advanced-search{
+      margin-bottom: 20px;
     }
 
-    .download-example .popups-container .popups-content {
+    .popups .popups-container {
+      height: auto;
+      padding: 25px 30px;
+    }
+
+    .popups .popups-container .popups-content {
       overflow: visible;
     }
 
@@ -397,7 +433,7 @@
       border: 1px dotted #999;
     }
 
-    .ready-edit .popups-item {
+    .ready-edit .popups-open {
       border: 2px solid #212121;
       padding: 1px 6px;
       line-height: 24px;
@@ -405,7 +441,7 @@
       display: inline-block;
     }
 
-    .ready-edit .popups-item:hover {
+    .ready-edit .popups-open:hover {
       background: #2196f3;
       color: #fff;
     }
@@ -571,14 +607,14 @@
       var target = e.target;
 
       /*弹窗开启*/
-      if ($(target).hasClass("popups-item")) {
+      if ($(target).hasClass("popups-open")) {
         $(target).next().addClass("active");
         $("body").addClass("pop-ups");
         autoTextarea($(target).next().find("textarea"));
       }
 
       /*弹窗关闭*/
-      if ($(target).hasClass("close-popups")) {
+      if ($(target).hasClass("popups-close")) {
         $(target).parent().parent().removeClass("active");
         $("body").removeClass("pop-ups");
       }
@@ -768,7 +804,7 @@
       var skuVal = $(this).prev().find(".sku").val().trim().replace(/\s+/g, " ");
       var sortVal = $(this).prev().find(".sort").val().trim().replace(/\s+/g, " ");
       if (skuVal && sortVal) {
-        var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-item">' + skuVal + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
+        var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-open">' + skuVal + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
         var readyEdit = $(this).parent().parent().find(".ready-edit");
         readyEdit.append(newEditItem);
         $(this).prev().clone().appendTo(readyEdit.children().last().find(".popups-box"));
@@ -781,7 +817,7 @@
       var exportStr = "";
       var num = 0;
       var maxRelateNum = 0;
-      $(this).prev().find(".edit-item").each(function(){
+      $(this).parent().parent().parent().parent().prev().find(".edit-item").each(function(){
         if($(this).find(".sku").val().trim()!="" && $(this).find(".sort").val().trim()!=""){
           var relateNum = 0;
           num++;
@@ -813,9 +849,9 @@
           relateStr += "<th>产品详情-相关内容"+(r+1)+"行1栏-标题</th><th>产品详情-相关内容"+(r+1)+"行1栏-正文</th><th>产品详情-相关内容"+(r+1)+"行1栏-图片描述(sku-r-"+r+"1.jpg)</th><th>产品详情-相关内容"+(r+1)+"行2栏-标题</th><th>产品详情-相关内容"+(r+1)+"行2栏-正文</th><th>产品详情-相关内容"+(r+1)+"行2栏-图片描述(sku-r-"+r+"2.jpg)</th><th>产品详情-相关内容"+(r+1)+"行3栏-标题</th><th>产品详情-相关内容"+(r+1)+"行3栏-正文</th><th>产品详情-相关内容"+(r+1)+"行3栏-图片描述(sku-r-"+r+"3.jpg)</th><th>产品详情-相关内容"+(r+1)+"行4栏-标题</th><th>产品详情-相关内容"+(r+1)+"行4栏-正文</th><th>产品详情-相关内容"+(r+1)+"行4栏-图片描述(sku-r-"+r+"4.jpg)</th>";
         }
         exportStr = "<thead><tr><th>序号</th><th>sku</th><th>产品类名</th><th>产品卖点</th><th>产品详情-第一张大图(sku-main-1.jpg)</th><th>产品详情-标题</th><th>产品详情-详细描述</th><th>产品详情-Features</th><th>产品详情-Note</th><th>产品详情-Product Specifics</th>"+relateStr+"</tr></thead><tbody>" + exportStr + "</tbody>";
-        $(this).next().html(exportStr);
+        $(this).parent().parent().parent().parent().next().html(exportStr);
 
-        var table = $(this).next()[0];
+        var table = $(this).parent().parent().parent().parent().next()[0];
         var sheet = XLSX.utils.table_to_sheet(table); //将一个table对象转换成一个sheet对象
         var wb = sheet2blob(sheet);
         if ('ie' == getExplorer()) {
@@ -861,11 +897,60 @@
           maxNum = str.length;
         }
 
-        if ($(".num").val()) {
-          var num = $(".num").val();
-          var json = str[num - 1];
-          if (json != undefined) {
-            getData(json);
+        if ($(".search-num").val() || $(".search-sku").val() || $(".search-sort").val()) {
+          var searchStr = [];
+
+          var numStr = [];
+          if($(".search-num").val()) {
+            var num = $(".search-num").val();
+            numStr.push(str[num - 1]);
+          }else {
+            numStr = str;
+          }
+          for(var n=0; n<numStr.length; n++){
+            var json = numStr[n];
+            if (json != undefined && json[headers[1]] && json[headers[2]]) {
+              json[headers[1]] = json[headers[1]].toString().trim();
+              json[headers[2]] = json[headers[2]].toString().trim();
+              searchStr.push(json);
+            }
+          }
+
+          if(searchStr.length>0){
+            var skuStr = [];
+            if($(".search-sku").val()) {
+              for(var k=0; k<searchStr.length; k++){
+                var json = searchStr[k];
+                if (json != undefined && $(".search-sku").val() == json[headers[1]].toString().trim()) {
+                  skuStr.push(searchStr[k]);
+                }
+              }
+            }else {
+              skuStr = searchStr;
+            }
+            searchStr = skuStr;
+          }
+
+          if(searchStr.length>0){
+            var sortStr = [];
+            if($(".search-sort").val()) {
+              for(var r=0; r<searchStr.length; r++){
+                var json = searchStr[r];
+                if (json != undefined && $(".search-sort").val() == json[headers[2]]) {
+                  sortStr.push(searchStr[r]);
+                }
+              }
+            }else {
+              sortStr = searchStr;
+            }
+            searchStr = sortStr;
+          }
+
+          for(var i=0; i<searchStr.length; i++){
+            var json = searchStr[i];
+            if (json != undefined && json[headers[1]] && json[headers[2]]) {
+              getData(json);
+            }
           }
         } else {
           for(var i=0; i<maxNum; i++){
@@ -964,7 +1049,7 @@
             }
             point.find(".export textarea").eq(0).val(dataTable1);
             detail.find(".export textarea").eq(0).val(dataTable2);
-            var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-item">' + json[headers[1]] + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
+            var newEditItem = '\n            <div class="edit-item">\n              <span class="popups-open">' + json[headers[1]] + '</span>\n              <div class="popups-box">\n              </div>\n              <button class="del-popups">×</button>\n              </div>';
             var readyEdit = $(obj).parent().find(".ready-edit");
             readyEdit.append(newEditItem);
             $(obj).parent().find(".wait-edit .popups-container").clone().appendTo(readyEdit.children().last().find(".popups-box"));
@@ -1097,11 +1182,11 @@
       $(".tool").on("input propertychange", function (e) {
         var target = e.target;
         if ($(target).hasClass(ele)) {
-          $(target).val($(target).val().trim().replace(/\s+/g, " "));
+          $(target).val($(target).val().replace(/^ /,"").replace(/\s+/g, " "));
           $(target).next().css("display", "block");
           var dataList = $(target).next().children();
           for (var i = 0; i < dataList.length; i++) {
-            if (dataList.eq(i).text().toUpperCase().indexOf($(target).val().toUpperCase()) == -1) {
+            if (dataList.eq(i).text().toUpperCase().indexOf($(target).val().trim().toUpperCase()) == -1) {
               dataList.eq(i).css("display", "none");
             } else {
               dataList.eq(i).css("display", "");
@@ -1110,7 +1195,7 @@
         }
       });
 
-      $(".tool").click(function (e) {
+      $("html").click(function (e) {
         var target = e.target;
         if ($(target).hasClass(ele)) {
           var dis = $(target).next().css("display") == "block" ? "" : "block";
@@ -1128,24 +1213,17 @@
             }
           }
         }else if ($(target).parent().prev().hasClass(ele)) {
+          $(".dataList").css("display", "");
           if ($(target).parent().prev().val() != $(target).text()) {
             $(target).parent().prev().val($(target).text());
           }
         }else {
+          $(".dataList").css("display", "");
           if ($("."+ele).val().replace(/\s/g, "") != "") {
             if ($(".dataList li[value='" + $("."+ele).val().trim().replace(/\s+/g, "_") + "']").length == 0) {
               $("." + ele).val("");
-              $(".dataList").css("display", "");
               $(".dataList li").css("display", "block");
             }
-          }
-        }
-      });
-
-      $("html").click(function (e) {
-        for (var k in ele) {
-          if (!$(e.target).hasClass(ele)) {
-            $(".dataList").css("display", "");
           }
         }
       });
