@@ -98,7 +98,7 @@
           <div class="wait-edit popups-box">
             <div class="popups-container">
               <div class="sku-sort">
-                <input class="sku" type="text" placeholder="sku">
+                <input class="sku" type="text" placeholder="sku" onkeyup="value=value.trim();">
                 <div class="sortContent">
                   <input type="text" list="sort" class="sort" placeholder="产品类名(后台上传到此文件夹)">
                 </div>
@@ -602,7 +602,61 @@
     var arr1 = ['Wheel Spacers', 'Wheel Hub Bearing', 'Keyless Entry Remote', 'Ignition Coil', 'Head Gasket Set', 'AC Compressor', 'Exhaust Manifold', 'CV Axle Shaft Assembly', 'Brake Rotor And Pads', 'Timing Chain Kit', 'Timing Belt Kit', 'Power Window Regulator', 'Leveling Lift Kit', 'Thermosta Thousing', 'Water Pump', 'Radiators', 'Suspension Kit', 'Door Handle', 'Shock Absorber', 'Complete Struts', 'Fuel Pump', 'O2 Sensor', 'Lift Support', 'Sensor', 'Side Mirror', 'ABS Wheel Speed Sensor', 'Door Lock Actuator', 'Power Window Switch', 'Starter', 'Air Suspension Struts', 'Alternator', 'Radiator Cooling Fan', 'Brake Caliper', 'Fasteners'];
     dataListValue(arr1, "sort");
 
-    /*自定义*/
+    /*搜索编辑框*/
+    $(".search-num").keydown(function(e){
+      if(e.keyCode==13) {
+        var readyItem = $(this).parent().next().next().children();
+        if($(this).val()) {
+          readyItem.hide();
+          readyItem.eq($(this).val()-1).show();
+        }else {
+          readyItem.show();
+        }
+      }
+    });
+
+    $(".search-sku").keydown(function(e){
+      if(e.keyCode==13) {
+        var readyItem = $(this).parent().next().next().children();
+        if($(this).val()) {
+          var skuVal = $(this).val();
+          readyItem.each(function(){
+            if($(this).find(".sku").val().indexOf(skuVal) != -1) {
+              $(this).show();
+            }else {
+              $(this).hide();
+            }
+          });
+        }else {
+          readyItem.show();
+        }
+      }
+    });
+
+    $(".search-sort").keydown(function(e){
+      if(e.keyCode==13) {
+        var readyItem = $(this).parent().parent().next().next().children();
+        if($(this).val()) {
+          if($(this).next().find("li[value='"+$(this).val().trim().replace(/\s+/g,"_")+"']").length>0) {
+            var sortVal = $(this).val();
+            readyItem.each(function(){
+              if($(this).find(".sort").val() === sortVal) {
+                $(this).show();
+              }else {
+                $(this).hide();
+              }
+            });
+          } else {
+            $(this).val("");
+            readyItem.show();
+          }
+        }else {
+          readyItem.show();
+        }
+      }
+    });
+
+    /*编辑框*/
     $(".edit").click(function (e) {
       var target = e.target;
 
@@ -791,6 +845,14 @@
       var target = e.target;
       if ($(target).hasClass("del-popups")) {
         $(target).parent().remove();
+      }
+    });
+
+    /*更改编辑框sku*/
+    $(".ready-edit").on("input propertychange", function (e) {
+      var target = e.target;
+      if($(target).hasClass("sku")) {
+        $(target).parent().parent().parent().prev().html($(target).val());
       }
     });
 
