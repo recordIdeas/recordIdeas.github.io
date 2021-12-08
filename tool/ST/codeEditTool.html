@@ -56,9 +56,9 @@
             </div>
           </div>
           <div class="advanced-search">
-            <input type="text" placeholder="序号" class="search-num" style="width:6em"
+            <input type="text" placeholder="序号" class="search-num" style="width:10em"
               onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
-            <input type="text" placeholder="sku" class="search-sku" style="width:6em"
+            <input type="text" placeholder="sku" class="search-sku" style="width:10em"
                 onkeyup="value=value.trim();">
             <div class="sortContent">
               <input type="text" list="sort" class="sort search-sort" placeholder="产品类名(后台上传到此文件夹)">
@@ -204,7 +204,7 @@
     }
 
     button {
-      margin: 5px 0;
+      margin: 5px 5px 5px 0;
       padding: 1px 6px;
     }
 
@@ -235,9 +235,16 @@
       height: 30px;
     }
 
+    body {
+      background: #f1f1f1;
+    }
+
     .tool {
-      padding: 5px;
+      padding: 20px 0 0 20px;
+      min-height: 100vh;
       max-width: 1200px;
+      margin: auto;
+      background: #fff;
     }
 
     .tabs {
@@ -323,6 +330,7 @@
       position: absolute;
       width: 100%;
       max-height: 20em;
+      text-align: left;
       overflow: auto;
       border: 1px solid #767676;
       border-top: 0;
@@ -426,7 +434,29 @@
       overflow: visible;
     }
 
-    /*自定义*/
+    /*编辑框*/
+    .edit {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .advanced-search {
+      flex: 1;
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .ready-edit {
+      width: 100%;
+      padding: 0 20px 0 0;
+      overflow-y: scroll;
+      max-height: calc(100vh - 160px);
+    }
+
+    #batchFile {
+      margin: 5px;
+    }
+
     .edit-item {
       margin: 10px 0;
       padding: 10px;
@@ -709,13 +739,13 @@
               var arrH3 = importItem.eq(m).find(".relateh3 textarea");
               var arrP = importItem.eq(m).find(".relatep textarea");
               var column = 0;
-              var relateStr = "";
               for(var r=0; r<4; r++){
-                if(arrAlt.eq(r).val().trim()!="" || arrH3.eq(r).val().trim()!="" || arrP.eq(r).val().trim()!=""){
+                if((arrAlt.eq(r).val() + arrH3.eq(r).val() + arrP.eq(r).val()).toString().trim()!=""){
                   column++;
                 }
               }
               if(column>0) {
+                var relateStr = "";
                 var grid = "";
                 var rowNum = 0;
                 if (column == 1) {
