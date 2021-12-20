@@ -1,0 +1,787 @@
+<script src="../../../js/jquery-3.5.1.js"></script>
+<script src="../../../js/xlsx.core.min.js"></script>
+
+<input type="file" id="batchFile"
+  accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  onchange="batchImport(this,5000)" onclick="this.value=''" ;>
+  <textarea id="result"></textarea>
+<script>
+  /*批量导表*/
+  function batchImport(obj, maxNum) {
+    if (obj.files.length == 0) {
+      return;
+    }
+
+    var f = obj.files[0];
+    var reader = new FileReader();
+    reader.readAsBinaryString(f);
+    reader.onload = function (e) {
+      var data = e.target.result;
+      excelFile = XLSX.read(data, {
+        type: 'binary'
+      });
+
+      //banner图
+      var bannerExcel = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+      var bannerArr = [];
+      var bannerHead = new Array();
+      for (var key in bannerExcel[0]) {
+        bannerHead.push(key);  //获取表头
+      }
+      for(var i=0; i<bannerExcel.length; i++) {
+        if(i === 0) {
+          bannerArr[i] =`<div class="landing-page-banner">
+    <img src="{{media url='lazyloading/blank.png'}}"
+              onload="imgSwitch(this, [576], ['src_1','src_2'])"
+              src_1="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[3]]+`"}}"
+              src_2="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[2]]+`"}}"
+              alt="`+bannerExcel[i][bannerHead[1]]+`" />
+  </div>
+`
+        }else {
+          bannerArr[i] =`  <div class="landing-page-banner">
+    <div class="container">
+      <img src="{{media url='lazyloading/blank.png'}}"
+                onload="imgSwitch(this, [576], ['src_1','src_2'])"
+                src_1="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[3]]+`"}}"
+                src_2="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[2]]+`"}}"
+                alt="`+bannerExcel[i][bannerHead[1]]+`" />
+    </div>
+  </div>
+`
+        }
+      }
+
+      //优惠券图
+      var discountExcel = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[1]]);
+      var discountStr = "";
+      var hotDiscountStr = "";
+      var discountHead = new Array();
+      for (var key in discountExcel[0]) {
+        discountHead.push(key);  //获取表头
+      }
+      for(var i=0; i<discountExcel.length; i++) {
+        discountStr +=`
+        <div class="discount-image">
+          <img src="{{media url="wysiwyg/landing_page/`+discountExcel[i][discountHead[5]]+`"}}" alt="`+discountExcel[i][discountHead[4]]+`" />
+        </div>`;
+
+        hotDiscountStr += `
+            <div class="discount-item">
+              <div class="discount-condition">`+discountExcel[i][discountHead[1]]+`,</div>
+              <div class="discount-method">
+                <span class="small">Use Code</span>: <span class="discount-code">`+discountExcel[i][discountHead[2]]+`</span>
+              </div>
+            </div>`;
+      }
+      discountStr = `  <div class="landing-page-discount">
+    <div class="container">
+      <div class="discount-images">` + discountStr + `
+      </div>
+      <div class="discount-description"><span>`+discountExcel[0][discountHead[0]]+`</span></div>
+    </div>
+  </div>
+`;
+
+      var hotExcel = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[2]]);
+      var hotArr = [];
+      var hotStr = "";
+      var bgIndex = 0;
+      var bgStr = "";
+      var floatStr = "";
+      var hotHead = new Array();
+      for (var key in hotExcel[0]) {
+        hotHead.push(key);  //获取表头
+      }
+      for(var i=0; i<hotExcel.length; i++) {
+        hotExcel[i][hotHead[5]] = rounding(hotExcel[i][hotHead[5]]);
+        hotExcel[i][hotHead[6]] = rounding(hotExcel[i][hotHead[6]]);
+        hotExcel[i][hotHead[7]] = rounding(hotExcel[i][hotHead[7]]);
+        hotExcel[i][hotHead[8]] = rounding(hotExcel[i][hotHead[8]]);
+        if(hotExcel[i][hotHead[0]]) {
+          var obj = {
+            title: hotExcel[i][hotHead[0]],
+            href: hotExcel[i][hotHead[1]],
+            content: ""
+          }
+          hotArr[hotArr.length] = obj;
+        }
+        hotArr[hotArr.length-1].content += `
+            <div class="product-item">
+              <div class="product-content">
+                <a href="`+ hotExcel[i][hotHead[9]] +`">
+                  <div class="product-image"><img src="{{media url="wysiwyg/landing_page/product_images/`+hotExcel[i][hotHead[3]]+`"}}" alt="`+ hotExcel[i][hotHead[4]] +`" /></div>
+                  <div class="product-detail">
+                    <div class="product-title">`+ hotExcel[i][hotHead[4]] +`</div>
+                    <div class="product-price">
+                      <div class="underline-price">`+ hotExcel[i][hotHead[5]] +`</div>
+                      <div class="save-price">SAVE: $`+ hotExcel[i][hotHead[6]] +`</div>
+                    </div>
+                    <div class="product-discount">$`+ hotExcel[i][hotHead[7]] +`-$`+ hotExcel[i][hotHead[8]] +`</div>
+                  </div>
+                </a>
+              </div>
+            </div>`;
+      }
+      for(var j=0; j<hotArr.length; j++) {
+        if(bgIndex == 0) {
+          bgStr = "landing-page-gray";
+          bgIndex = 1;
+        }else {
+          bgStr = "landing-page-white";
+          bgIndex = 0;
+        }
+        hotStr += `  <div id="`+ hotArr[j].title +`" class="hot-product float-menu-target">
+    <div class="landing-page-bg `+ bgStr +`">
+      <div class="container">
+        <div class="category-title">
+          <span>
+            `+ hotArr[j].title +`
+          </span>
+        </div>
+        <div class="category-discount">
+          <div class="discount-list">`+ hotDiscountStr +`
+          </div>
+        </div>
+        <div class="category-product">
+          <div class="product-list">`+ hotArr[j].content +`
+          </div>
+        </div>
+        <div class="category-href">
+          <a href="`+ hotArr[j].href +`">
+            <span class="view-more">view more</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+`
+        if(j==1) {
+          hotStr += bannerArr[1];
+        }else if(j==3) {
+          hotStr += bannerArr[2];
+        }
+        floatStr += `  <div class="float-meun-item"><a href="#`+ hotArr[j].title +`">`+ hotArr[j].title +`</a></div>
+`;
+      }
+      result.value = hotStr;
+
+      var otherExcel = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[3]]);
+      var otherHead = new Array();
+      var otherArr = [];
+      var otherStr = "";
+      var maxItemStr = "";
+      for (var key in otherExcel[0]) {
+        otherHead.push(key);  //获取表头
+      }
+      for(var i=0; i<otherExcel.length; i++) {
+        if(otherExcel[i][otherHead[0]]) {
+          var obj = {
+            title: otherExcel[i][otherHead[0]],
+            max_item: otherExcel[i][otherHead[1]],
+            content: ""
+          }
+          otherArr[otherArr.length] = obj;
+        }
+        otherArr[otherArr.length-1].content += `
+            <div class="product-item">
+              <div class="product-content">
+                <div class="product-image">
+                  <a href="`+ otherExcel[i][otherHead[5]] +`">
+                    <img src="{{media url="wysiwyg/landing_page/product_images/`+ otherExcel[i][otherHead[3]] +`"}}" alt="`+ otherExcel[i][otherHead[2]] +`" />
+                  </a>
+                </div>
+                <div class="product-detail">
+                  <div class="prodcut-title">`+ otherExcel[i][otherHead[2]] +`</div>
+                  <div class="prodcut-price">`+ otherExcel[i][otherHead[4]] +`</div>
+                  <div class="shop-now">
+                    <a href="`+ otherExcel[i][otherHead[5]] +`">SHOP NOW</a>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+      }
+      for(var j=0; j<otherArr.length; j++) {
+        if(bgIndex == 0) {
+          bgStr = "landing-page-gray";
+          bgIndex = 1;
+        }else {
+          bgStr = "landing-page-white";
+          bgIndex = 0;
+        }
+        maxItemStr = otherArr[j].max_item < 6 ? "max-item-" + otherArr[j].max_item + " " : "";
+        otherStr += `  <div id="`+ otherArr[j].title +`" class="other-product float-menu-target">
+    <div class="landing-page-bg `+ bgStr +`">
+      <div class="container">
+        <div class="category-title">
+          <span>
+            `+ otherArr[j].title +`
+            <img src="{{media url="wysiwyg/landing_page/Christmas-title-1.gif"}}" alt="Christmas" />
+          </span>
+        </div>
+        <div class="oher-product">
+          <div class="`+ maxItemStr + `product-list">`+ otherArr[j].content +`
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`
+        floatStr += `  <div class="float-meun-item"><a href="#`+ otherArr[j].title +`">`+ otherArr[j].title +`</a></div>
+`;
+      }
+
+      floatStr = `<div class="float-menu-list">
+  <div class="float-meun-item"><img src="{{media url="wysiwyg/landing_page/Christmas-santa.gif"}}" alt="" /></div>
+` + floatStr + `</div>`;
+
+      result.value = `<div class="landing-page-2">
+  `+ bannerArr[0] + discountStr + hotStr + otherStr +`</div>
+` + floatStr + `
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900;">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700">
+
+<style>
+  .float-menu-target {
+      padding: 80px 0 0;
+      margin: -80px 0 0;
+  }
+
+  .float-menu-list {
+      position: fixed;
+      right: -100%;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      text-align: right;
+      transition: all 0.5s ease;
+  }
+
+  @media(min-width: 768px) {
+    .float-menu-list.float-on-top {
+      right: 0;
+    }
+  }
+
+  .float-menu-list .float-meun-item {
+      margin: 15px 0;
+  }
+
+  .float-menu-list .float-meun-item a {
+      padding: 5px 10px;
+      font-size: 15px;
+      color: #fff;
+      background: #333;
+      font-family: 'Oswald';
+  }
+
+  .float-menu-list .float-meun-item a:hover {
+      background: #cf1119;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(1) {
+      animation: fm 6s ease infinite;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(2) {
+      animation: fm 6s 1s ease infinite;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(3) {
+      animation: fm 6s 2s ease infinite;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(4) {
+      animation: fm 6s 3s ease infinite;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(5) {
+      animation: fm 6s 4s ease infinite;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(6) {
+      animation: fm 6s 5s ease infinite;
+  }
+
+  .float-on-top.float-menu-list .float-meun-item:nth-of-type(7) {
+      animation: fm 6s 6s ease infinite;
+  }
+
+  .float-on-top.float-menu-list:hover .float-meun-item{
+      animation-play-state: paused;
+  }
+
+  @keyframes fm {
+      0%{
+          transform: translateX(0);
+      }
+      33.33%{
+          transform: translateX(-15px);
+      }
+  }
+
+  .landing-page-2 {
+      width: 100vw;
+      margin: -15px 0 -15px 50%;
+      transform: translateX(-50%);
+      font-family: 'Roboto';
+  }
+
+  .landing-page-discount {
+      margin: 0 0 2.5em;
+      padding: 10px 0 30px;
+  }
+
+  .landing-page-discount .container {
+      max-width: 1200px;
+  }
+
+  .discount-images {
+      padding: 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+
+  .discount-images .discount-image {
+      padding: 10px;
+      width: 25%;
+      text-align: center;
+  }
+
+  .discount-list .discount-item .discount-code {
+      color: #ff5500;
+  }
+
+  @media(max-width: 767px) {
+      .discount-images .discount-image {
+          width: 50%;
+      }
+  }
+
+  @media(max-width: 320px) {
+      .discount-images .discount-image {
+          width: 100%;
+      }
+  }
+
+  .discount-description {
+      position: relative;
+      text-align: center;
+  }
+
+  .discount-description:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      width: 100%;
+      height: 1px;
+      background: #ccc;
+  }
+
+  .discount-description span {
+      position: relative;
+      padding: 0 10px;
+      font-size: 14px;
+      font-weight: 550;
+      color: #191919;
+      background: #fff;
+  }
+
+  .landing-page-banner {
+    text-align: center;
+  }
+
+  .landing-page-bg {
+      margin: 0;
+      padding: 0 0 3em;
+  }
+
+  .hot-product+.landing-page-banner {
+      margin: -20px 0 0;
+      padding: 0 0 5em;
+  }
+
+  .other-product {
+      transform: translateY(4em);
+  }
+
+  .other-product .landing-page-bg {
+      padding: 0 0 8em;
+  }
+
+  .landing-page-white {
+      background: #fff;
+  }
+
+  .landing-page-gray {
+      background: #f1f1f1;
+  }
+
+  .category-title {
+      text-align: center;
+      transform: translateY(-50%);
+  }
+
+  .category-title span {
+      display: inline-block;
+      padding: 5px 15px;
+      font-size: 3em;
+      line-height: 1.2em;
+      color: #fff;
+      background: #333;
+  }
+
+  .other-product .category-title span {
+      background: #cf1119;
+      position: relative;
+  }
+
+  .other-product .category-title span img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      max-height: 80px;
+      transform: translateY(-60px);
+  }
+  .category-href {
+      padding: 10px 0 20px;
+      text-align: center;
+  }
+
+  .category-href .view-more {
+    font-size: 16px;
+    color: #333;
+  }
+
+  .view-more{
+    position: relative;
+    padding: 5px;
+  }
+
+  .view-more {
+      animation: vm-move 2s ease infinite;
+  }
+
+  .view-more:hover {
+      animation: none;
+  }
+
+  @keyframes vm-move {
+      0%{
+          left: -5px;
+      }
+      50%{
+          left: 5px;
+      }
+      100%{
+          left: -5px;
+      }
+  }
+
+  .view-more:before,
+  .view-more:after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 50%;
+    height: 1px;
+    display: flex;
+    background: #999;
+    transition: all 0.2s ease 0s;
+  }
+
+  .view-more:before {
+    left: 2px;
+  }
+
+  .view-more:after {
+    right: 2px;
+  }
+
+  .view-more:hover {
+    color: #f50;
+  }
+
+  .view-more:hover:after,
+  .view-more:hover:before {
+    background: #f50;
+  }
+
+  .view-more:hover:before {
+    transform: rotate(15deg) translate3d(0, 0, 0);
+  }
+
+  .view-more:hover:after {
+    transform: rotate(-15deg) translate3d(0, 0, 0);
+  }
+
+  .category-discount {
+      margin: -1em 0 1em;
+  }
+
+  .discount-list {
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .discount-list .discount-item {
+      padding: 0 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .discount-item .discount-condition {
+    padding: 0 5px 0 0;
+  }
+
+  @media(min-width: 576px) {
+      .discount-list .discount-item {
+          width: 50%;
+          justify-content: left;
+      }
+
+      .discount-list .discount-item:nth-child(odd) {
+          justify-content: right;
+      }
+  }
+
+  .product-list {
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .product-list .product-item {
+      padding: 10px;
+      width: 16.6666%;
+  }
+
+  @media(min-width: 1200px) {
+    .product-list.max-item-5 .product-item{
+        width: 20%;
+    }
+  }
+
+  @media(max-width: 1199px) {
+      .product-list .product-item {
+          width: 20%;
+      }
+  }
+
+  @media(min-width: 992px) {
+    .product-list.max-item-4 .product-item{
+        width: 25%;
+    }
+  }
+
+  @media(max-width: 991px) {
+      .product-list .product-item {
+          width: 25%;
+      }
+  }
+
+  @media(min-width: 768px) {
+    .product-list.max-item-3 .product-item{
+        width: 33.33%;
+    }
+  }
+
+  @media(max-width: 767px) {
+      .product-list .product-item {
+          padding: 5px;
+          width: 33.3333%;
+      }
+  }
+
+  @media(min-width: 576px) {
+    .product-list.max-item-2 .product-item{
+        width: 50%;
+    }
+  }
+
+  @media(max-width: 575px) {
+      .product-list .product-item {
+          width: 50%;
+      }
+  }
+
+  @media(min-width: 321px) {
+    .product-list.max-item-1 .product-item{
+        width: 100%;
+    }
+  }
+
+  @media(max-width: 320px) {
+      .product-list .product-item {
+          width: 100%;
+      }
+  }
+
+  .product-content {
+      padding: 10px;
+      height: 100%;
+      background: #fff;
+  }
+
+  .hot-product .landing-page-white .product-content {
+      border: 1px solid #ccc;
+  }
+
+  .other-product .landing-page-gray .product-content {
+      position: relative;
+  }
+
+  .other-product .landing-page-gray .product-detail .prodcut-price {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      padding: 0 5px;
+      width: 50px;
+      height: 40px;
+      line-height: 20px;
+      text-align: center;
+      color: #fff;
+      background: rgba(207,17,25,0.85);
+  }
+
+  .other-product .landing-page-gray .product-detail .prodcut-price:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 100%;
+      width: 0;
+      display: inline-block;
+      border: 25px solid rgba(207,17,25,0.85);
+      border-width: 5px 25px 15px;
+      border-bottom-color: transparent;
+  }
+
+  .product-content:hover {
+      box-shadow: 0 0 10px #bbb;
+  }
+
+  .product-image {
+      text-align: center;
+  }
+
+  .product-image img {
+      max-height: 150px;
+  }
+
+  .product-detail {
+      padding: 10px 0;
+  }
+
+  .product-detail .product-title {
+      line-height: 1.5em;
+      color: #333;
+  }
+
+  .product-price {
+      padding: 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 14px;
+  }
+
+  .product-price .underline-price {
+      margin: 0 10px 0 0;
+      text-decoration: line-through;
+      color: #999;
+  }
+
+  .product-price .save-price {
+      padding: 0 10px;
+      font-size: 14px;
+      color: #fff;
+      background: #f50;
+      border-radius: 15px;
+  }
+
+  .product-discount {
+      color: #e74c3c;
+      font-size: 15px;
+      font-weight: 550;
+  }
+
+  .other-product .product-detail {
+      text-align: center;
+  }
+
+  .other-product .product-detail .prodcut-title {
+      padding: 10px 0 0;
+      width: 100%;
+      display: inline-block;
+      vertical-align: bottom;
+      font-size: 18px;
+      line-height: 1.2em;
+      font-weight: 550;
+      color: #333;
+  }
+
+  .other-product .product-detail .prodcut-price {
+      padding: 10px 0 0;
+      width: 100%;
+      display: inline-block;
+      vertical-align: top;
+      line-height: 1.2em;
+      font-weight: 550;
+      color: #e74c3c;
+  }
+
+  .other-product .shop-now {
+      padding: 10px 0 0;
+  }
+
+  .other-product .shop-now a {
+      padding: 3px 8px;
+      font-weight: 550;
+      color: #fff;
+      background: #105a2c;
+      border: 2px solid #105a2c;
+      border-radius: 15px;
+  }
+
+  .other-product .shop-now a:hover {
+      color: #105a2c;
+      background: #fff;
+  }
+</style>
+
+<script>
+  window.addEventListener("load", function(){
+    document.querySelectorAll(".product-title").forEach(function(e){
+      e.innerText = e.innerText.trim();
+      e.innerText = e.innerText.length>80 ? e.innerText.substr(0, 80) + "..." : e.innerText;
+    });
+  });
+
+  window.addEventListener("scroll",function(){
+    if(window.scrollY > document.querySelector(".landing-page-discount").scrollHeight){
+        document.querySelector(".float-menu-list").classList.add("float-on-top");
+    }else{
+      document.querySelector(".float-menu-list").classList.remove("float-on-top");
+    }
+  });
+<\/script>
+`;
+    }
+  }
+
+  function rounding(num){
+    num = parseFloat(num.toPrecision(12));
+    return Math.round(num) === num ? num : num.toFixed(2);
+  }
+</script>
