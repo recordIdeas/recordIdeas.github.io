@@ -5,17 +5,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-</head>
-<body>
   <script src="../../../js/jquery-3.5.1.js"></script>
   <script src="../../../js/xlsx.core.min.js"></script>
-
-  <input type="file" id="batchFile"
-    accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    onchange="batchImport(this,5000)" onclick="this.value=''" ;>
+</head>
+<body>
+  <div class="upload">
+    <a href="https://recordideas.github.io/resources/file/Exhaust-Parts-Deals.xls" download="Exhaust-Parts-Deals.xls">下载示例文件</a>
+    <input type="file" id="batchFile"
+      accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      onchange="batchImport(this,5000)" onclick="this.value=''" ;>
+  </div>
   <textarea id="result"></textarea>
   <style>
-  #batchFile {
+  .upload {
     width: 100%;
   }
 
