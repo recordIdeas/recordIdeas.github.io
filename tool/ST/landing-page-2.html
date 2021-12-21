@@ -44,6 +44,7 @@
           type: 'binary'
         });
 
+        var resultArr = [];
         //banner图
         var bannerExcel = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
         var bannerHead = new Array();
@@ -51,21 +52,21 @@
           bannerHead.push(key);  //获取表头
         }
 
-        var bannerArr = [];
         for(var i=0; i<bannerExcel.length; i++) {
-            bannerArr[i] =`<img src="{{media url='lazyloading/blank.png'}}"
+          var bannerIndex = bannerExcel[i][bannerHead[4]]-1;
+          resultArr[bannerIndex] =`<img src="{{media url='lazyloading/blank.png'}}"
          onload="imgSwitch(this, [576], ['src_1','src_2'])"
          src_1="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[3]]+`"}}"
          src_2="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[2]]+`"}}"
          alt="`+bannerExcel[i][bannerHead[1]]+`" />`;
 
           if(i !== 0) {
-            bannerArr[i] =`<div class="container">
-      `+ bannerArr[i] +`
+            resultArr[bannerIndex] =`<div class="container">
+      `+ resultArr[bannerIndex] +`
     </div>`;
           }
-            bannerArr[i] =`  <div class="landing-page-banner">
-    `+ bannerArr[i] +`
+          resultArr[bannerIndex] =`  <div class="landing-page-banner">
+    `+ resultArr[bannerIndex] +`
   </div>
 `;
         }
@@ -77,10 +78,10 @@
           discountHead.push(key);  //获取表头
         }
 
-        var discountStr = "";
+        var discountIndex = discountExcel[0][discountHead[6]]-1;
         var hotDiscountStr = "";
         for(var i=0; i<discountExcel.length; i++) {
-          discountStr +=`
+          resultArr[discountIndex] +=`
         <div class="discount-image">
           <img src="{{media url="wysiwyg/landing_page/`+discountExcel[i][discountHead[5]]+`"}}" alt="`+discountExcel[i][discountHead[4]]+`" />
         </div>`;
@@ -93,9 +94,9 @@
               </div>
             </div>`;
         }
-        discountStr = `  <div class="landing-page-discount">
+        resultArr[discountIndex] = `  <div class="landing-page-discount">
     <div class="container">
-      <div class="discount-images">` + discountStr + `
+      <div class="discount-images">` + resultArr[discountIndex] + `
       </div>
       <div class="discount-description"><span>`+discountExcel[0][discountHead[0]]+`</span></div>
     </div>
@@ -109,7 +110,6 @@
         }
 
         var hotArr = [];
-        var hotStr = "";
         var bgIndex = 0;
         var bgStr = "";
         var floatStr = "";
@@ -122,6 +122,7 @@
             var obj = {
               title: hotExcel[i][hotHead[0]],
               href: hotExcel[i][hotHead[1]],
+              pos: hotExcel[i][hotHead[10]],
               content: ""
             }
             hotArr[hotArr.length] = obj;
@@ -151,7 +152,7 @@
             bgStr = "landing-page-white";
             bgIndex = 0;
           }
-          hotStr += `  <div id="`+ hotArr[j].title +`" class="hot-product float-menu-target">
+          resultArr[hotArr[j].pos-1] = `  <div id="`+ hotArr[j].title +`" class="hot-product float-menu-target">
     <div class="landing-page-bg `+ bgStr +`">
       <div class="container">
         <div class="category-title">
@@ -176,15 +177,9 @@
     </div>
   </div>
 `;
-          if(j==1) {
-            hotStr += bannerArr[1];
-          }else if(j==3) {
-            hotStr += bannerArr[2];
-          }
           floatStr += `  <div class="float-meun-item"><a href="#`+ hotArr[j].title +`">`+ hotArr[j].title +`</a></div>
 `;
         }
-        result.value = hotStr;
 
         var otherExcel = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[3]]);
         var otherHead = new Array();
@@ -193,13 +188,13 @@
         }
 
         var otherArr = [];
-        var otherStr = "";
         var maxItemStr = "";
         for(var i=0; i<otherExcel.length; i++) {
           if(otherExcel[i][otherHead[0]]) {
             var obj = {
               title: otherExcel[i][otherHead[0]],
               max_item: otherExcel[i][otherHead[1]],
+              pos: otherExcel[i][otherHead[6]],
               content: ""
             }
             otherArr[otherArr.length] = obj;
@@ -231,7 +226,7 @@
             bgIndex = 0;
           }
           maxItemStr = otherArr[j].max_item < 6 ? "max-item-" + otherArr[j].max_item + " " : "";
-          otherStr += `  <div id="`+ otherArr[j].title +`" class="other-product float-menu-target">
+          resultArr[otherArr[j].pos-1] = `  <div id="`+ otherArr[j].title +`" class="other-product float-menu-target">
     <div class="landing-page-bg `+ bgStr +`">
       <div class="container">
         <div class="category-title">
@@ -256,8 +251,12 @@
   <div class="float-meun-item"><img src="{{media url="wysiwyg/landing_page/Christmas-santa.gif"}}" alt="" /></div>
 ` + floatStr + `</div>`;
 
-  result.value = `<div class="landing-page-2">
-`+ bannerArr[0] + discountStr + hotStr + otherStr +`</div>
+        result.value = `<div class="landing-page-2">
+`;
+        resultArr.forEach(function(e){
+          result.value += e;
+        });
+        result.value += `</div>
 ` + floatStr + `
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900;">
@@ -799,8 +798,8 @@
 <\/script>
   `;
 
-  result.style.height = result.scrollHeight + "px";
-}
+        result.style.height = result.scrollHeight + "px";
+      }
     }
 
     function rounding(num){
