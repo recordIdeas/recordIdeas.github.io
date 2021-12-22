@@ -16,7 +16,42 @@
       onchange="batchImport(this,5000)" onclick="this.value=''" ;>
   </div>
   <textarea id="result"></textarea>
+  <div id="preview"></div>
   <style>
+  * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      text-decoration: none;
+  }
+
+  img {
+      max-width: 100%;
+  }
+
+  .container {
+      margin: auto;
+  }
+
+  @media(min-width: 768px) {
+    .container {
+        max-width: 750px;
+    }
+  }
+
+  @media(min-width: 992px) {
+    .container {
+        max-width: 970px;
+    }
+  }
+
+  @media(min-width: 1200px) {
+    .container {
+        max-width: 1400px;
+    }
+  }
+
   .upload {
     width: 100%;
   }
@@ -54,7 +89,7 @@
 
         for(var i=0; i<bannerExcel.length; i++) {
           var bannerIndex = bannerExcel[i][bannerHead[4]]-1;
-          resultArr[bannerIndex] =`<img src="{{media url='lazyloading/blank.png'}}"
+          resultArr[bannerIndex] =`<img src="{{media url="lazyloading/blank.png"}}"
          onload="imgSwitch(this, [576], ['src_1','src_2'])"
          src_1="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[3]]+`"}}"
          src_2="{{media url="wysiwyg/landing_page/`+bannerExcel[i][bannerHead[2]]+`"}}"
@@ -79,6 +114,7 @@
         }
 
         var discountIndex = discountExcel[0][discountHead[6]]-1;
+        resultArr[discountIndex] = "";
         var hotDiscountStr = "";
         for(var i=0; i<discountExcel.length; i++) {
           resultArr[discountIndex] +=`
@@ -208,8 +244,8 @@
                   </a>
                 </div>
                 <div class="product-detail">
-                  <div class="prodcut-title">`+ otherExcel[i][otherHead[2]] +`</div>
-                  <div class="prodcut-price">`+ otherExcel[i][otherHead[4]] +`</div>
+                  <div class="product-title">`+ otherExcel[i][otherHead[2]] +`</div>
+                  <div class="product-price">`+ otherExcel[i][otherHead[4]] +`</div>
                   <div class="shop-now">
                     <a href="`+ otherExcel[i][otherHead[5]] +`">SHOP NOW</a>
                   </div>
@@ -235,7 +271,7 @@
             <img src="{{media url="wysiwyg/landing_page/Christmas-title-1.gif"}}" alt="Christmas" />
           </span>
         </div>
-        <div class="oher-product">
+        <div class="other-product">
           <div class="`+ maxItemStr + `product-list">`+ otherArr[j].content +`
           </div>
         </div>
@@ -259,7 +295,7 @@
         result.value += `</div>
 ` + floatStr + `
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900;">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700">
 
 <style>
@@ -663,12 +699,12 @@
       position: relative;
   }
 
-  .other-product .landing-page-gray .product-detail .prodcut-price {
+  .other-product .landing-page-gray .product-detail .product-price {
       position: absolute;
       top: 0;
       left: 10px;
       padding: 0 5px;
-      width: 50px;
+      width: 60px;
       height: 40px;
       line-height: 20px;
       text-align: center;
@@ -676,20 +712,37 @@
       background: rgba(207,17,25,0.85);
   }
 
-  .other-product .landing-page-gray .product-detail .prodcut-price:before {
+  .other-product .landing-page-gray .product-detail .product-price:before {
       content: '';
       position: absolute;
       left: 0;
       top: 100%;
       width: 0;
       display: inline-block;
-      border: 25px solid rgba(207,17,25,0.85);
-      border-width: 5px 25px 15px;
+      border: 30px solid rgba(207,17,25,0.85);
+      border-width: 5px 30px 15px;
       border-bottom-color: transparent;
   }
 
   .product-content:hover {
       box-shadow: 0 0 10px #bbb;
+  }
+
+  .hot-product .product-content a,
+  .other-product .product-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+  }
+
+  .product-content .product-detail {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .product-content .product-detail .product-title {
+      flex: 1;
   }
 
   .product-image {
@@ -740,7 +793,7 @@
       text-align: center;
   }
 
-  .other-product .product-detail .prodcut-title {
+  .other-product .product-detail .product-title {
       padding: 10px 0 0;
       width: 100%;
       display: inline-block;
@@ -751,7 +804,7 @@
       color: #333;
   }
 
-  .other-product .product-detail .prodcut-price {
+  .other-product .product-detail .product-price {
       padding: 10px 0 0;
       width: 100%;
       display: inline-block;
@@ -799,6 +852,11 @@
   `;
 
         result.style.height = result.scrollHeight + "px";
+        preview.innerHTML = result.value.replace(/{{media url="/g,"https:/eccppautoparts.com/media/").replace(/"}}/g,"");
+        document.querySelectorAll(".product-title").forEach(function(e){
+          e.innerText = e.innerText.trim();
+          e.innerText = e.innerText.length>80 ? e.innerText.substr(0, 80) + "..." : e.innerText;
+        });
       }
     }
 
@@ -816,7 +874,72 @@
       result.style.height = "";
       result.style.height = result.scrollHeight + "px";
     });
-  </script>
+
+    function imgSwitch(img, widthArr, imgsrcArr) {
+      function init() {
+          var n = imgsrcArr.length;
+          if (img) {
+              for (var j = 0; j < n; j++) {
+                  if(widthArr[j-1] && widthArr[j]){
+                      if ((window.innerWidth >= widthArr[j-1]) && (window.innerWidth < widthArr[j])) {
+                          imageSrc(j);
+                          break;
+                      } 
+                  }else if(widthArr[j-1]){
+                      if (window.innerWidth >= widthArr[j-1]) {
+                          imageSrc(j);
+                          break;
+                      }
+                  }else if(widthArr[j]){
+                      if (window.innerWidth < widthArr[j]) {
+                          imageSrc(j);
+                          break;
+                      }
+                  }
+              }
+              function imageSrc(b) {
+                  if (img.src != img.getAttribute(imgsrcArr[b])) {
+                      img.src = img.getAttribute(imgsrcArr[b]);
+                  }
+              }
+          }
+      }
+
+      init();
+      window.addEventListener("resize", throttle(init,100));
+    }
+    function throttle(fn, Interval) {
+        if(!Interval){
+            Interval = 500;
+        }
+        var timerId = null;
+        return function () {
+            var arg = arguments[0];
+            if (timerId) {
+                return;
+            }
+            timerId = setTimeout(function () {
+                fn(arg);
+                timerId = null;
+            }, Interval);
+        }
+    }
+
+    window.addEventListener("scroll",function(){
+      if(window.scrollY > getTop(document.querySelector(".landing-page-discount"))){
+          document.querySelector(".float-menu-list").classList.add("float-on-top");
+      }else{
+        document.querySelector(".float-menu-list").classList.remove("float-on-top");
+      }
+    });
+    function getTop(e) {
+      var T = e.offsetTop;
+      while(e = e.offsetParent) {
+          T += e.offsetTop;
+      }
+      return T;
+    }
+</script>
 
 </body>
 </html>
