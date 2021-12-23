@@ -858,7 +858,7 @@
   `;
 
         result.style.height = result.scrollHeight + "px";
-        preview.innerHTML = result.value.replace(/{{media url="/g,"https:/eccppautoparts.com/media/").replace(/"}}/g,"");
+        preview.innerHTML = result.value.replace(/{{media url="/g,"https://eccppautoparts.com/media/").replace(/"}}/g,"");
         document.querySelectorAll(".product-title").forEach(function(e){
           e.innerText = e.innerText.trim().replace(/\(/g," (").replace(/\)/g,") ").replace(/,/g,", ").replace(/\s+/g," ");
           e.innerText = e.innerText.length>80 ? e.innerText.substr(0, 80) + "..." : e.innerText;
