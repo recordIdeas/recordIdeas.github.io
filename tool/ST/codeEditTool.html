@@ -45,7 +45,7 @@
                   <button>
                     <label for="file-cancel">取消</label>
                   </button>
-                    <a href="/resources/file/upload_textchangehtml.xlsx" download="product_info_example.xlsx">
+                    <a onclick='$("#file-cancel").click()' href="https://recordideas.github.io/resources/file/upload_textchangehtml.xlsx" download="product_info_example.xlsx">
                       <button>
                         <label>下载</label>
                       </button>
@@ -958,6 +958,8 @@
           document.body.removeChild(oa);
         }
       }
+
+      $('#export-cancel').click();
     });
 
     /*批量导表*/
