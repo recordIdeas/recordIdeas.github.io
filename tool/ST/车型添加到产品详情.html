@@ -8,36 +8,93 @@
   <title>车型转换工具</title>
   <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
 </head>
-
+  
 <style>
-  .btn {
-    width: 1.5em;
-    height: 1.5em;
-    margin: 0 10px 20px 0;
+  .part-fit-radio {
+      display: flex;
+      flex-wrap: wrap;
   }
 
-  .model-items {
-    margin-bottom: 20px;
+  .part-fit-radio label{
+      order: 1;
+      width: 2em;
+      height: 2em;
+      line-height: 2em;
+      text-align: center;
   }
 
-  .model-item {
-    padding-bottom: 10px;
-    display: flex;
+  .part-fit-radio label:hover {
+    color: #f50;
   }
 
-  .model-item input{
-    margin: 0 10px;
+  .part-fit-radio label a {
+    border: 0 !important;
+  }
+
+  .part-fit-radio .part-radio{
+      margin: 0;
+      display: none;
+  }
+   .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab+label{
+      color: #fff;
+      font-weight: bold;
+      background: #999;
+  }
+
+  .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab{
+      display: block;
+  }
+
+  .part-fit-radio .part-tab{
+      display: none;
+      width: 100%;
+      background: #fff;
+  }
+
+  #vehicle_matching:target>div {
+    border: 2px solid #ff5500;
   }
 </style>
+  
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
     <label for="tabone">车型处理</label>
     <div class="tab">
+      <div class="condition">
+        <button class="condition-del">-</button>
+        <button class="condition-add">+</button>
+        <div class="condition-model" hidden>
+          <div class="condition-item">
+            Make: <input class="condition-Make" type="text">
+            Model: <input class="condition-Model" type="text">
+            <button class="conditon-remove">x</button>
+          </div>
+        </div>
+        <div class="condition-list">
+        </div>
+        <script>
+          document.querySelector(".condition-add").addEventListener("click",function(){
+            document.querySelector(".condition-list").appendChild(document.querySelector(".condition-model .condition-item").cloneNode(true));
+          });
+          document.querySelector(".condition-del").addEventListener("click",function(){
+            var node = document.querySelectorAll(".condition-item");
+            if(node.length > 1) {
+              document.querySelector(".condition-list").removeChild(node[node.length-1]);
+            }
+          });
+          document.querySelector(".condition-list").addEventListener("click",function(e){
+            var target = e.target;
+            if(target.className === "conditon-remove") {
+              document.querySelector(".condition-list").removeChild(target.parentNode);
+            }
+          });
+        </script>
+      </div>
       <div class="up_btn">导入车型表：
         <input type="file" id="xFile" multiple name=""
           accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          onchange="showfile1(this,'excelFile')" onclick="this.value=''" ;>
+          onchange="showfile1(this,'excelFile', 60)" onclick="this.value=''" ;>
       </div>
       <div id="excelFile">
         <table border='1'>
@@ -80,38 +137,6 @@
       <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('totalExcel')" value="导出" /></div>
     </div>
     <input type="radio" name="tabs" id="tabthree">
-    <label for="tabthree">特殊车型处理</label>
-    <div class="tab">
-      <div class="special-model">
-        <button id="add-special-model" class="btn">+</button>
-        <button id="del-special-model" class="btn">-</button>
-        <div class="model-item">
-          Make : <input type="text">
-          Model: <input type="text">
-        </div>
-      </div>
-      <div class="up_btn">导入特殊车型表：
-        <input type="file" id="xFile" multiple name=""
-          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          onchange="showfile3(this,'specialExcel')" onclick="this.value=''" ;>
-      </div>
-      <div id="specialExcel">
-        <table border='1'>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Data</th>
-              <th>product Details</th>
-              <th>result</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('specialExcel')" value="导出" /></div>
-    </div>
-
   </div>
 
   <style>
@@ -122,16 +147,17 @@
       padding: 0;
     }
 
+    button {
+      margin: 0 0 10px;
+      padding: 0 5px;
+    }
+
     textarea {
       width: 100%;
       white-space: pre-line;
       padding: 0;
       border: 0;
       height: 1em;
-    }
-
-    .export_btn {
-      display: none;
     }
 
     table {
@@ -161,10 +187,6 @@
 
     .tabs {
       padding: 10px;
-    }
-
-    .up_btn {
-      padding-bottom: 10px;
     }
 
     .tabs input[name="tabs"] {
@@ -199,12 +221,17 @@
       padding-right: 40px;
       width: 100%;
     }
+
+    .up_btn {
+      padding-bottom: 10px;
+    }
+
+    .export_btn {
+      display: none;
+    }
   </style>
 
   <script>
-    addItem(document.getElementById("add-special-model"),  document.querySelector(".model-item"), document.querySelector(".special-model"));
-    delItem(document.getElementById("del-special-model"), ".model-item", document.querySelector(".special-model"));
-
     document.body.addEventListener("click", function (e) {
       var e = e || window.event;
       var target = e.target;
@@ -215,19 +242,33 @@
     });
 
     // 读取文件的内容
-    function showfile1(obj, importExcel) {
-      var excelFile;
-      document.getElementById(importExcel).nextElementSibling.style.display = "";
+    function showfile1(obj, importExcel, maxNum) {
+      var condition = [];
+      document.querySelectorAll(".condition-item").forEach(function(e){
+        if(handleStr(e.querySelector(".condition-Make").value) || handleStr(e.querySelector(".condition-Model").value)) {
+          condition.push({
+            Make: handleStr(e.querySelector(".condition-Make").value),
+            Model: handleStr(e.querySelector(".condition-Model").value)
+          });
+        }
+      });
+
+      document.getElementById(importExcel).nextElementSibling.style.display = "none";
       if (!obj.files) {
         return;
       }
       document.getElementById(importExcel).querySelector("tbody").innerHTML = "";
+
+      var excelFile;
       for (var k = 0; k < obj.files.length; k++) {
         var f = obj.files[k];
         var reader = new FileReader();
+        reader.filename = f.name;
         reader.readAsBinaryString(f);
         reader.onload = function (e) {
           var data = e.target.result;
+          var name = e.target.filename;
+          name = name.substring(0, name.lastIndexOf("."));
           excelFile = XLSX.read(data, {
             type: 'binary'
           });
@@ -236,131 +277,31 @@
           for (var key in str[0]) {
             headers.push(key)  //获取表头
           }
+          var allStr = str;
+          var allArr = finder(allStr);
+          if(allArr.length > 0) {
+            allArr = filter(allArr, condition);
 
-          var otherSku = str.filter(function(i){
-            return i.SKU != str[0].SKU;
-          })
-
-          if(otherSku.length>0){
-            document.getElementById(importExcel).nextElementSibling.style.display = "none";
-            return;
-          }
-
-          str.sort(function (a, b) {
-            if (a.Make === b.Make) {
-              if (a.Model === b.Model) {
-                return a.Year - b.Year;
-              }else{
-                return compareString(a.Model, b.Model);
-              }
-            }else{
-              return compareString(a.Make, b.Make);
+            if(allArr.length > maxNum) {
+              allArr.sort(sortCompare("Index"));
+              allArr = allArr.splice(allArr.length - maxNum);
             }
-          });
+            allArr.sort(sortLocaleCompare("Make","Model"));
 
-          var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
-          for (var i = 1; i < str.length; i++) {
-            if (str[i]) {
-              if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
-                if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                  if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                    if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                      allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                    } else {
-                      allStr += "-" + str[i][headers[1]];
-                    }
-                  } else {
-                    allStr += "," + str[i][headers[1]];
-                  }
-                }
-              } else {
-                allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
-              }
-            }
-          }
-          var allArr = allStr.split(";<br>");
-          if(allArr.length>60){
-            var allBrr = allArr;
-            var maxYear = Math.max.apply(Math, str.map(function(o) {return o.Year}));
-            var minYear = Math.min.apply(Math, str.map(function(o) {return o.Year}));
-            var searchNum = maxYear - Math.ceil((maxYear + minYear)/2) + 3;
-            var startYear = Math.ceil((maxYear + minYear)/2);
-            if(searchNum>30){
-              startYear = maxYear - 30;
-              searchNum = 30;
-            }
-            sortUpdateYear(str,60,startYear,searchNum);
-            var len = allArr.length > 60 ? 60 : allArr.length;
-            allArr.splice(len);
-            for(var a = 0; a < allArr.length; a++){
-              for(var b = 0; b < allBrr.length; b++){
-                if(getMake(allArr,a) == getMake(allBrr,b) && getModel(allArr,a) == getModel(allBrr,b)){
-                  allArr[a] = allBrr[b];
-                  break;
-                }
-              }
-            }
-          }
-          yearAsBegin(allArr);
+            var finalArr = [];
+            allArr.forEach(function(e){
+              finalArr.push(e.Year + " " + e.Make + " " + e.Model);
+            });
 
-          allStr = allArr.join(";<br>");
-          document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-                + str[0][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;")
-               + '</td><td contenteditable="true">' + allStr
-              + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
-
-          function sortUpdateYear(str,maxLen,Year,num,flag) {
-            if(num>0){
-              num--;
-              sortByYear(str,Year);
-              if(allArr.length != maxLen){
-                if(allArr.length > maxLen){
-                  if(!flag){
-                    Year++;
-                  }else{
-                    return;
-                  }
-                }else{
-                  if(!flag){
-                    flag = "del";
-                  }
-                  Year--;
-                }
-                sortUpdateYear(str,maxLen,Year,num,flag);
-              }else{
-                return;
-              }
-            }else{
-              return;
-            }
-          }
-
-          function sortByYear(str,Year) {
-            allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
-            for (var i = 1; i < str.length; i++) {
-              if (str[i] && Number(str[i][headers[1]].toString())>Year) {
-                if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
-                  if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                    if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                      if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                        allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                      } else {
-                        allStr += "-" + str[i][headers[1]];
-                      }
-                    } else {
-                      allStr += "," + str[i][headers[1]];
-                    }
-                  }
-                } else {
-                  allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
-                }
-              }
-            }
-            allArr = allStr.split(";<br>");
+            allStr = finalArr.join(";<br>");
+            document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
+            + name.replace(/\s/g,"").replace(/^0/,"0&nbsp;")
+            + '</td><td contenteditable="true">' + allStr
+            + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
+            document.getElementById(importExcel).nextElementSibling.style.display = "block";
           }
         }
       }
-      document.getElementById(importExcel).nextElementSibling.style.display = "block";
     }
 
     function showfile2(obj, importExcel) {
@@ -419,249 +360,92 @@
       document.getElementById(importExcel).nextElementSibling.style.display = "block";
     }
 
-    // 读取文件的内容
-    function showfile3(obj, importExcel) {
-      var modelItems = document.querySelectorAll(".special-model .model-item");
-      var filterFlag = false;
-      for(var m=0; m<modelItems.length; m++){
-        if(modelItems[m].getElementsByTagName("input")[0].value.trim() || modelItems[m].getElementsByTagName("input")[1].value.trim()){
-          filterFlag = true;
-          break;
+    function finder(data) {
+      var tree = {};
+      data.forEach(function(e){
+        if(!tree[e.Make]) {
+          tree[e.Make] = {}
         }
+
+        if(!tree[e.Make][e.Model]) {
+          tree[e.Make][e.Model] = {}
+        }
+
+        if(!tree[e.Make][e.Model][e.Year]) {
+          tree[e.Make][e.Model][e.Year] = handleStr(e.Year)
+        }
+      });
+      var arr=[];
+      for(var Make in tree) {
+        var ModelArr = [];
+
+        var ModelTree = tree[Make];
+        for(var Model in ModelTree) {
+          var YearArr = [];
+          var YearTree = ModelTree[Model];
+          for(var Year in YearTree) {
+            YearArr.push(Year);
+          }
+          YearArr.sort();
+
+          var YearStr = "";
+          YearArr.forEach(function(e, i) {
+            if(i === 0) {
+              YearStr = e;
+            } else if(YearArr[i] - YearArr[i-1] === 1) {
+              if(YearStr.substring(YearStr.lastIndexOf("-")).length === 5) {
+                YearStr = YearStr.substring(0, YearStr.lastIndexOf("-")+1) + e;
+              }else {
+                YearStr += "-" + e;
+              }
+            } else {
+              YearStr += "," + e;
+            }
+          });
+
+          ModelArr.push({
+            Model: Model,
+            Year: YearStr,
+            Index: YearArr[YearArr.length -1]
+          });
+        }
+        ModelArr.forEach(function(e){
+          arr.push({
+            Make: Make,
+            Model: e.Model,
+            Year: e.Year,
+            Index: e.Index
+          });
+        });
       }
 
-      if(!filterFlag){
-        showfile1(obj, importExcel);
-      }else{
-        var excelFile;
-        document.getElementById(importExcel).nextElementSibling.style.display = "";
-        if (!obj.files) {
-          return;
-        }
-        document.getElementById(importExcel).querySelector("tbody").innerHTML = "";
-        for (var k = 0; k < obj.files.length; k++) {
-          var f = obj.files[k];
-          var reader = new FileReader();
-          reader.readAsBinaryString(f);
-          reader.onload = function (e) {
-            var data = e.target.result;
-            excelFile = XLSX.read(data, {
-              type: 'binary'
-            });
-            var headers = new Array();
-            var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
-            for (var key in str[0]) {
-              headers.push(key)  //获取表头
-            }
+      return arr;
+    }
 
-            var otherSku = str.find(function(i){
-              return i.SKU != str[0].SKU;
-            })
-
-            if(otherSku){
-              document.getElementById(importExcel).nextElementSibling.style.display = "none";
-              return;
-            }
-
-            var modelItems = document.querySelectorAll(".special-model .model-item");
-            var specialModelCount = [];
-            for(var m=0; m<modelItems.length; m++){
-              var input_Make = modelItems[m].getElementsByTagName("input")[0].value.trim().replace(/\s+/g," ").toLowerCase();
-              var input_Model = modelItems[m].getElementsByTagName("input")[1].value.trim().replace(/\s+/g," ").toLowerCase();
-              if(input_Make || input_Model){
-                var same_Make_Model = specialModelCount.find(function(item){
-                  return item.Make == input_Make && item.Model == input_Model;
-                });
-
-                if(!same_Make_Model){
-                  var same_Make = specialModelCount.find(function(item){
-                    return item.Make == input_Make && input_Make != "";
-                  });
-
-                  if(same_Make){
-                    if(!input_Model){
-                      specialModelCount = specialModelCount.filter(function(item){
-                        return item.Make != input_Make;
-                      });
-
-                      specialModelCount.push({
-                        Make: input_Make,
-                        Model: input_Model
-                      });
-                    }else{
-                      var empty_Model = specialModelCount.find(function(item){
-                        return item.Make == input_Make && item.Model == "";
-                      });
-
-                      if(!empty_Model){
-                        specialModelCount.push({
-                          Make: input_Make,
-                          Model: input_Model
-                        });
-                      }
-                    }
-                  }else{
-                    var same_Model = specialModelCount.find(function(item){
-                      return item.Model == input_Model && input_Model != "";
-                    });
-
-                    if(same_Model){
-                      if(!input_Make){
-                        specialModelCount = specialModelCount.filter(function(item){
-                          return item.Model != input_Model;
-                        });
-
-                        specialModelCount.push({
-                          Make: input_Make,
-                          Model: input_Model
-                        });
-                      }else{
-                        var empty_Make = specialModelCount.find(function(item){
-                          return item.Model == input_Model && item.Make == "";
-                        });
-
-                        if(!empty_Make){
-                          specialModelCount.push({
-                            Make: input_Make,
-                            Model: input_Model
-                          });
-                        }
-                      }
-                    }else{
-                      specialModelCount.push({
-                        Make: input_Make,
-                        Model: input_Model
-                      });
-                    }
-                  }
-                }
+    function filter(data, condition) {
+      if(condition.length > 0) {
+        var newData = [];
+        var flag = false;
+        condition.forEach(function(e) {
+          data.forEach(function(f){
+            if(e.Make != "" && e.Model != "") {
+              if(f.Make === e.Make && f.Model === e.Model) {
+                newData.push(f);
+              }
+            }else if(e.Make != "") {
+              if(f.Make === e.Make) {
+                newData.push(f);
+              }
+            }else if(e.Model != "") {
+              if(f.Model === e.Model) {
+                newData.push(f);
               }
             }
-
-            specialModelCount.sort(function (a, b) {
-              if (a.Make === b.Make) {
-                if (a.Model === b.Model) {
-                  return a.Year - b.Year;
-                }else{
-                  return compareString(a.Model, b.Model);
-                }
-              }else{
-                return compareString(a.Make, b.Make);
-              }
-            });
-
-            str = str.filter(function(item){
-              var flag = specialModelCount.find(function(obj){
-                var objMake = obj.Make.toString().trim().replace(/\s+/g," ").toLowerCase();
-                var objModel = obj.Model.toString().trim().replace(/\s+/g," ").toLowerCase();
-                var itemMake = item.Make.toString().trim().replace(/\s+/g," ").toLowerCase();
-                var itemModel = item.Model.toString().trim().replace(/\s+/g," ").toLowerCase();
-                if(objMake == itemMake){
-                  return objModel == itemModel || objModel == "";
-                }else if(objModel == itemModel){
-                  return objMake == itemMake || objMake == "";
-                }
-              });
-              if(flag){
-                return item;
-              }
-            });
-
-            if(str.length>0){
-              str.sort(function (a, b) {
-                if (a.Make === b.Make) {
-                  if (a.Model === b.Model) {
-                    return a.Year - b.Year;
-                  }else{
-                    return compareString(a.Model, b.Model);
-                  }
-                }else{
-                  return compareString(a.Make, b.Make);
-                }
-              });
-
-              var allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
-              for (var i = 1; i < str.length; i++) {
-                if (str[i]) {
-                  if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
-                    if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                      if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                        if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                          allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                        } else {
-                          allStr += "-" + str[i][headers[1]];
-                        }
-                      } else {
-                        allStr += "," + str[i][headers[1]];
-                      }
-                    }
-                  } else {
-                    allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
-                  }
-                }
-              }
-              var allArr = allStr.split(";<br>");
-              yearAsBegin(allArr);
-
-              allStr = allArr.join(";<br>");
-              document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-                    + str[0][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;")
-                  + '</td><td contenteditable="true">' + allStr
-                  + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
-
-              function sortUpdateYear(str,maxLen,Year,num,flag) {
-                if(num>0){
-                  num--;
-                  sortByYear(str,Year);
-                  if(allArr.length != maxLen){
-                    if(allArr.length > maxLen){
-                      if(!flag){
-                        Year++;
-                      }else{
-                        return;
-                      }
-                    }else{
-                      if(!flag){
-                        flag = "del";
-                      }
-                      Year--;
-                    }
-                    sortUpdateYear(str,maxLen,Year,num,flag);
-                  }else{
-                    return;
-                  }
-                }else{
-                  return;
-                }
-              }
-
-              function sortByYear(str,Year) {
-                allStr = str[0][headers[2]] + "," + str[0][headers[3]] + "," + str[0][headers[1]];
-                for (var i = 1; i < str.length; i++) {
-                  if (str[i] && Number(str[i][headers[1]].toString())>Year) {
-                    if ((str[i][headers[2]] == str[i - 1][headers[2]]) && (str[i][headers[3]] == str[i - 1][headers[3]])) {
-                      if (str[i][headers[1]] != str[i - 1][headers[1]]) {
-                        if (str[i][headers[1]] - str[i - 1][headers[1]] == 1) {
-                          if (allStr.substring(allStr.lastIndexOf("-")).length == 5) {
-                            allStr = allStr.substring(0, allStr.lastIndexOf("-")+1) + str[i][headers[1]];
-                          } else {
-                            allStr += "-" + str[i][headers[1]];
-                          }
-                        } else {
-                          allStr += "," + str[i][headers[1]];
-                        }
-                      }
-                    } else {
-                      allStr += ";<br>" + str[i][headers[2]] + "," + str[i][headers[3]] + "," + str[i][headers[1]];
-                    }
-                  }
-                }
-                allArr = allStr.split(";<br>");
-              }
-              document.getElementById(importExcel).nextElementSibling.style.display = "block";
-            }
-          }
-        }
+          })
+        });
+        return newData;
+      }else {
+        return data;
       }
     }
 
@@ -732,52 +516,6 @@
       return '';
     }
 
-    function yearAsBegin(allArr){
-      for (var m = 0; m < allArr.length; m++) {
-        if (allArr[m].trim().replace(/\s+/g, " ") != "") {
-          var s1 = allArr[m].substr(0, allArr[m].indexOf(","));
-          var s2 = allArr[m].substr(allArr[m].indexOf(",") + 1);
-          var s3 = s2.substr(s2.indexOf(",") + 1);
-          s2 = s2.substr(0, s2.indexOf(",")).replace(/\s+/g, " ");
-          allArr[m] = s3 + " " + s1 + " " + s2;
-        }
-      }
-    }
-
-    function getMake(arr,k){
-      return arr[k].substring(0, arr[k].indexOf(",")).trim().replace(/\s+/g,"");
-    }
-
-    function getModel(arr,k){
-      var Model = arr[k].substring(arr[k].indexOf(",")+1);
-      return Model.substring(0, Model.indexOf(",")).trim().replace(/\s+/g,"");
-    }
-
-    function compareString(a,b){
-      var aVal = a.toString().toLocaleUpperCase().trim().replace(/\s+/g," ");
-      var bVal = b.toString().toLocaleUpperCase().trim().replace(/\s+/g," ");
-      if(parseFloat(aVal) && parseFloat(bVal)){
-        aVal = parseFloat(aVal);
-        bVal = parseFloat(bVal);
-        return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
-      }else{
-        var reg = new RegExp("\\d+$");
-        if(aVal.match(reg) && bVal.match(reg)){
-          if(aVal.replace(/(\d+)$/g,"") === bVal.replace(/(\d+)$/g,"")){
-            var reg = new RegExp("\\d+$");
-            var aVal0 = parseFloat(aVal.match(reg));
-            var bVal0 = parseFloat(bVal.match(reg));
-          }else{
-            var aVal0 = aVal.replace(/(\d+)$/g,"");
-            var bVal0 = bVal.replace(/(\d+)$/g,"");
-          }
-          return aVal0 === bVal0 ? 0 : aVal0 > bVal0 ? 1 : -1;
-        }else{
-          return aVal === bVal ? 0 : aVal > bVal ? 1 : -1;
-        }
-      }
-    }
-
     function handleDetails(ele, str2) {
       ele.previousElementSibling.innerText = str2;
       var str1 = ele.previousElementSibling.previousElementSibling.innerText;
@@ -826,25 +564,32 @@
       }
     }
 
-    function addItem(btn, item, container) {
-      var itemHtml = item.innerHTML;
-      btn.addEventListener("click",function () {
-        var itemNode = document.createElement("div");
-        itemNode.className = item.className;
-        itemNode.innerHTML = itemHtml;
-        container.appendChild(itemNode);
-      });
+    function sortCompare(p) {
+      return function(m,n) {
+        var a = m[p];
+        var b = n[p]
+        return a - b;
+      }
     }
 
-    function delItem(btn, itemSelector, container) {
-      btn.addEventListener("click",function () {
-        var itemList = container.querySelectorAll(itemSelector);
-        if(itemList.length>1){
-          container.removeChild(itemList[itemList.length-1])
+    function sortLocaleCompare(p,q) {
+      return function(m,n) {
+        var a = m[p];
+        var b = n[p];
+        if(a === b) {
+          var c = m[q];
+          var d = n[q];
+          return c.localeCompare(d, 'zh-CN', { numeric: true });
+        }else {
+          return a.localeCompare(b, 'zh-CN', { numeric: true });
         }
-      });
+      }
+    }
+
+    function handleStr(str) {
+      return str.toString().trim().replace(/\s+/g,"");
     }
   </script>
-</body>
+  </body>
 
 </html>
