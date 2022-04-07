@@ -283,7 +283,7 @@
             allArr = filter(allArr, condition);
 
             if(allArr.length > maxNum) {
-              allArr.sort(sortCompare("Index"));
+              allArr.sort(sortLocaleCompare("Index","Make","Model"));
               allArr = allArr.splice(allArr.length - maxNum);
             }
             allArr.sort(sortLocaleCompare("Make","Model"));
@@ -564,16 +564,28 @@
       }
     }
 
-    function sortLocaleCompare(p,q) {
+    function sortLocaleCompare(p,q,r) {
       return function(m,n) {
-        var a = m[p];
-        var b = n[p];
-        if(a === b) {
-          var c = m[q];
-          var d = n[q];
-          return c.localeCompare(d, 'zh-CN', { numeric: true });
-        }else {
-          return a.localeCompare(b, 'zh-CN', { numeric: true });
+        if(m[p] && n[p]) {
+          var a = m[p];
+          var b = n[p];
+          if(a === b) {
+            if(m[q] && n[q]) {
+              var c = m[q];
+              var d = n[q];
+              if(c === d) {
+                if(m[r] && n[r]) {
+                  var e = m[r];
+                  var f = n[r];
+                  return e.localeCompare(f, 'zh-CN', { numeric: true });
+                }
+              }else {
+                return c.localeCompare(d, 'zh-CN', { numeric: true });
+              }
+            }
+          }else {
+            return a.localeCompare(b, 'zh-CN', { numeric: true });
+          }
         }
       }
     }
