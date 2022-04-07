@@ -8,7 +8,7 @@
   <title>车型转换工具</title>
   <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
 </head>
-  
+
 <style>
   .part-fit-radio {
       display: flex;
@@ -55,7 +55,6 @@
     border: 2px solid #ff5500;
   }
 </style>
-  
 <body>
   <div class="tabs">
     <input type="radio" name="tabs" id="tabone" checked="checked">
@@ -375,10 +374,9 @@
           tree[e.Make][e.Model][e.Year] = handleStr(e.Year)
         }
       });
+
       var arr=[];
       for(var Make in tree) {
-        var ModelArr = [];
-
         var ModelTree = tree[Make];
         for(var Model in ModelTree) {
           var YearArr = [];
@@ -403,20 +401,13 @@
             }
           });
 
-          ModelArr.push({
+          arr.push({
+            Make: Make,
             Model: Model,
             Year: YearStr,
             Index: YearArr[YearArr.length -1]
           });
         }
-        ModelArr.forEach(function(e){
-          arr.push({
-            Make: Make,
-            Model: e.Model,
-            Year: e.Year,
-            Index: e.Index
-          });
-        });
       }
 
       return arr;
@@ -589,7 +580,7 @@
     function handleStr(str) {
       return str.toString().trim().replace(/\s+/g,"");
     }
-  </script>
-  </body>
+</script>
+</body>
 
 </html>
