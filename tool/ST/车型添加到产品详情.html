@@ -1,245 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>车型转换工具</title>
+  <title>Document</title>
   <script type="text/javascript" src="../../js/xlsx.core.min.js"></script>
 </head>
-
-<style>
-  .part-fit-radio {
-      display: flex;
-      flex-wrap: wrap;
-  }
-
-  .part-fit-radio label{
-      order: 1;
-      width: 2em;
-      height: 2em;
-      line-height: 2em;
-      text-align: center;
-  }
-
-  .part-fit-radio label:hover {
-    color: #f50;
-  }
-
-  .part-fit-radio label a {
-    border: 0 !important;
-  }
-
-  .part-fit-radio .part-radio{
-      margin: 0;
-      display: none;
-  }
-   .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab+label{
-      color: #fff;
-      font-weight: bold;
-      background: #999;
-  }
-
-  .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab{
-      display: block;
-  }
-
-  .part-fit-radio .part-tab{
-      display: none;
-      width: 100%;
-      background: #fff;
-  }
-
-  #vehicle_matching:target>div {
-    border: 2px solid #ff5500;
-  }
-</style>
 <body>
-  <div class="tabs">
-    <input type="radio" name="tabs" id="tabone" checked="checked">
-    <label for="tabone">车型处理</label>
-    <div class="tab">
-      <div class="condition">
-        <button class="condition-del">-</button>
-        <button class="condition-add">+</button>
-        <div class="condition-model" hidden>
-          <div class="condition-item">
-            Make: <input class="condition-Make" type="text">
-            Model: <input class="condition-Model" type="text">
-            <button class="conditon-remove">x</button>
-          </div>
-        </div>
-        <div class="condition-list">
-        </div>
-        <script>
-          document.querySelector(".condition-add").addEventListener("click",function(){
-            document.querySelector(".condition-list").appendChild(document.querySelector(".condition-model .condition-item").cloneNode(true));
-          });
-          document.querySelector(".condition-del").addEventListener("click",function(){
-            var node = document.querySelectorAll(".condition-item");
-            if(node.length > 1) {
-              document.querySelector(".condition-list").removeChild(node[node.length-1]);
-            }
-          });
-          document.querySelector(".condition-list").addEventListener("click",function(e){
-            var target = e.target;
-            if(target.className === "conditon-remove") {
-              document.querySelector(".condition-list").removeChild(target.parentNode);
-            }
-          });
-        </script>
+  <div class="condition">
+    <button class="condition-del">-</button>
+    <button class="condition-add">+</button>
+    <div class="condition-model" hidden>
+      <div class="condition-item">
+        Make: <input class="condition-Make" type="text">
+        Model: <input class="condition-Model" type="text">
+        <button class="conditon-remove">x</button>
       </div>
-      <div class="up_btn">导入车型表：
-        <input type="file" id="xFile" multiple name=""
-          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          onchange="showfile1(this,'excelFile', 60)" onclick="this.value=''" ;>
-      </div>
-      <div id="excelFile">
-        <table border='1'>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Data</th>
-              <th>product Details</th>
-              <th>result</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
     </div>
-    <input type="radio" name="tabs" id="tabtwo">
-    <label for="tabtwo">批量处理</label>
-    <div class="tab">
-      <div class="up_btn">导入统计表：
-        <input type="file" id="xFile" name=""
-          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          onchange="showfile2(this,'totalExcel')" onclick="this.value=''" ;>
+    <div class="condition-list">
+      <div class="condition-item">
+        Make: <input class="condition-Make" type="text">
+        Model: <input class="condition-Model" type="text">
+        <button class="conditon-remove">x</button>
       </div>
-      <div id="totalExcel">
-        <table border='1'>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Data</th>
-              <th>product Details</th>
-              <th>result</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('totalExcel')" value="导出" /></div>
     </div>
-    <input type="radio" name="tabs" id="tabthree">
+    <script>
+      document.querySelector(".condition-add").addEventListener("click",function(){
+        document.querySelector(".condition-list").appendChild(document.querySelector(".condition-model .condition-item").cloneNode(true));
+      });
+      document.querySelector(".condition-del").addEventListener("click",function(){
+        var node = document.querySelectorAll(".condition-item");
+        if(node.length > 1) {
+          document.querySelector(".condition-list").removeChild(node[node.length-1]);
+        }
+      });
+      document.querySelector(".condition-list").addEventListener("click",function(e){
+        var target = e.target;
+        if(target.className === "conditon-remove") {
+          document.querySelector(".condition-list").removeChild(target.parentNode);
+        }
+      });
+    </script>
   </div>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    button {
-      margin: 0 0 10px;
-      padding: 0 5px;
-    }
-
-    textarea {
-      width: 100%;
-      white-space: pre-line;
-      padding: 0;
-      border: 0;
-      height: 1em;
-    }
-
-    table {
-      width: 100%;
-    }
-
-    td {
-      vertical-align: baseline;
-    }
-
-    th:nth-of-type(1),
-    td:nth-of-type(1) {
-      width: 5%;
-    }
-
-    th:nth-of-type(2),
-    td:nth-of-type(2) {
-      width: 25%;
-    }
-
-    th:nth-of-type(3),
-    td:nth-of-type(3),
-    th:nth-of-type(4),
-    td:nth-of-type(4) {
-      width: 35%;
-    }
-
-    .tabs {
-      padding: 10px;
-    }
-
-    .tabs input[name="tabs"] {
-      display: none;
-    }
-
-    .tabs input[name="tabs"]+label+.tab {
-      display: none;
-    }
-
-    .tabs input[name="tabs"]:checked+label+.tab {
-      display: block;
-    }
-
-    .tabs input[name="tabs"]:checked+label {
-      border-bottom: 2px solid #444;
-      margin-bottom: 5px;
-      padding-bottom: 5px;
-    }
-
-    .tabs input[name="tabs"]~label:last-of-type {
-      margin-right: 0;
-    }
-
-    .tabs input[name="tabs"]~label {
-      margin-right: 20px;
-    }
-
-    .tabs .tab {
-      position: absolute;
-      margin-top: 15px;
-      padding-right: 40px;
-      width: 100%;
-    }
-
-    .up_btn {
-      padding-bottom: 10px;
-    }
-
-    .export_btn {
-      display: none;
-    }
-  </style>
-
+  <input type="file" id="xFile" multiple name=""
+  accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  onchange="showfile1(this,'excelFile', 60)" onclick="this.value=''" ;>
+  <div id="excelFile">
+    <table border='1'>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Data</th>
+          <th>product Details</th>
+          <th>result</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="export_btn" style="display: none;">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
   <script>
-    document.body.addEventListener("click", function (e) {
-      var e = e || window.event;
-      var target = e.target;
-      if (target.className.indexOf("details-result") != -1) {
-        var str2 = target.previousElementSibling.innerText;
-        handleDetails(target, str2);
-      }
-    });
-
     // 读取文件的内容
     function showfile1(obj, importExcel, maxNum) {
       var condition = [];
@@ -251,6 +73,7 @@
           });
         }
       });
+      condition = unique(condition);
 
       document.getElementById(importExcel).nextElementSibling.style.display = "none";
       if (!obj.files) {
@@ -301,62 +124,6 @@
           }
         }
       }
-    }
-
-    function showfile2(obj, importExcel) {
-      var excelFile;
-      document.getElementById(importExcel).nextElementSibling.style.display = "";
-      if (!obj.files) {
-        return;
-      }
-      var f = obj.files[0];
-
-      var reader = new FileReader();
-      reader.readAsBinaryString(f);
-      reader.onload = function (e) {
-        var data = e.target.result;
-        excelFile = XLSX.read(data, {
-          type: 'binary'
-        });
-
-        var headers = new Array();
-        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
-        for (var key in str[0]) {
-          headers.push(key)  //获取表头
-        }
-
-        var dataTable2 = "";
-        for (var i = 0; i < str.length; i++) {
-          if (str[i]) {
-            if(str[i][headers[0]]){
-              dataTable2 += "<tr><td>" + str[i][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;") + '</td>';
-            }else{
-              dataTable2 += '<tr><td></td>';
-            }
-            if(str[i][headers[1]]){
-              dataTable2 += '<td contenteditable="true">'
-              + str[i][headers[1]].replace(/\n/g, "<br>") + '</td>';
-            }else{
-              dataTable2 += '<td contenteditable="true"></td>';
-            }
-            if(str[i][headers[2]]){
-              dataTable2 += '<td contenteditable="true">' + str[i][headers[2]]
-              + '</td><td class="details-result" contenteditable="true"></td></tr>';
-            }else{
-              dataTable2 += '<td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
-            }
-          }
-        }
-        document.getElementById(importExcel).querySelector("tbody").innerHTML = dataTable2;
-        var importDetals = document.getElementById(importExcel).querySelectorAll("tbody .details-result");
-        for(var k=0; k<importDetals.length; k++){
-          if(importDetals[k]){
-            var str2 = importDetals[k].previousElementSibling.innerHTML;
-            handleDetails(importDetals[k], str2);
-          }
-        }
-      }
-      document.getElementById(importExcel).nextElementSibling.style.display = "block";
     }
 
     function finder(data) {
@@ -440,121 +207,6 @@
       }
     }
 
-    function btn_export(importExcel) {
-      var table = document.getElementById(importExcel).querySelector("table");
-      var sheet = XLSX.utils.table_to_sheet(table); //将一个table对象转换成一个sheet对象
-      var wb = sheet2blob(sheet);
-      if ('ie' == getExplorer()) {
-        window.navigator.msSaveOrOpenBlob(wb, 'excel.xlsx');
-      }
-      else {
-        var oa = document.createElement('a');
-        oa.href = URL.createObjectURL(wb);
-        oa.download = 'excel.xlsx';
-        document.body.appendChild(oa);
-        oa.click();
-        document.body.removeChild(oa);
-      }
-    }
-
-    // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
-    function sheet2blob(sheet, sheetName) {
-      try {
-        new Uint8Array([1, 2]).slice(0, 2);
-      } catch (e) {
-        console.log("[Uint8Array" + e.description + "]这里使用【Array.slice】。");
-        //IE或有些浏览器不支持Uint8Array.slice()方法。改成使用Array.slice()方法
-        Uint8Array.prototype.slice = Array.prototype.slice;
-      }
-      sheetName = sheetName || 'sheet1';
-      var workbook = {
-        SheetNames: [sheetName],
-        Sheets: {}
-      };
-      workbook.Sheets[sheetName] = sheet;
-      // 生成excel的配置项
-      var wopts = {
-        bookType: 'xlsx', // 要生成的文件类型
-        bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
-        type: 'binary'
-      };
-      var wbout = XLSX.write(workbook, wopts);
-      var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-      // 字符串转ArrayBuffer
-      function s2ab(s) {
-        var buf = new ArrayBuffer(s.length);
-        var view = new Uint8Array(buf);
-        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-        return buf;
-      }
-      return blob;
-    }
-
-    function getExplorer() {
-      var explorer = window.navigator.userAgent;
-      //ie
-      if (explorer.indexOf("MSIE") >= 0) {
-        return 'ie';
-      }
-      //Edge
-      if (explorer.indexOf("Edge") >= 0) {
-        return 'ie';
-      }
-      //Trident
-      if (explorer.indexOf("Trident") >= 0) {
-        return 'ie';
-      }
-      return '';
-    }
-
-    function handleDetails(ele, str2) {
-      ele.previousElementSibling.innerText = str2;
-      var str1 = ele.previousElementSibling.previousElementSibling.innerText;
-      if(str1.replace(/\s/g,"")){
-        str1 = str1.trim().replace(/\s+/g, " ");
-        var strArr1 = str1.split(";");
-        var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
-        if (strArr1.length > 20) {
-          modelStr += '\n<div class="part-fit-radio">';
-          for(var i=0; i<strArr1.length; i+=10){
-            var mIndex = parseInt(i / 10) + 1;
-            modelStr += '\n<input ';
-            if(i==0){
-              modelStr += 'checked="checked"';
-            }
-            modelStr += 'id="part-radio'+mIndex+'" class="part-radio" type="radio" name="part-radio">\n<div class="part-tab">\n<ul>';
-            for(var j=0; j<10; j++){
-              if(strArr1[i+j]){
-                modelStr += "\n<li>" + strArr1[i+j].trim() + "</li>";
-              }
-            }
-            modelStr += '\n</ul>\n</div>\n<label for="part-radio' + mIndex+'">'+ mIndex +'</label>';
-          }
-          modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
-        } else {
-          modelStr += '\n<ul>';
-          for (var i in strArr1) {
-            if (strArr1[i].trim().replace(/\s+/g, " ") != "") {
-              modelStr += "\n<li>" + strArr1[i].trim() + "</li>";
-            }
-          }
-          modelStr += "\n</ul>\n</div>";
-        }
-        if(str2.indexOf('<div class="part-fit">')!=-1){
-          var pStr1 = str2.substring(0,str2.indexOf("<h2>"));
-          var pStr2 = str2.substring(str2.indexOf("</h2>")+5);
-          pStr1=pStr1.substring(0,pStr1.indexOf('<div class="part-fit">'));
-          pStr2=pStr2.substring(pStr2.indexOf('<h2>'));
-          ele.innerText = pStr1 + modelStr + "\n" + pStr2;
-        }else{
-          var index2 = str2.indexOf("<h2>");
-          ele.innerText = str2.substring(0, index2) + modelStr + "\n" + str2.substring(index2);
-        }
-      }else{
-        ele.innerText = ele.previousElementSibling.innerText;
-      }
-    }
-
     function sortCompare(p) {
       return function(m,n) {
         var a = m[p];
@@ -577,10 +229,21 @@
       }
     }
 
+    function unique(arr){
+     let result = {};
+     let finalResult=[];
+     arr.forEach(function(e){
+      result[e.Make + e.Model] = e;
+     });
+     for(item in result){
+      finalResult.push(result[item]);
+     }
+     return finalResult;
+    }
+
     function handleStr(str) {
       return str.toString().trim().replace(/\s+/g,"");
     }
-</script>
+  </script>
 </body>
-
 </html>
