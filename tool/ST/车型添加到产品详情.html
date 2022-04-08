@@ -465,115 +465,116 @@
       document.getElementById(importExcel).nextElementSibling.style.display = "block";
     }
 
-    function getTable(allArr, sku, importExcel, condition, maxNum){
-      allArr = handleFinder(allArr);
-      if(allArr.length > 0) {
-        allArr = filterFinder(allArr, condition);
+    function getTable(arr, sku, importExcel, condition, maxNum){
+      arr = handleFinder();
+      if(arr.length > 0) {
+        arr = filterFinder(condition);
+        if(arr.length > 0) {
+          if(arr.length > maxNum) {
+            arr.sort(sortLocaleCompare("Index","Make","Model"));
+            arr = arr.splice(arr.length - maxNum);
+          }
+          arr.sort(sortLocaleCompare("Make","Model"));
 
-        if(allArr.length > maxNum) {
-          allArr.sort(sortLocaleCompare("Index","Make","Model"));
-          allArr = allArr.splice(allArr.length - maxNum);
+          var finalArr = [];
+          arr.forEach(function(e){
+            finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
+          });
+
+          arr = finalArr.join("<br>");
+          document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
+          + sku.replace(/\s/g,"").replace(/^0/,"0&nbsp;")
+          + '</td><td contenteditable="true">' + arr
+          + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
+          document.getElementById(importExcel).nextElementSibling.style.display = "block";
         }
-        allArr.sort(sortLocaleCompare("Make","Model"));
+
+        function filterFinder(condition) {
+          if(condition.length > 0) {
+            var newArr = [];
+            var flag = false;
+            arr.forEach(function(e){
+              condition.forEach(function(f){
+                if(f.Make != "" && f.Model != "") {
+                  if(compareStr(f.Make, e.Make) && compareStr(f.Model, e.Model)) {
+                    newArr.push(e);
+                  }
+                }else if(f.Make != "") {
+                  if(compareStr(f.Make, e.Make)) {
+                    newArr.push(e);
+                  }
+                }else if(f.Model != "") {
+                  if(compareStr(f.Model, e.Model)) {
+                    newArr.push(e);
+                  }
+                }
+              });
+            });
+            return newArr;
+          }else {
+            return arr;
+          }
+        }
+      }
+
+      function handleFinder(){
+        var finder = {};
+        arr.forEach(function(e){
+          if(e.Make) {
+            if(!finder[e.Make]) {
+              finder[e.Make] = {}
+            }
+
+            if(e.Model) {
+              if(!finder[e.Make][e.Model]) {
+                finder[e.Make][e.Model] = {}
+              }
+
+              if(e.Year){
+                if(!finder[e.Make][e.Model][e.Year]) {
+                  finder[e.Make][e.Model][e.Year] = e.Year;
+                }
+              }
+            }
+          }
+        });
 
         var finalArr = [];
-        allArr.forEach(function(e){
-          finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
-        });
+        for(var Make in finder) {
+          for(var Model in finder[Make]) {
+            var yearStr = "";
+            var yearArr = [];
 
-        allArr = finalArr.join("<br>");
-        document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-        + sku.replace(/\s/g,"").replace(/^0/,"0&nbsp;")
-        + '</td><td contenteditable="true">' + allArr
-        + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
-        document.getElementById(importExcel).nextElementSibling.style.display = "block";
-      }
-    }
-
-    function handleFinder(arr){
-      var finder = {};
-      arr.forEach(function(e){
-        if(e.Make) {
-          if(!finder[e.Make]) {
-            finder[e.Make] = {}
-          }
-
-          if(e.Model) {
-            if(!finder[e.Make][e.Model]) {
-              finder[e.Make][e.Model] = {}
+            for(var Year in finder[Make][Model]) {
+              yearArr.push(Year);
             }
 
-            if(e.Year){
-              if(!finder[e.Make][e.Model][e.Year]) {
-                finder[e.Make][e.Model][e.Year] = e.Year;
+            yearArr.sort();
+
+            yearArr.forEach(function(e, i) {
+              if(i === 0) {
+                yearStr = e;
+              } else if(yearArr[i] - yearArr[i-1] === 1) {
+                if(yearStr.substring(yearStr.lastIndexOf("-")).length === 5) {
+                  yearStr = yearStr.substring(0, yearStr.lastIndexOf("-")+1) + e;
+                }else {
+                  yearStr += "-" + e;
+                }
+              } else {
+                yearStr += "," + e;
               }
-            }
+            });
+
+            finalArr.push({
+              Make: Make,
+              Model: Model,
+              Year: yearStr,
+              Index: yearArr[yearArr.length-1]
+            });
           }
         }
-      });
 
-      var finalArr = [];
-      for(var Make in finder) {
-        for(var Model in finder[Make]) {
-          var yearStr = "";
-          var yearArr = [];
-
-          for(var Year in finder[Make][Model]) {
-            yearArr.push(Year);
-          }
-
-          yearArr.sort();
-
-          yearArr.forEach(function(e, i) {
-            if(i === 0) {
-              yearStr = e;
-            } else if(yearArr[i] - yearArr[i-1] === 1) {
-              if(yearStr.substring(yearStr.lastIndexOf("-")).length === 5) {
-                yearStr = yearStr.substring(0, yearStr.lastIndexOf("-")+1) + e;
-              }else {
-                yearStr += "-" + e;
-              }
-            } else {
-              yearStr += "," + e;
-            }
-          });
-
-          finalArr.push({
-            Make: Make,
-            Model: Model,
-            Year: yearStr,
-            Index: yearArr[yearArr.length-1]
-          });
-        }
-      }
-
-      return finalArr;
-    }
-
-    function filterFinder(arr, condition) {
-      if(condition.length > 0) {
-        var newArr = [];
-        var flag = false;
-        arr.forEach(function(e){
-          condition.forEach(function(f){
-            if(f.Make != "" && f.Model != "") {
-              if(f.Make === e.Make && f.Model === e.Model) {
-                newArr.push(e);
-              }
-            }else if(f.Make != "") {
-              if(f.Make === e.Make) {
-                newArr.push(e);
-              }
-            }else if(f.Model != "") {
-              if(f.Model === e.Model) {
-                newArr.push(e);
-              }
-            }
-          });
-        });
-        return newArr;
-      }else {
-        return arr;
+        return finalArr;
       }
     }
 
@@ -740,6 +741,16 @@
 
     function handleStr(str) {
       return str.toString().trim().replace(/\s+/g,"");
+    }
+
+    function compareStr(a,b) {
+      var m = a.toString().replace(/\s/g,"").toUpperCase();
+      var n = b.toString().replace(/\s/g,"").toUpperCase();
+      if(m === n) {
+        return true;
+      }else {
+        return false;
+      }
     }
 </script>
 </body>
