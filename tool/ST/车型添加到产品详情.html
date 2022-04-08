@@ -278,9 +278,9 @@
             headers.push(key)  //获取表头
           }
           var allStr = str;
-          var allArr = finder(allStr);
+          var allArr = handleFinder(allStr);
           if(allArr.length > 0) {
-            allArr = filter(allArr, condition);
+            allArr = filterFinder(allArr, condition);
 
             if(allArr.length > maxNum) {
               allArr.sort(sortLocaleCompare("Index","Make","Model"));
@@ -360,84 +360,90 @@
       document.getElementById(importExcel).nextElementSibling.style.display = "block";
     }
 
-    function finder(data) {
-      var tree = {};
-      data.forEach(function(e){
-        if(!tree[e.Make]) {
-          tree[e.Make] = {}
-        }
+    function handleFinder(arr){
+      var finder = {};
+      arr.forEach(function(e){
+        if(e.Make) {
+          if(!finder[e.Make]) {
+            finder[e.Make] = {}
+          }
 
-        if(!tree[e.Make][e.Model]) {
-          tree[e.Make][e.Model] = {}
-        }
+          if(e.Model) {
+            if(!finder[e.Make][e.Model]) {
+              finder[e.Make][e.Model] = {}
+            }
 
-        if(!tree[e.Make][e.Model][e.Year]) {
-          tree[e.Make][e.Model][e.Year] = handleStr(e.Year)
+            if(e.Year){
+              if(!finder[e.Make][e.Model][e.Year]) {
+                finder[e.Make][e.Model][e.Year] = e.Year;
+              }
+            }
+          }
         }
       });
 
-      var arr=[];
-      for(var Make in tree) {
-        var ModelTree = tree[Make];
-        for(var Model in ModelTree) {
-          var YearArr = [];
-          var YearTree = ModelTree[Model];
-          for(var Year in YearTree) {
-            YearArr.push(Year);
-          }
-          YearArr.sort();
+      var finalArr = [];
+      for(var Make in finder) {
+        for(var Model in finder[Make]) {
+          var yearStr = "";
+          var yearArr = [];
 
-          var YearStr = "";
-          YearArr.forEach(function(e, i) {
+          for(var Year in finder[Make][Model]) {
+            yearArr.push(Year);
+          }
+
+          yearArr.sort();
+
+          yearArr.forEach(function(e, i) {
             if(i === 0) {
-              YearStr = e;
-            } else if(YearArr[i] - YearArr[i-1] === 1) {
-              if(YearStr.substring(YearStr.lastIndexOf("-")).length === 5) {
-                YearStr = YearStr.substring(0, YearStr.lastIndexOf("-")+1) + e;
+              yearStr = e;
+            } else if(yearArr[i] - yearArr[i-1] === 1) {
+              if(yearStr.substring(yearStr.lastIndexOf("-")).length === 5) {
+                yearStr = yearStr.substring(0, yearStr.lastIndexOf("-")+1) + e;
               }else {
-                YearStr += "-" + e;
+                yearStr += "-" + e;
               }
             } else {
-              YearStr += "," + e;
+              yearStr += "," + e;
             }
           });
 
-          arr.push({
+          finalArr.push({
             Make: Make,
             Model: Model,
-            Year: YearStr,
-            Index: YearArr[YearArr.length -1]
+            Year: yearStr,
+            Index: yearArr[yearArr.length-1]
           });
         }
       }
 
-      return arr;
+      return finalArr;
     }
 
-    function filter(data, condition) {
+    function filterFinder(arr, condition) {
       if(condition.length > 0) {
-        var newData = [];
+        var newArr = [];
         var flag = false;
-        condition.forEach(function(e) {
-          data.forEach(function(f){
-            if(e.Make != "" && e.Model != "") {
+        arr.forEach(function(e){
+          condition.forEach(function(f){
+            if(f.Make != "" && f.Model != "") {
               if(f.Make === e.Make && f.Model === e.Model) {
-                newData.push(f);
+                newArr.push(e);
               }
-            }else if(e.Make != "") {
+            }else if(f.Make != "") {
               if(f.Make === e.Make) {
-                newData.push(f);
+                newArr.push(e);
               }
-            }else if(e.Model != "") {
+            }else if(f.Model != "") {
               if(f.Model === e.Model) {
-                newData.push(f);
+                newArr.push(e);
               }
             }
-          })
+          });
         });
-        return newData;
+        return newArr;
       }else {
-        return data;
+        return arr;
       }
     }
 
