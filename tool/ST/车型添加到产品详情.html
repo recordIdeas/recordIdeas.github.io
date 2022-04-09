@@ -7,226 +7,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
   <script src="../../../js/xlsx.core.min.js"></script>
-</head>
 
-<style>
-  .part-fit-radio {
+  <style>
+    .part-fit-radio {
       display: flex;
       flex-wrap: wrap;
-  }
+    }
 
-  .part-fit-radio label{
+    .part-fit-radio label {
       order: 1;
       width: 2em;
       height: 2em;
       line-height: 2em;
       text-align: center;
-  }
+    }
 
-  .part-fit-radio label:hover {
-    color: #f50;
-  }
+    .part-fit-radio label:hover {
+      color: #f50;
+    }
 
-  .part-fit-radio label a {
-    border: 0 !important;
-  }
+    .part-fit-radio label a {
+      border: 0 !important;
+    }
 
-  .part-fit-radio .part-radio{
+    .part-fit-radio .part-radio {
       margin: 0;
       display: none;
-  }
-   .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab+label{
+    }
+
+    .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab+label {
       color: #fff;
       font-weight: bold;
       background: #999;
-  }
+    }
 
-  .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab{
+    .part-fit-radio .part-radio:nth-of-type(n):checked+.part-tab {
       display: block;
-  }
+    }
 
-  .part-fit-radio .part-tab{
+    .part-fit-radio .part-tab {
       display: none;
       width: 100%;
       background: #fff;
-  }
+    }
 
-  #vehicle_matching:target>div {
-    border: 2px solid #ff5500;
-  }
-</style>
-
-<style>
-.loading {
-    --sk-size: 60px;
-    --sk-color: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background: rgba(0,0,0,0.3);
-}
-
-.sk-circle {
-  width: var(--sk-size);
-  height: var(--sk-size);
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
-
-.sk-circle-dot {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.sk-circle-dot:before {
-    content: '';
-    display: block;
-    width: 15%;
-    height: 15%;
-    background-color: var(--sk-color);
-    border-radius: 100%;
-    animation: sk-circle 1.2s infinite ease-in-out both; 
-}
-
-.sk-circle-dot:nth-child(1) { transform: rotate(30deg); }
-.sk-circle-dot:nth-child(2) { transform: rotate(60deg); }
-.sk-circle-dot:nth-child(3) { transform: rotate(90deg); }
-.sk-circle-dot:nth-child(4) { transform: rotate(120deg); }
-.sk-circle-dot:nth-child(5) { transform: rotate(150deg); }
-.sk-circle-dot:nth-child(6) { transform: rotate(180deg); }
-.sk-circle-dot:nth-child(7) { transform: rotate(210deg); }
-.sk-circle-dot:nth-child(8) { transform: rotate(240deg); }
-.sk-circle-dot:nth-child(9) { transform: rotate(270deg); }
-.sk-circle-dot:nth-child(10) { transform: rotate(300deg); }
-.sk-circle-dot:nth-child(11) { transform: rotate(330deg); }
-.sk-circle-dot:nth-child(1):before { animation-delay: -1.1s; }
-.sk-circle-dot:nth-child(2):before { animation-delay: -1s; }
-.sk-circle-dot:nth-child(3):before { animation-delay: -0.9s; }
-.sk-circle-dot:nth-child(4):before { animation-delay: -0.8s; }
-.sk-circle-dot:nth-child(5):before { animation-delay: -0.7s; }
-.sk-circle-dot:nth-child(6):before { animation-delay: -0.6s; }
-.sk-circle-dot:nth-child(7):before { animation-delay: -0.5s; }
-.sk-circle-dot:nth-child(8):before { animation-delay: -0.4s; }
-.sk-circle-dot:nth-child(9):before { animation-delay: -0.3s; }
-.sk-circle-dot:nth-child(10):before { animation-delay: -0.2s; }
-.sk-circle-dot:nth-child(11):before { animation-delay: -0.1s; }
-
-@keyframes sk-circle {
-  0%, 80%, 100% {
-    transform: scale(0); }
-  40% {
-    transform: scale(1); 
-  } 
-}
-</style>
-
-<body>
-  <div class="tabs">
-    <input type="radio" name="tabs" id="tabone" checked="checked">
-    <label for="tabone">车型处理</label>
-    <div class="tab">
-      <div class="condition">
-        <button class="condition-del">-</button>
-        <button class="condition-add">+</button>
-        <div class="condition-model" hidden>
-          <div class="condition-item">
-            Make: <input class="condition-Make" type="text">
-            Model: <input class="condition-Model" type="text">
-            <button class="conditon-remove">x</button>
-          </div>
-        </div>
-        <div class="condition-list">
-        </div>
-        <script>
-          document.querySelector(".condition-add").addEventListener("click",function(){
-            document.querySelector(".condition-list").appendChild(document.querySelector(".condition-model .condition-item").cloneNode(true));
-          });
-          document.querySelector(".condition-del").addEventListener("click",function(){
-            var node = document.querySelectorAll(".condition-item");
-            if(node.length > 1) {
-              document.querySelector(".condition-list").removeChild(node[node.length-1]);
-            }
-          });
-          document.querySelector(".condition-list").addEventListener("click",function(e){
-            var target = e.target;
-            if(target.className === "conditon-remove") {
-              document.querySelector(".condition-list").removeChild(target.parentNode);
-            }
-          });
-        </script>
-      </div>
-      <div class="up_btn">导入车型表：
-        <input type="file" id="xFile" multiple name=""
-          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          onchange="showfile1(this,'excelFile', 60)" onclick="this.value=''" ;>
-      </div>
-      <div id="excelFile">
-        <table border='1'>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Data</th>
-              <th>product Details</th>
-              <th>result</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
-    </div>
-    <input type="radio" name="tabs" id="tabtwo">
-    <label for="tabtwo">批量处理</label>
-    <div class="tab">
-      <div class="up_btn">导入统计表：
-        <input type="file" id="xFile" name=""
-          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          onchange="showfile2(this,'totalExcel')" onclick="this.value=''" ;>
-      </div>
-      <div id="totalExcel">
-        <table border='1'>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Data</th>
-              <th>product Details</th>
-              <th>result</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('totalExcel')" value="导出" /></div>
-    </div>
-    <input type="radio" name="tabs" id="tabthree">
-  </div>
-
-  <div class="loading" style="display: none;">
-    <div class="sk-circle">
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-      <div class="sk-circle-dot"></div>
-    </div>
-  </div>
+    #vehicle_matching:target>div {
+      border: 2px solid #ff5500;
+    }
+  </style>
 
   <style>
     * {
@@ -239,6 +67,10 @@
     button {
       margin: 0 0 10px;
       padding: 0 5px;
+    }
+
+    select {
+      margin: 0 5px 10px 0;
     }
 
     textarea {
@@ -318,7 +150,253 @@
     .export_btn {
       display: none;
     }
+
+    .loading {
+      --sk-size: 60px;
+      --sk-color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .sk-circle {
+      width: 60px;
+      height: 60px;
+      width: var(--sk-size);
+      height: var(--sk-size);
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .sk-circle-dot {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .sk-circle-dot:before {
+      content: '';
+      display: block;
+      width: 15%;
+      height: 15%;
+      background-color: #fff;
+      background-color: var(--sk-color);
+      border-radius: 100%;
+      animation: sk-circle 1.2s infinite ease-in-out both;
+    }
+
+    .sk-circle-dot:nth-child(1) {
+      transform: rotate(30deg);
+    }
+
+    .sk-circle-dot:nth-child(2) {
+      transform: rotate(60deg);
+    }
+
+    .sk-circle-dot:nth-child(3) {
+      transform: rotate(90deg);
+    }
+
+    .sk-circle-dot:nth-child(4) {
+      transform: rotate(120deg);
+    }
+
+    .sk-circle-dot:nth-child(5) {
+      transform: rotate(150deg);
+    }
+
+    .sk-circle-dot:nth-child(6) {
+      transform: rotate(180deg);
+    }
+
+    .sk-circle-dot:nth-child(7) {
+      transform: rotate(210deg);
+    }
+
+    .sk-circle-dot:nth-child(8) {
+      transform: rotate(240deg);
+    }
+
+    .sk-circle-dot:nth-child(9) {
+      transform: rotate(270deg);
+    }
+
+    .sk-circle-dot:nth-child(10) {
+      transform: rotate(300deg);
+    }
+
+    .sk-circle-dot:nth-child(11) {
+      transform: rotate(330deg);
+    }
+
+    .sk-circle-dot:nth-child(1):before {
+      animation-delay: -1.1s;
+    }
+
+    .sk-circle-dot:nth-child(2):before {
+      animation-delay: -1s;
+    }
+
+    .sk-circle-dot:nth-child(3):before {
+      animation-delay: -0.9s;
+    }
+
+    .sk-circle-dot:nth-child(4):before {
+      animation-delay: -0.8s;
+    }
+
+    .sk-circle-dot:nth-child(5):before {
+      animation-delay: -0.7s;
+    }
+
+    .sk-circle-dot:nth-child(6):before {
+      animation-delay: -0.6s;
+    }
+
+    .sk-circle-dot:nth-child(7):before {
+      animation-delay: -0.5s;
+    }
+
+    .sk-circle-dot:nth-child(8):before {
+      animation-delay: -0.4s;
+    }
+
+    .sk-circle-dot:nth-child(9):before {
+      animation-delay: -0.3s;
+    }
+
+    .sk-circle-dot:nth-child(10):before {
+      animation-delay: -0.2s;
+    }
+
+    .sk-circle-dot:nth-child(11):before {
+      animation-delay: -0.1s;
+    }
+
+    @keyframes sk-circle {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
   </style>
+</head>
+
+<body>
+  <div class="loading" style="display: none;">
+    <div class="sk-circle">
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+      <div class="sk-circle-dot"></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <input type="radio" name="tabs" id="tabone" checked="checked">
+    <label for="tabone">车型处理</label>
+    <div class="tab">
+      <div class="condition">
+        <div class="condition-model" hidden>
+          <div class="condition-item">
+            Make: <input class="condition-Make" type="text">
+            Model: <input class="condition-Model" type="text">
+            <button class="conditon-remove">x</button>
+          </div>
+        </div>
+        <div class="condition-list">
+        </div>
+        <button class="condition-del">-</button>
+        <button class="condition-add">+</button>
+        <script>
+          document.querySelector(".condition-add").addEventListener("click", function () {
+            document.querySelector(".condition-list").appendChild(document.querySelector(".condition-model .condition-item").cloneNode(true));
+          });
+          document.querySelector(".condition-del").addEventListener("click", function () {
+            var node = document.querySelectorAll(".condition-item");
+            if (node.length > 1) {
+              document.querySelector(".condition-list").removeChild(node[node.length - 1]);
+            }
+          });
+          document.querySelector(".condition-list").addEventListener("click", function (e) {
+            var target = e.target;
+            if (target.className === "conditon-remove") {
+              document.querySelector(".condition-list").removeChild(target.parentNode);
+            }
+          });
+        </script>
+      </div>
+      <div class="condition-select">
+      </div>
+      <div class="up_btn">导入车型表：
+        <input type="file" id="xFile" multiple name=""
+          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          onchange="showfile1(this,'excelFile', 60)" onclick="this.value=''" ;>
+      </div>
+      <div id="excelFile">
+        <table border='1'>
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Data</th>
+              <th>product Details</th>
+              <th>result</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
+    </div>
+    <input type="radio" name="tabs" id="tabtwo">
+    <label for="tabtwo">批量处理</label>
+    <div class="tab">
+      <div class="up_btn">导入统计表：
+        <input type="file" id="xFile" name=""
+          accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          onchange="showfile2(this,'totalExcel')" onclick="this.value=''" ;>
+      </div>
+      <div id="totalExcel">
+        <table border='1'>
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Data</th>
+              <th>product Details</th>
+              <th>result</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('totalExcel')" value="导出" /></div>
+    </div>
+    <input type="radio" name="tabs" id="tabthree">
+  </div>
 
   <script>
     document.body.addEventListener("click", function (e) {
@@ -330,28 +408,33 @@
       }
     });
 
+
     // 读取文件的内容
     function showfile1(obj, importExcel, maxNum) {
-      var condition = [];
-      document.querySelectorAll(".condition-item").forEach(function(e){
-        if(handleStr(e.querySelector(".condition-Make").value) || handleStr(e.querySelector(".condition-Model").value)) {
-          condition.push({
-            Make: handleStr(e.querySelector(".condition-Make").value),
-            Model: handleStr(e.querySelector(".condition-Model").value)
-          });
-        }
-      });
-      condition = unique(condition);
-
-      document.querySelector(".loading").style.display = "";
-      document.getElementById(importExcel).nextElementSibling.style.display = "none";
       if (!obj.files) {
         return;
       }
-      document.getElementById(importExcel).querySelector("tbody").innerHTML = "";
+      var import_tbody = document.getElementById(importExcel).querySelector("tbody");
+      var export_btn = document.getElementById(importExcel).nextElementSibling;
+      var loading = document.querySelector(".loading");
+      var condition_select = document.querySelector(".condition-select");
+
+      loading.style.display = "";
+      export_btn.style.display = "none";
+      import_tbody.innerHTML = "";
+      condition_select.innerHTML = "";
 
       var excelFile;
       var skuArr = {};
+      var finderCondition = [];
+      document.querySelectorAll(".condition-item").forEach(function (e) {
+        finderCondition.push({
+          Make: handleStr(e.querySelector(".condition-Make").value),
+          Model: handleStr(e.querySelector(".condition-Model").value)
+        });
+      });
+      finderCondition = unique(finderCondition);
+
       for (var k = 0; k < obj.files.length; k++) {
         var f = obj.files[k];
         var reader = new FileReader();
@@ -360,8 +443,8 @@
         reader.readAsBinaryString(f);
         reader.onload = function (e) {
           var data = e.target.result;
-          var index = e.target.index;
-          var name = e.target.filename;
+          var index = this.index;
+          var name = this.filename;
           name = name.substring(0, name.lastIndexOf("."));
           excelFile = XLSX.read(data, {
             type: 'binary'
@@ -372,12 +455,12 @@
             headers.push(key)  //获取表头
           }
           var allArr = str;
-          allArr.forEach(function(e){
-            let sku = name;
-            if(e.SKU) {
+          allArr.forEach(function (e) {
+            var sku = name;
+            if (e.SKU) {
               sku = e.SKU;
             }
-            if(!skuArr[sku]) {
+            if (!skuArr[sku]) {
               skuArr[sku] = [];
             }
             skuArr[sku].push({
@@ -387,31 +470,133 @@
             });
           });
 
-          if(index === obj.files.length-1) {
+          if (index === obj.files.length - 1) {
+            var select_value = [];
             var fSkuArr = [];
-            for(var sku in skuArr) {
+            for (var sku in skuArr) {
               fSkuArr.push({
                 sku: sku,
                 content: skuArr[sku]
               });
             }
-            fSkuArr.sort(function(m,n){
+            fSkuArr.sort(function (m, n) {
               return m.sku - n.sku;
             });
 
-            fSkuArr.forEach(function(e){
-              getTable(e.content, e.sku, importExcel, condition, maxNum);
+            fSkuArr.forEach(function (e) {
+              e.content = handleFinder(e.content);
+
+              var content = e.content;
+              if (content.length > 0) {
+                content = filterFinder(finderCondition, content);
+              }
+              getTable(content, e.sku, importExcel, maxNum);
+
+              select_value.push.apply(select_value, content);
             });
 
-            document.querySelector(".loading").style.display = "none";
+            if (select_value.length > 0) {
+              var select_value_unique = {};
+              select_value.forEach(function (e) {
+                if (e.Make) {
+                  if (!select_value_unique[e.Make]) {
+                    select_value_unique[e.Make] = {};
+                  }
+
+                  if (e.Model) {
+                    if (!select_value_unique[e.Make][e.Model]) {
+                      select_value_unique[e.Make][e.Model] = {};
+                    }
+                  }
+                }
+              });
+
+              var select_value_arr = [];
+              for (var Make in select_value_unique) {
+                var modelArr = [];
+                for (var Model in select_value_unique[Make]) {
+                  modelArr.push(Model);
+                }
+                modelArr.sort();
+                select_value_arr.push({
+                  Make: Make,
+                  Model: modelArr
+                });
+              }
+              select_value_arr.sort(sortLocaleCompare("Make"));
+
+              var select_value = {};
+              select_value_arr.forEach(function (e) {
+                select_value[e.Make] = e.Model;
+              });
+
+
+              var condition_Make = document.createElement("select");
+              condition_Make.name = "condition-Make";
+              condition_Make.innerHTML = '<option value="">Make</option>';
+              condition_select.appendChild(condition_Make);
+
+              var condition_Model = document.createElement("select");
+              condition_Model.name = "condition-Model";
+              condition_Model.innerHTML = '<option value="">Model</option>';
+              condition_select.appendChild(condition_Model);
+
+              for (var Make in select_value) {
+                condition_Make.innerHTML += '<option value="' + Make + '">' + Make + '</option>';
+              }
+
+              condition_Make.addEventListener("change", function () {
+                import_tbody.innerHTML = "";
+                condition_Model.innerHTML = '<option value="">Model</option>';
+                var MakeCondition = [{
+                  Make: this.value,
+                  Model: ""
+                }];
+                MakeCondition = unique(MakeCondition);
+                fSkuArr.forEach(function (e) {
+                  var content = e.content;
+                  if (content.length > 0) {
+                    content = filterFinder(MakeCondition, content);
+                  }
+                  getTable(content, e.sku, importExcel, maxNum);
+                });
+
+                if (select_value[this.value]) {
+                  select_value[this.value].forEach(function (Model) {
+                    condition_Model.innerHTML += '<option value="' + Model + '">' + Model + '</option>';
+                  });
+
+                  condition_Model.addEventListener("change", function () {
+                    import_tbody.innerHTML = "";
+                    var ModelCondition = [{
+                      Make: this.previousElementSibling.value,
+                      Model: this.value
+                    }];
+                    ModelCondition = unique(ModelCondition);
+                    fSkuArr.forEach(function (e) {
+                      var content = e.content;
+                      if (content.length > 0) {
+                        content = filterFinder(ModelCondition, content);
+                      }
+                      getTable(content, e.sku, importExcel, maxNum);
+                    });
+                  });
+                }
+              });
+            }
+
+            loading.style.display = "none";
           }
         }
       }
     }
 
     function showfile2(obj, importExcel) {
+      var import_tbody = document.getElementById(importExcel).querySelector("tbody");
+      var export_btn = document.getElementById(importExcel).nextElementSibling;
+
       var excelFile;
-      document.getElementById(importExcel).nextElementSibling.style.display = "";
+      export_btn.style.display = "";
       if (!obj.files) {
         return;
       }
@@ -434,175 +619,178 @@
         var dataTable2 = "";
         for (var i = 0; i < str.length; i++) {
           if (str[i]) {
-            if(str[i][headers[0]]){
-              dataTable2 += "<tr><td>" + str[i][headers[0]].toString().replace(/\s/g,"").replace(/^0/,"0&nbsp;") + '</td>';
-            }else{
+            if (str[i][headers[0]]) {
+              dataTable2 += "<tr><td>" + str[i][headers[0]].toString().replace(/\s/g, "").replace(/^0/, "0&nbsp;") + '</td>';
+            } else {
               dataTable2 += '<tr><td></td>';
             }
-            if(str[i][headers[1]]){
+            if (str[i][headers[1]]) {
               dataTable2 += '<td contenteditable="true">'
-              + str[i][headers[1]].replace(/\n/g, "<br>") + '</td>';
-            }else{
+                + str[i][headers[1]].replace(/\n/g, "<br>") + '</td>';
+            } else {
               dataTable2 += '<td contenteditable="true"></td>';
             }
-            if(str[i][headers[2]]){
+            if (str[i][headers[2]]) {
               dataTable2 += '<td contenteditable="true">' + str[i][headers[2]]
-              + '</td><td class="details-result" contenteditable="true"></td></tr>';
-            }else{
+                + '</td><td class="details-result" contenteditable="true"></td></tr>';
+            } else {
               dataTable2 += '<td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
             }
           }
         }
-        document.getElementById(importExcel).querySelector("tbody").innerHTML = dataTable2;
-        var importDetals = document.getElementById(importExcel).querySelectorAll("tbody .details-result");
-        for(var k=0; k<importDetals.length; k++){
-          if(importDetals[k]){
+        import_tbody.innerHTML = dataTable2;
+        var importDetals = import_tbody.querySelectorAll(".details-result");
+        for (var k = 0; k < importDetals.length; k++) {
+          if (importDetals[k]) {
             var str2 = importDetals[k].previousElementSibling.innerHTML;
             handleDetails(importDetals[k], str2);
           }
         }
       }
-      document.getElementById(importExcel).nextElementSibling.style.display = "block";
+      export_btn.style.display = "block";
     }
 
-    function getTable(arr, sku, importExcel, condition, maxNum){
-      arr = handleFinder();
-      if(arr.length > 0) {
-        arr = filterFinder(condition);
-        if(arr.length > 0) {
-          if(arr.length > maxNum) {
-            arr.sort(sortLocaleCompare("Index","Make","Model"));
-            arr = arr.splice(arr.length - maxNum);
+    function handleFinder(arr) {
+      var finder = {};
+      arr.forEach(function (e) {
+        if (e.Make) {
+          if (!finder[e.Make]) {
+            finder[e.Make] = {};
           }
-          arr.sort(sortLocaleCompare("Make","Model"));
 
-          var finalArr = [];
-          arr.forEach(function(e){
-            finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
+          if (e.Model) {
+            if (!finder[e.Make][e.Model]) {
+              finder[e.Make][e.Model] = {};
+            }
+
+            if (e.Year) {
+              if (!finder[e.Make][e.Model][e.Year]) {
+                finder[e.Make][e.Model][e.Year] = {};
+              }
+            }
+          }
+        }
+      });
+
+      var finalArr = [];
+      for (var Make in finder) {
+        for (var Model in finder[Make]) {
+          var yearStr = "";
+          var yearArr = [];
+
+          for (var Year in finder[Make][Model]) {
+            yearArr.push(Year);
+          }
+
+          yearArr.sort();
+
+          yearArr.forEach(function (e, i) {
+            if (i === 0) {
+              yearStr = e;
+            } else if (yearArr[i] - yearArr[i - 1] === 1) {
+              if (yearStr.substring(yearStr.lastIndexOf("-")).length === 5) {
+                yearStr = yearStr.substring(0, yearStr.lastIndexOf("-") + 1) + e;
+              } else {
+                yearStr += "-" + e;
+              }
+            } else {
+              yearStr += "," + e;
+            }
           });
 
-          arr = finalArr.join("<br>");
-          document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-          + sku.replace(/\s/g,"").replace(/^0/,"0&nbsp;")
-          + '</td><td contenteditable="true">' + arr
-          + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
-          document.getElementById(importExcel).nextElementSibling.style.display = "block";
-        }
-
-        function filterFinder(condition) {
-          if(condition.length > 0) {
-            var newArr = [];
-            var flag = false;
-            arr.forEach(function(e){
-              condition.forEach(function(f){
-                if(f.Make != "" && f.Model != "") {
-                  if(compareStr(f.Make, e.Make) && compareStr(f.Model, e.Model)) {
-                    newArr.push(e);
-                    return;
-                  }
-                }else if(f.Make != "") {
-                  if(compareStr(f.Make, e.Make)) {
-                    newArr.push(e);
-                    return;
-                  }
-                }else if(f.Model != "") {
-                  if(compareStr(f.Model, e.Model)) {
-                    newArr.push(e);
-                    return;
-                  }
-                }
-              });
-            });
-            return newArr;
-          }else {
-            return arr;
-          }
+          finalArr.push({
+            Make: Make,
+            Model: Model,
+            Year: yearStr,
+            Index: yearArr[yearArr.length - 1]
+          });
         }
       }
 
-      function handleFinder(){
-        var finder = {};
-        arr.forEach(function(e){
-          if(e.Make) {
-            if(!finder[e.Make]) {
-              finder[e.Make] = {};
-            }
+      return finalArr;
+    }
 
-            if(e.Model) {
-              if(!finder[e.Make][e.Model]) {
-                finder[e.Make][e.Model] = {};
-              }
-
-              if(e.Year){
-                if(!finder[e.Make][e.Model][e.Year]) {
-                  finder[e.Make][e.Model][e.Year] = {};
-                }
-              }
+    function getTable(arr, sku, importExcel, maxNum) {
+      var newArr = arr;
+      if (newArr.length > 0) {
+        if (newArr.length > maxNum) {
+          newArr.sort(sortLocaleCompare("Index", "Make", "Model"));
+          var tempArr = [];
+          newArr.forEach(function (e, i) {
+            if (i > newArr.length - maxNum - 1) {
+              tempArr.push(newArr[i]);
             }
-          }
-        });
+          });
+          newArr = tempArr;
+        }
+        newArr.sort(sortLocaleCompare("Make", "Model"));
 
         var finalArr = [];
-        for(var Make in finder) {
-          for(var Model in finder[Make]) {
-            var yearStr = "";
-            var yearArr = [];
+        newArr.forEach(function (e) {
+          finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
+        });
 
-            for(var Year in finder[Make][Model]) {
-              yearArr.push(Year);
-            }
+        var finalStr = finalArr.join("<br>");
+        document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
+          + sku.replace(/\s/g, "").replace(/^0/, "0&nbsp;")
+          + '</td><td contenteditable="true">' + finalStr
+          + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
 
-            yearArr.sort();
+        document.getElementById(importExcel).nextElementSibling.style.display = "block";
+      }
+    }
 
-            yearArr.forEach(function(e, i) {
-              if(i === 0) {
-                yearStr = e;
-              } else if(yearArr[i] - yearArr[i-1] === 1) {
-                if(yearStr.substring(yearStr.lastIndexOf("-")).length === 5) {
-                  yearStr = yearStr.substring(0, yearStr.lastIndexOf("-")+1) + e;
-                }else {
-                  yearStr += "-" + e;
-                }
-              } else {
-                yearStr += "," + e;
+    function filterFinder(condition, arr) {
+      if (condition.length > 0) {
+        var newArr = [];
+        arr.forEach(function (e) {
+          condition.forEach(function (f) {
+            if (f.Make != "" && f.Model != "") {
+              if (compareStr(f.Make, e.Make) && compareStr(f.Model, e.Model)) {
+                newArr.push(e);
+                return;
               }
-            });
-
-            finalArr.push({
-              Make: Make,
-              Model: Model,
-              Year: yearStr,
-              Index: yearArr[yearArr.length-1]
-            });
-          }
-        }
-
-        return finalArr;
+            } else if (f.Make != "") {
+              if (compareStr(f.Make, e.Make)) {
+                newArr.push(e);
+                return;
+              }
+            } else if (f.Model != "") {
+              if (compareStr(f.Model, e.Model)) {
+                newArr.push(e);
+                return;
+              }
+            }
+          });
+        });
+        return newArr;
+      } else {
+        return arr;
       }
     }
 
     function handleDetails(ele, str2) {
       ele.previousElementSibling.innerText = str2;
       var str1 = ele.previousElementSibling.previousElementSibling.innerText;
-      if(str1.replace(/\s/g,"")){
+      if (str1.replace(/\s/g, "")) {
         str1 = str1.trim().replace(/\s+/g, " ");
         var strArr1 = str1.split(";");
         var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
         if (strArr1.length > 20) {
           modelStr += '\n<div class="part-fit-radio">';
-          for(var i=0; i<strArr1.length; i+=10){
+          for (var i = 0; i < strArr1.length; i += 10) {
             var mIndex = parseInt(i / 10) + 1;
             modelStr += '\n<input ';
-            if(i==0){
+            if (i == 0) {
               modelStr += 'checked="checked"';
             }
-            modelStr += 'id="part-radio'+mIndex+'" class="part-radio" type="radio" name="part-radio">\n<div class="part-tab">\n<ul>';
-            for(var j=0; j<10; j++){
-              if(strArr1[i+j]){
-                modelStr += "\n<li>" + strArr1[i+j].trim() + "</li>";
+            modelStr += 'id="part-radio' + mIndex + '" class="part-radio" type="radio" name="part-radio">\n<div class="part-tab">\n<ul>';
+            for (var j = 0; j < 10; j++) {
+              if (strArr1[i + j]) {
+                modelStr += "\n<li>" + strArr1[i + j].trim() + "</li>";
               }
             }
-            modelStr += '\n</ul>\n</div>\n<label for="part-radio' + mIndex+'">'+ mIndex +'</label>';
+            modelStr += '\n</ul>\n</div>\n<label for="part-radio' + mIndex + '">' + mIndex + '</label>';
           }
           modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
         } else {
@@ -614,17 +802,17 @@
           }
           modelStr += "\n</ul>\n</div>";
         }
-        if(str2.indexOf('<div class="part-fit">')!=-1){
-          var pStr1 = str2.substring(0,str2.indexOf("<h2>"));
-          var pStr2 = str2.substring(str2.indexOf("</h2>")+5);
-          pStr1=pStr1.substring(0,pStr1.indexOf('<div class="part-fit">'));
-          pStr2=pStr2.substring(pStr2.indexOf('<h2>'));
+        if (str2.indexOf('<div class="part-fit">') != -1) {
+          var pStr1 = str2.substring(0, str2.indexOf("<h2>"));
+          var pStr2 = str2.substring(str2.indexOf("</h2>") + 5);
+          pStr1 = pStr1.substring(0, pStr1.indexOf('<div class="part-fit">'));
+          pStr2 = pStr2.substring(pStr2.indexOf('<h2>'));
           ele.innerText = pStr1 + modelStr + "\n" + pStr2;
-        }else{
+        } else {
           var index2 = str2.indexOf("<h2>");
           ele.innerText = str2.substring(0, index2) + modelStr + "\n" + str2.substring(index2);
         }
-      }else{
+      } else {
         ele.innerText = ele.previousElementSibling.innerText;
       }
     }
@@ -697,65 +885,109 @@
     }
 
     function sortCompare(p) {
-      return function(m,n) {
+      return function (m, n) {
         var a = m[p];
         var b = n[p]
         return a - b;
       }
     }
 
-    function sortLocaleCompare(p,q,r) {
-      return function(m,n) {
-        if(m[p] && n[p]) {
+    function sortLocaleCompare(p, q, r) {
+      return function (m, n) {
+        if (m[p] && n[p]) {
           var a = m[p];
           var b = n[p];
-          if(a === b) {
-            if(m[q] && n[q]) {
+          if (a === b) {
+            if (m[q] && n[q]) {
               var c = m[q];
               var d = n[q];
-              if(c === d) {
-                if(m[r] && n[r]) {
+              if (c === d) {
+                if (m[r] && n[r]) {
                   var e = m[r];
                   var f = n[r];
                   return e.localeCompare(f, 'zh-CN', { numeric: true });
                 }
-              }else {
+              } else {
                 return c.localeCompare(d, 'zh-CN', { numeric: true });
               }
             }
-          }else {
+          } else {
             return a.localeCompare(b, 'zh-CN', { numeric: true });
           }
         }
       }
     }
 
-    function unique(arr){
-     let result = {};
-     let finalResult=[];
-     arr.forEach(function(e){
-      result[e.Make + e.Model] = e;
-     });
-     for(item in result){
-      finalResult.push(result[item]);
-     }
-     return finalResult;
+    function unique(arr) {
+      var result = {};
+      var finalResult = [];
+      arr.forEach(function (e) {
+        if ((e.Make + e.Model).replace(/\s/g, "") != "") {
+          result[e.Make + e.Model] = e;
+        }
+      });
+      for (key in result) {
+        finalResult.push(result[key]);
+      }
+      return finalResult;
     }
 
     function handleStr(str) {
-      return str.toString().trim().replace(/\s+/g,"");
+      return str.toString().trim().replace(/\s+/g, "");
     }
 
-    function compareStr(a,b) {
-      var m = a.toString().replace(/\s/g,"").toUpperCase();
-      var n = b.toString().replace(/\s/g,"").toUpperCase();
-      if(m === n) {
+    function compareStr(a, b) {
+      a = a || "";
+      b = b || "";
+      if (a === b) {
         return true;
-      }else {
-        return false;
+      } else {
+        var m = a.toString().replace(/\s/g, "").toUpperCase();
+        var n = b.toString().replace(/\s/g, "").toUpperCase();
+        if (m === n) {
+          return true;
+        } else {
+          return false;
+        }
       }
     }
-</script>
+
+    Array.prototype.forEach = Array.prototype.forEach || function (callback) {
+      var isArray = Object.prototype.toString.call(this) == '[object Array]';
+      if (isArray) {
+        for (var key in this) {
+          if (key != 'forEach') {
+            callback.call(this[key], key, this[key], this);
+          }
+        }
+      } else {
+        throw TypeError;
+      }
+    };
+
+    if (typeof NodeList.prototype.forEach !== 'function') {
+      NodeList.prototype.forEach = Array.prototype.forEach;
+    }
+
+    if (typeof (FileReader.prototype.readAsBinaryString) !== "function") {
+      FileReader.prototype.readAsBinaryString = function (fileData) {
+        let binary = "";
+        let pt = this;
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          let bytes = new Uint8Array(reader.result);
+          let length = bytes.byteLength;
+          for (let i = 0; i < length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          let obj = {};
+          obj.target = { result: binary };
+          pt.onload(obj);
+        }
+        reader.readAsArrayBuffer(fileData);
+      }
+    }
+  </script>
 </body>
 
 </html>
