@@ -58,7 +58,7 @@
 
 <style>
 .loading {
-    --sk-size: 70px;
+    --sk-size: 60px;
     --sk-color: #fff;
     position: fixed;
     top: 0;
@@ -498,14 +498,17 @@
                 if(f.Make != "" && f.Model != "") {
                   if(compareStr(f.Make, e.Make) && compareStr(f.Model, e.Model)) {
                     newArr.push(e);
+                    return;
                   }
                 }else if(f.Make != "") {
                   if(compareStr(f.Make, e.Make)) {
                     newArr.push(e);
+                    return;
                   }
                 }else if(f.Model != "") {
                   if(compareStr(f.Model, e.Model)) {
                     newArr.push(e);
+                    return;
                   }
                 }
               });
@@ -522,17 +525,17 @@
         arr.forEach(function(e){
           if(e.Make) {
             if(!finder[e.Make]) {
-              finder[e.Make] = {}
+              finder[e.Make] = {};
             }
 
             if(e.Model) {
               if(!finder[e.Make][e.Model]) {
-                finder[e.Make][e.Model] = {}
+                finder[e.Make][e.Model] = {};
               }
 
               if(e.Year){
                 if(!finder[e.Make][e.Model][e.Year]) {
-                  finder[e.Make][e.Model][e.Year] = e.Year;
+                  finder[e.Make][e.Model][e.Year] = {};
                 }
               }
             }
