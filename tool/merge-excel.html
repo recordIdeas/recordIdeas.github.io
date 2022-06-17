@@ -106,12 +106,10 @@
 
 
 <script>
-  var excelFile1;
-  // 读取文件的内容
   function showfile1(obj) {
     var dataTable2 = "";
     document.getElementById("exportFile1").innerHTML = "";
-    var excelFile1;
+    var excelFile;
     if (!obj.files) {
       return;
     }
@@ -125,10 +123,10 @@
       reader.onload = function (e) {
         var data = e.target.result;
         var filename = e.target.filename.replace(/\.xlsx/,"");
-        excelFile1 = XLSX.read(data, {
+        excelFile = XLSX.read(data, {
           type: 'binary'
         });
-        var str = XLSX.utils.sheet_to_json(excelFile1.Sheets[excelFile1.SheetNames[0]]);
+        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
 
         if(dataTable2 === "") {
           dataTable2 = "<table data-type = 'total' border='1'><thead><tr><th>category</th>"
@@ -157,91 +155,6 @@
     }
   }
 
-  /************************导出数据************************/
-
-  function btn_export(importExcel) {
-    var tables = document.getElementById(importExcel).querySelectorAll("table");
-    var sheetArr = [];
-    tables.forEach(function(table){
-      var sheetName = table.getAttribute("data-type");
-      var sheet = XLSX.utils.table_to_sheet(table,{ raw: true }); //将一个table对象转换成一个sheet对象
-      sheetArr.push({
-        sheet: sheet,
-        sheetName: sheetName
-      });
-    });
-
-    var wb = sheet2blob(sheetArr);
-    var sheetName = 1;
-    if ('ie' == getExplorer()) {
-      window.navigator.msSaveOrOpenBlob(wb, sheetName+'.xlsx');
-    } else {
-      var oa = document.createElement('a');
-      oa.href = URL.createObjectURL(wb);
-      oa.download = sheetName+'.xlsx';
-      document.body.appendChild(oa);
-      oa.click();
-      document.body.removeChild(oa);
-    }
-  }
-
-  // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
-  function sheet2blob(sheetArr) {
-    try {
-      new Uint8Array([1, 2]).slice(0, 2);
-    } catch (e) {
-      console.log("[Uint8Array" + e.description + "]这里使用【Array.slice】。");
-      //IE或有些浏览器不支持Uint8Array.slice()方法。改成使用Array.slice()方法
-      Uint8Array.prototype.slice = Array.prototype.slice;
-    }
-    var workbook = {
-      SheetNames: [],
-      Sheets: {}
-    };
-    sheetArr.forEach(function(sh){
-      var sheetName = sh["sheetName"] || 'sheet1';
-      workbook.SheetNames.push(sheetName);
-      workbook.Sheets[sheetName] = sh["sheet"];
-    });
-    // 生成excel的配置项
-    var wopts = {
-      bookType: 'xlsx', // 要生成的文件类型
-      bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
-      type: 'binary'
-    };
-    var wbout = XLSX.write(workbook, wopts);
-    var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    // 字符串转ArrayBuffer
-    function s2ab(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
-    }
-    return blob;
-  }
-
-  function getExplorer() {
-    var explorer = window.navigator.userAgent;
-    //ie
-    if (explorer.indexOf("MSIE") >= 0) {
-      return 'ie';
-    }
-    //Edge
-    if (explorer.indexOf("Edge") >= 0) {
-      return 'ie';
-    }
-    //Trident
-    if (explorer.indexOf("Trident") >= 0) {
-      return 'ie';
-    }
-    return '';
-  }
-</script>
-
-<script>
-  var excelFile;
-  // 读取文件的内容
   function showfile2(obj) {
     document.getElementById("exportFile2").innerHTML = "";
     var excelFile;
@@ -289,148 +202,63 @@
     }
   }
 
-  /************************导出数据************************/
-
-  function btn_export(importExcel) {
-    var tables = document.getElementById(importExcel).querySelectorAll("table");
-    var sheetArr = [];
-    tables.forEach(function(table){
-      var sheetName = table.getAttribute("data-type");
-      var sheet = XLSX.utils.table_to_sheet(table,{ raw: true }); //将一个table对象转换成一个sheet对象
-      sheetArr.push({
-        sheet: sheet,
-        sheetName: sheetName
-      });
-    });
-
-    var wb = sheet2blob(sheetArr);
-    var sheetName = 1;
-    if ('ie' == getExplorer()) {
-      window.navigator.msSaveOrOpenBlob(wb, sheetName+'.xlsx');
-    } else {
-      var oa = document.createElement('a');
-      oa.href = URL.createObjectURL(wb);
-      oa.download = sheetName+'.xlsx';
-      document.body.appendChild(oa);
-      oa.click();
-      document.body.removeChild(oa);
+  function showfile3(obj) {
+    var dataTable2 = "";
+    document.getElementById("exportFile3").innerHTML = "";
+    var excelFile;
+    if (!obj.files) {
+      return;
     }
-  }
+    var index = 0;
+    var len = obj.files.length;
+    for (var k = 0; k < obj.files.length; k++) {
+      var f = obj.files[k];
+      var reader = new FileReader();
+      reader.filename = f.name;
+      reader.readAsBinaryString(f);
+      reader.onload = function (e) {
+        var data = e.target.result;
+        var filename = e.target.filename.replace(/\.xlsx/,"");
+        excelFile = XLSX.read(data, {
+          type: 'binary'
+        });
+        var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
 
-  // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
-  function sheet2blob(sheetArr) {
-    try {
-      new Uint8Array([1, 2]).slice(0, 2);
-    } catch (e) {
-      console.log("[Uint8Array" + e.description + "]这里使用【Array.slice】。");
-      //IE或有些浏览器不支持Uint8Array.slice()方法。改成使用Array.slice()方法
-      Uint8Array.prototype.slice = Array.prototype.slice;
-    }
-    var workbook = {
-      SheetNames: [],
-      Sheets: {}
-    };
-    sheetArr.forEach(function(sh){
-      var sheetName = sh["sheetName"] || 'sheet1';
-      workbook.SheetNames.push(sheetName);
-      workbook.Sheets[sheetName] = sh["sheet"];
-    });
-    // 生成excel的配置项
-    var wopts = {
-      bookType: 'xlsx', // 要生成的文件类型
-      bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
-      type: 'binary'
-    };
-    var wbout = XLSX.write(workbook, wopts);
-    var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    // 字符串转ArrayBuffer
-    function s2ab(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
-    }
-    return blob;
-  }
-
-  function getExplorer() {
-    var explorer = window.navigator.userAgent;
-    //ie
-    if (explorer.indexOf("MSIE") >= 0) {
-      return 'ie';
-    }
-    //Edge
-    if (explorer.indexOf("Edge") >= 0) {
-      return 'ie';
-    }
-    //Trident
-    if (explorer.indexOf("Trident") >= 0) {
-      return 'ie';
-    }
-    return '';
-  }
-</script>
-
-<script>
-		var excelFile3;
-    // 读取文件的内容
-    function showfile3(obj) {
-      var dataTable2 = "";
-      document.getElementById("exportFile3").innerHTML = "";
-      var excelFile3;
-      if (!obj.files) {
-        return;
-      }
-      var index = 0;
-      var len = obj.files.length;
-      for (var k = 0; k < obj.files.length; k++) {
-        var f = obj.files[k];
-        var reader = new FileReader();
-        reader.filename = f.name;
-        reader.readAsBinaryString(f);
-        reader.onload = function (e) {
-          var data = e.target.result;
-          var filename = e.target.filename.replace(/\.xlsx/,"");
-          excelFile3 = XLSX.read(data, {
-            type: 'binary'
-          });
-          var str = XLSX.utils.sheet_to_json(excelFile3.Sheets[excelFile3.SheetNames[0]]);
-
-          if(dataTable2 === "") {
-            dataTable2 = "<table data-type = 'total' border='1'><thead><tr><th>category</th>"
-            for (var key in str[0]) {
-              dataTable2 += "<th>" + key + "</th>"
-            }
-            dataTable2 += "</tr>\n</thead>\n<tbody>\n";
+        if(dataTable2 === "") {
+          dataTable2 = "<table data-type = 'total' border='1'><thead><tr><th>category</th>"
+          for (var key in str[0]) {
+            dataTable2 += "<th>" + key + "</th>"
           }
+          dataTable2 += "</tr>\n</thead>\n<tbody>\n";
+        }
 
-          let w = new Worker("workers.js");
-          w.postMessage({
-            str: str,
-            filename: filename
-          });
-          w.onmessage = function (event) {
-            var dataTable1 = "<table data-type = '"+filename+"' border='1'><thead><tr><th>category</th>"
-            for (var key in str[0]) {
-              dataTable1 += "<th>" + key + "</th>"
-            }
-            dataTable1 += "</tr>\n</thead>\n<tbody>\n";
-            dataTable1 += event.data;
-            dataTable1 += "</tbody>\n</table>";
-            document.getElementById("exportFile3").innerHTML += dataTable1;
-
-            dataTable2 += event.data;
-            index++;
-            if(index === len) {
-              dataTable2 += "</tbody>\n</table>";
-              document.getElementById("exportFile3").innerHTML = dataTable2 + document.getElementById("exportFile3").innerHTML;
-              btn_export('exportFile3');
-            }
-            w.terminate();
+        let w = new Worker("workers.js");
+        w.postMessage({
+          str: str,
+          filename: filename
+        });
+        w.onmessage = function (event) {
+          var dataTable1 = "<table data-type = '"+filename+"' border='1'><thead><tr><th>category</th>"
+          for (var key in str[0]) {
+            dataTable1 += "<th>" + key + "</th>"
           }
+          dataTable1 += "</tr>\n</thead>\n<tbody>\n";
+          dataTable1 += event.data;
+          dataTable1 += "</tbody>\n</table>";
+          document.getElementById("exportFile3").innerHTML += dataTable1;
+
+          dataTable2 += event.data;
+          index++;
+          if(index === len) {
+            dataTable2 += "</tbody>\n</table>";
+            document.getElementById("exportFile3").innerHTML = dataTable2 + document.getElementById("exportFile3").innerHTML;
+            btn_export('exportFile3');
+          }
+          w.terminate();
         }
       }
     }
+  }
 
     /************************导出数据************************/
 
