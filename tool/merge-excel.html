@@ -131,11 +131,11 @@
         var str = XLSX.utils.sheet_to_json(excelFile1.Sheets[excelFile1.SheetNames[0]]);
 
         if(dataTable2 === "") {
-          dataTable2 = "<table data-type = 'total' border='1'><thQead><tr><th>category</th>"
+          dataTable2 = "<table data-type = 'total' border='1'><thead><tr><th>category</th>"
           for (var key in str[0]) {
             dataTable2 += "<th>" + key + "</th>"
           }
-          dataTable2 += "</tr>\n</thQead>\n<tbody>\n";
+          dataTable2 += "</tr>\n</thead>\n<tbody>\n";
         }
 
         let w = new Worker("workers.js");
@@ -397,11 +397,11 @@
           var str = XLSX.utils.sheet_to_json(excelFile3.Sheets[excelFile3.SheetNames[0]]);
 
           if(dataTable2 === "") {
-            dataTable2 = "<table data-type = 'total' border='1'><thQead><tr><th>category</th>"
+            dataTable2 = "<table data-type = 'total' border='1'><thead><tr><th>category</th>"
             for (var key in str[0]) {
               dataTable2 += "<th>" + key + "</th>"
             }
-            dataTable2 += "</tr>\n</thQead>\n<tbody>\n";
+            dataTable2 += "</tr>\n</thead>\n<tbody>\n";
           }
 
           let w = new Worker("workers.js");
@@ -515,3 +515,4 @@
 </script>
 </body>
 </html>
+
