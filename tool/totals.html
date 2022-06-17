@@ -106,9 +106,9 @@
 
 
 <script>
-  if (!!(window.history && history.pushState)) {
+  if (!!(window.history && history.replaceState)) {
     // 支持History API
-    history.pushState(null, null, window.location.origin+"/page/1.html")
+    history.replaceState(null, null, window.location.origin+"/page/1.html")
   }
 	
   var excelFile1;
