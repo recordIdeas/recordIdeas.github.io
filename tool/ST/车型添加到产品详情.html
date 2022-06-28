@@ -267,8 +267,8 @@
   </div>
 
   <div class="tabs">
-    <input type="radio" name="tabs" id="tabone" checked="checked">
-    <label for="tabone">车型处理</label>
+    <input type="radio" name="tabs" id="tabzero" checked="checked">
+    <label for="tabzero">车型处理1</label>
     <div class="tab">
       <div class="condition">
         <div class="condition-model" hidden>
@@ -282,32 +282,53 @@
         </div>
         <button class="condition-del">-</button>
         <button class="condition-add">+</button>
-        <script>
-          document.querySelector(".condition-add").addEventListener("click", function () {
-            document.querySelector(".condition-list").appendChild(document.querySelector(".condition-model .condition-item").cloneNode(true));
-          });
-          document.querySelector(".condition-del").addEventListener("click", function () {
-            var node = document.querySelectorAll(".condition-item");
-            if (node.length > 1) {
-              document.querySelector(".condition-list").removeChild(node[node.length - 1]);
-            }
-          });
-          document.querySelector(".condition-list").addEventListener("click", function (e) {
-            var target = e.target;
-            if (target.className === "conditon-remove") {
-              document.querySelector(".condition-list").removeChild(target.parentNode);
-            }
-          });
-        </script>
       </div>
       <div class="condition-select">
       </div>
       <div class="up_btn">导入车型表：
         <input type="file" id="xFile" multiple name=""
           accept=".csv, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-          onchange="showfile1(this,'excelFile', 60)" onclick="this.value=''" ;>
+          onchange="showfile(this,'excelFile', 60000)" onclick="this.value=''" ;>
       </div>
       <div id="excelFile">
+        <table border='1'>
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Data</th>
+              <th>result</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
+    </div>
+    <input type="radio" name="tabs" id="tabone">
+    <label for="tabone">车型处理2</label>
+    <div class="tab">
+      <div class="condition">
+        <div class="condition-model" hidden>
+          <div class="condition-item">
+            Make: <input class="condition-Make" type="text">
+            Model: <input class="condition-Model" type="text">
+            <button class="conditon-remove">x</button>
+          </div>
+        </div>
+        <div class="condition-list">
+        </div>
+        <button class="condition-del">-</button>
+        <button class="condition-add">+</button>
+      </div>
+      <div class="condition-select">
+      </div>
+      <div class="up_btn">导入车型表：
+        <input type="file" id="xFile" multiple name=""
+          accept=".csv, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          onchange="showfile1(this,'excelFile1', 60000)" onclick="this.value=''" ;>
+      </div>
+      <div id="excelFile1">
         <table border='1'>
           <thead>
             <tr>
@@ -321,7 +342,7 @@
           </tbody>
         </table>
       </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
+      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile1')" value="导出" /></div>
     </div>
     <input type="radio" name="tabs" id="tabtwo">
     <label for="tabtwo">批量处理</label>
@@ -351,18 +372,39 @@
   </div>
 
   <script>
+    document.querySelectorAll(".condition-add").forEach(function(e){
+      e.addEventListener("click", function () {
+        this.parentElement.querySelector(".condition-list").appendChild(this.parentElement.querySelector(".condition-model .condition-item").cloneNode(true));
+      });
+    });
+    document.querySelectorAll(".condition-del").forEach(function(e){
+      e.addEventListener("click", function () {
+        var node = this.parentElement.querySelectorAll(".condition-item");
+        if (node.length > 1) {
+          this.parentElement.querySelector(".condition-list").removeChild(node[node.length - 1]);
+        }
+      });
+    });
+    document.querySelectorAll(".condition-list").forEach(function(e){
+      e.addEventListener("click", function (ev) {
+        var target = ev.target;
+        if (target.className === "conditon-remove") {
+          this.parentElement.querySelector(".condition-list").removeChild(target.parentNode);
+        }
+      });
+    });
+
     document.body.addEventListener("click", function (e) {
       var e = e || window.event;
       var target = e.target;
       if (target.className.indexOf("details-result") != -1) {
-        var str2 = target.previousElementSibling.innerText;
-        handleDetails(target, str2);
+        handleDetails(target);
       }
     });
 
 
     // 读取文件的内容
-    function showfile1(obj, importExcel, maxNum) {
+    function showfile(obj, importExcel, maxNum) {
       if (!obj.files) {
         return;
       }
@@ -379,7 +421,7 @@
       var excelFile;
       var skuArr = {};
       var finderCondition = [];
-      document.querySelectorAll(".condition-item").forEach(function (e) {
+      obj.parentElement.parentElement.querySelectorAll(".condition-item").forEach(function (e) {
         finderCondition.push({
           Make: handleStr(e.querySelector(".condition-Make").value),
           Model: handleStr(e.querySelector(".condition-Model").value)
@@ -417,7 +459,7 @@
             }
             skuArr[sku].push({
               Make: e.Make,
-              Model: e.Model,
+              Model: (e.Model + "</strong> " + e.Trim + " " + e.Engine).replace(/\s+/g," ").trim(),
               Year: e.Year
             });
           });
@@ -510,7 +552,7 @@
                   if (content.length > 0) {
                     content = filterFinder(MakeCondition, content);
                   }
-                  getTable(content, e.sku, importExcel, maxNum);
+                  getTable1(content, e.sku, importExcel, maxNum);
                 });
 
                 if (select_value[this.value]) {
@@ -530,7 +572,190 @@
                       if (content.length > 0) {
                         content = filterFinder(ModelCondition, content);
                       }
-                      getTable(content, e.sku, importExcel, maxNum);
+                      getTable1(content, e.sku, importExcel, maxNum);
+                    });
+                  });
+                }
+              });
+            }
+
+            loading.style.display = "none";
+          }
+        }
+      }
+    }
+
+    
+    // 读取文件的内容
+    function showfile1(obj, importExcel, maxNum) {
+      if (!obj.files) {
+        return;
+      }
+      var import_tbody = document.getElementById(importExcel).querySelector("tbody");
+      var export_btn = document.getElementById(importExcel).nextElementSibling;
+      var loading = document.querySelector(".loading");
+      var condition_select = document.querySelector(".condition-select");
+
+      loading.style.display = "";
+      export_btn.style.display = "none";
+      import_tbody.innerHTML = "";
+      condition_select.innerHTML = "";
+
+      var excelFile;
+      var skuArr = {};
+      var finderCondition = [];
+      obj.parentElement.parentElement.querySelectorAll(".condition-item").forEach(function (e) {
+        finderCondition.push({
+          Make: handleStr(e.querySelector(".condition-Make").value),
+          Model: handleStr(e.querySelector(".condition-Model").value)
+        });
+      });
+      finderCondition = unique(finderCondition);
+
+      for (var k = 0; k < obj.files.length; k++) {
+        var f = obj.files[k];
+        var reader = new FileReader();
+        reader.filename = f.name;
+        reader.index = k;
+        reader.readAsBinaryString(f);
+        reader.onload = function (e) {
+          var data = e.target.result;
+          var index = this.index;
+          var name = this.filename;
+          name = name.substring(0, name.lastIndexOf("."));
+          excelFile = XLSX.read(data, {
+            type: 'binary'
+          });
+          var headers = new Array();
+          var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+          for (var key in str[0]) {
+            headers.push(key)  //获取表头
+          }
+          var allArr = str;
+          allArr.forEach(function (e) {
+            var sku = name;
+            if (e.SKU) {
+              sku = e.SKU;
+            }
+            if (!skuArr[sku]) {
+              skuArr[sku] = [];
+            }
+            skuArr[sku].push({
+              Make: e.Make,
+              Model: e.Model + e.Trim + e.Engine,
+              Year: e.Year
+            });
+          });
+
+          if (index === obj.files.length - 1) {
+            var select_value = [];
+            var fSkuArr = [];
+            for (var sku in skuArr) {
+              fSkuArr.push({
+                sku: sku,
+                content: skuArr[sku]
+              });
+            }
+            fSkuArr.sort(function (m, n) {
+              return m.sku - n.sku;
+            });
+
+            fSkuArr.forEach(function (e) {
+              e.content = handleFinder(e.content);
+
+              var content = e.content;
+              if (content.length > 0) {
+                content = filterFinder(finderCondition, content);
+              }
+              getTable1(content, e.sku, importExcel, maxNum);
+
+              select_value.push.apply(select_value, content);
+            });
+
+            if (select_value.length > 0) {
+              var select_value_unique = {};
+              select_value.forEach(function (e) {
+                if (e.Make) {
+                  if (!select_value_unique[e.Make]) {
+                    select_value_unique[e.Make] = {};
+                  }
+
+                  if (e.Model) {
+                    if (!select_value_unique[e.Make][e.Model]) {
+                      select_value_unique[e.Make][e.Model] = {};
+                    }
+                  }
+                }
+              });
+
+              var select_value_arr = [];
+              for (var Make in select_value_unique) {
+                var modelArr = [];
+                for (var Model in select_value_unique[Make]) {
+                  modelArr.push(Model);
+                }
+                modelArr.sort();
+                select_value_arr.push({
+                  Make: Make,
+                  Model: modelArr
+                });
+              }
+              select_value_arr.sort(sortLocaleCompare("Make"));
+
+              var select_value = {};
+              select_value_arr.forEach(function (e) {
+                select_value[e.Make] = e.Model;
+              });
+
+
+              var condition_Make = document.createElement("select");
+              condition_Make.name = "condition-Make";
+              condition_Make.innerHTML = '<option value="">Make</option>';
+              condition_select.appendChild(condition_Make);
+
+              var condition_Model = document.createElement("select");
+              condition_Model.name = "condition-Model";
+              condition_Model.innerHTML = '<option value="">Model</option>';
+              condition_select.appendChild(condition_Model);
+
+              for (var Make in select_value) {
+                condition_Make.innerHTML += '<option value="' + Make + '">' + Make + '</option>';
+              }
+
+              condition_Make.addEventListener("change", function () {
+                import_tbody.innerHTML = "";
+                condition_Model.innerHTML = '<option value="">Model</option>';
+                var MakeCondition = [{
+                  Make: this.value,
+                  Model: ""
+                }];
+                MakeCondition = unique(MakeCondition);
+                fSkuArr.forEach(function (e) {
+                  var content = e.content;
+                  if (content.length > 0) {
+                    content = filterFinder(MakeCondition, content);
+                  }
+                  getTable1(content, e.sku, importExcel, maxNum);
+                });
+
+                if (select_value[this.value]) {
+                  select_value[this.value].forEach(function (Model) {
+                    condition_Model.innerHTML += '<option value="' + Model + '">' + Model + '</option>';
+                  });
+
+                  condition_Model.addEventListener("change", function () {
+                    import_tbody.innerHTML = "";
+                    var ModelCondition = [{
+                      Make: this.previousElementSibling.value,
+                      Model: this.value
+                    }];
+                    ModelCondition = unique(ModelCondition);
+                    fSkuArr.forEach(function (e) {
+                      var content = e.content;
+                      if (content.length > 0) {
+                        content = filterFinder(ModelCondition, content);
+                      }
+                      getTable1(content, e.sku, importExcel, maxNum);
                     });
                   });
                 }
@@ -594,8 +819,7 @@
         var importDetals = import_tbody.querySelectorAll(".details-result");
         for (var k = 0; k < importDetals.length; k++) {
           if (importDetals[k]) {
-            var str2 = importDetals[k].previousElementSibling.innerHTML;
-            handleDetails(importDetals[k], str2);
+            handleDetails(importDetals[k]);
           }
         }
       }
@@ -682,12 +906,45 @@
           finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
         });
 
-        var finalStr = finalArr.join("<br>");
+        var finalStr = finalArr.join("<br>\n<strong>");
+        finalStr = "<strong>" + finalStr.replace(/<br>/g,"") + "</strong>";
         document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-          + sku.replace(/\s/g, "").replace(/^0/, "0&nbsp;")
-          + '</td><td contenteditable="true">' + finalStr
+          + sku.replace(/\s/g, "")
           + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
 
+        document.getElementById(importExcel).querySelector("tbody").lastChild.querySelectorAll("td")[1].innerText = finalStr;
+
+        document.getElementById(importExcel).querySelector("tbody").lastChild.lastChild.innerText = "codazon_custom_tab=" + transformDetails(finalStr.replace(/<br>/g,""));
+
+        document.getElementById(importExcel).nextElementSibling.style.display = "block";
+      }
+    }
+
+    function getTable1(arr, sku, importExcel, maxNum) {
+      var newArr = arr;
+      if (newArr.length > 0) {
+        if (newArr.length > maxNum) {
+          newArr.sort(sortLocaleCompare("Index", "Make", "Model"));
+          var tempArr = [];
+          newArr.forEach(function (e, i) {
+            if (i > newArr.length - maxNum - 1) {
+              tempArr.push(newArr[i]);
+            }
+          });
+          newArr = tempArr;
+        }
+        newArr.sort(sortLocaleCompare("Make", "Model"));
+
+        var finalArr = [];
+        newArr.forEach(function (e) {
+          finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
+        });
+
+        var finalStr = finalArr.join("<br>");
+        document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
+          + sku.replace(/\s/g, "")
+          + '</td><td contenteditable="true">' + finalStr
+          + '</td><td class="product-details" contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
         document.getElementById(importExcel).nextElementSibling.style.display = "block";
       }
     }
@@ -721,28 +978,58 @@
       }
     }
 
-    function handleDetails(ele, str2) {
-      ele.previousElementSibling.innerText = str2;
-      var str1 = ele.previousElementSibling.previousElementSibling.innerText;
+    function handleDetails(ele) {
+      if(ele.parentElement.querySelector(".product-details")) {
+        var productDetail = ele.parentElement.querySelector(".product-details");
+        var str2 = productDetail.innerText;
+        productDetail.innerText = str2;
+      }
+      var str1 = ele.parentElement.querySelectorAll("td")[1].innerText;
+      if (str1.replace(/\s/g, "")) {
+        var modelStr1 = transformDetails(str1);
+        if(productDetail) {
+          if (str2.indexOf('<div class="part-fit">') != -1) {
+            var pStr1 = str2.substring(0, str2.indexOf("<h2>"));
+            var pStr2 = str2.substring(str2.indexOf("</h2>") + 5);
+            pStr1 = pStr1.substring(0, pStr1.indexOf('<div class="part-fit">'));
+            pStr2 = pStr2.substring(pStr2.indexOf('<h2>'));
+            ele.innerText = pStr1 + modelStr1 + "\n" + pStr2;
+          } else {
+            var index2 = str2.indexOf("<h2>");
+            ele.innerText = "codazon_custom_tab=" + str2.substring(0, index2) + modelStr1 + "\n" + str2.substring(index2);
+          }
+        }else {
+          ele.innerText = "codazon_custom_tab=" + modelStr1;
+        }
+      } else {
+        if(productDetail) {
+          ele.innerText = "codazon_custom_tab=" + productDetail.innerText;
+        }
+      }
+    }
+
+    function transformDetails(str1) {
       if (str1.replace(/\s/g, "")) {
         str1 = str1.trim().replace(/\s+/g, " ");
         var strArr1 = str1.split(";");
         var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
-        if (strArr1.length > 20) {
+        if (strArr1.length > 30) {
           modelStr += '\n<div class="part-fit-radio">';
-          for (var i = 0; i < strArr1.length; i += 10) {
-            var mIndex = parseInt(i / 10) + 1;
-            modelStr += '\n<input ';
-            if (i == 0) {
-              modelStr += 'checked="checked"';
-            }
-            modelStr += 'id="part-radio' + mIndex + '" class="part-radio" type="radio" name="part-radio">\n<div class="part-tab">\n<ul>';
-            for (var j = 0; j < 10; j++) {
-              if (strArr1[i + j]) {
-                modelStr += "\n<li>" + strArr1[i + j].trim() + "</li>";
+          for (var i = 0; i < strArr1.length; i += 20) {
+            if(strArr1[i]) {
+              var mIndex = parseInt(i / 20) + 1;
+              modelStr += '\n<input ';
+              if (i == 0) {
+                modelStr += 'checked="checked"';
               }
+              modelStr += 'id="part-radio' + mIndex + '" class="part-radio" type="radio" name="part-radio">\n<div class="part-tab">\n<ul>';
+              for (var j = 0; j < 20; j++) {
+                if (strArr1[i + j]) {
+                  modelStr += "\n<li>" + strArr1[i + j].trim() + "</li>";
+                }
+              }
+              modelStr += '\n</ul>\n</div>\n<label for="part-radio' + mIndex + '">' + mIndex + '</label>';
             }
-            modelStr += '\n</ul>\n</div>\n<label for="part-radio' + mIndex + '">' + mIndex + '</label>';
           }
           modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
         } else {
@@ -754,24 +1041,14 @@
           }
           modelStr += "\n</ul>\n</div>";
         }
-        if (str2.indexOf('<div class="part-fit">') != -1) {
-          var pStr1 = str2.substring(0, str2.indexOf("<h2>"));
-          var pStr2 = str2.substring(str2.indexOf("</h2>") + 5);
-          pStr1 = pStr1.substring(0, pStr1.indexOf('<div class="part-fit">'));
-          pStr2 = pStr2.substring(pStr2.indexOf('<h2>'));
-          ele.innerText = pStr1 + modelStr + "\n" + pStr2;
-        } else {
-          var index2 = str2.indexOf("<h2>");
-          ele.innerText = str2.substring(0, index2) + modelStr + "\n" + str2.substring(index2);
-        }
-      } else {
-        ele.innerText = ele.previousElementSibling.innerText;
+        return modelStr;
       }
+      return "";
     }
 
     function btn_export(importExcel) {
       var table = document.getElementById(importExcel).querySelector("table");
-      var sheet = XLSX.utils.table_to_sheet(table); //将一个table对象转换成一个sheet对象
+      var sheet = XLSX.utils.table_to_sheet(table,{ raw: true }); //将一个table对象转换成一个sheet对象
       var wb = sheet2blob(sheet);
       if ('ie' == getExplorer()) {
         window.navigator.msSaveOrOpenBlob(wb, 'excel.xlsx');
