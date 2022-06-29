@@ -761,7 +761,7 @@
       }
 
       return finalArr;
-    }
+    }getTable
 
     function getTable(arr, sku, importExcel, maxNum) {
       var newArr = arr;
@@ -865,8 +865,12 @@
       if (str1.replace(/\s/g, "")) {
         str1 = str1.trim();
         var tableFlag = 0;
+        var engineFlag = 0;
         if(str1.indexOf("<td>") != -1) {
           tableFlag = 1;
+        }
+        if(str1.indexOf("<td><td>") != -1) {
+          engineFlag = 1;
         }
         var strArr1 = str1.split("\n");
         var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
@@ -882,26 +886,28 @@
               modelStr += 'id="part-radio' + mIndex + '" class="part-radio" type="radio" name="part-radio">\n<div class="part-tab">';
               if(tableFlag === 1) {
                 modelStr += '\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
-                var engineFlag = 0;
+                if(engineFlag === 1) {
+                  modelStr += '\n<th>Engine</th>';
+                }
               }
 
               var trStr = "";
               for (var j = 0; j < 20; j++) {
                 if (strArr1[i + j]) {
                   if(tableFlag === 1) {
-                    if(strArr1[i + j].indexOf("</td><td>") != -1) {
-                      engineFlag = 1;
+                    if(engineFlag === 1) {
+                      if(strArr1[i + j].indexOf("</td><td>") != -1) {
+                        trStr += "\n<tr>" + strArr1[i + j].trim() + "</tr>";
+                      }else {
+                        trStr += "\n<tr>" + strArr1[i + j].trim() + "<td></td></tr>";
+                      }
                     }
-                    trStr += "\n<tr>" + strArr1[i + j].trim() + "</tr>";
                   }else {
                     trStr += "\n<li>" + strArr1[i + j].trim() + "</li>";
                   }
                 }
               }
               if(tableFlag === 1) {
-                if(engineFlag === 1) {
-                  modelStr += '\n<th>Engine</th>';
-                }
                 modelStr += '\n</tr>\n</thead>\n<tbody>' + trStr
                          + '\n</tbody>\n</table>';
               }else {
@@ -914,27 +920,28 @@
           modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
         } else {
           if(tableFlag === 1) {
-             modelStr += '\n<tbody>\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
-            var engineFlag = 0;
+            modelStr += '\n<tbody>\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
+            if(engineFlag === 1) {
+              modelStr += '\n<th>Engine</th>';
+            }
           }
           var trStr = "";
           for (var i in strArr1) {
             if (strArr1[i].trim().replace(/\s+/g, " ") != "") {
               if(tableFlag === 1) {
-                if(strArr1[i].indexOf("</td><td>") != -1) {
-                  engineFlag = 1;
+                if(engineFlag === 1) {
+                  if(strArr1[i].indexOf("</td><td>") != -1) {
+                    trStr += "\n<tr>" + strArr1[i].trim() + "</tr>";
+                  }else {
+                    trStr += "\n<tr>" + strArr1[i].trim() + "<td></td></tr>";
+                  }
                 }
-
-                trStr += "\n<tr>" + strArr1[i].trim() + "</tr>";
               }else {
                 trStr += "\n<li>" + strArr1[i].trim() + "</li>";
               }
             }
           }
           if(tableFlag === 1) {
-            if(engineFlag === 1) {
-              modelStr += '\n<th>Engine</th>';
-            }
             modelStr += '\n</tr>\n</thead>\n<tbody>' + trStr
                       + '\n</tbody>\n</table>';
           }else {
