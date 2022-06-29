@@ -268,7 +268,7 @@
 
   <div class="tabs">
     <input type="radio" name="tabs" id="tabzero" checked="checked">
-    <label for="tabzero">车型处理1</label>
+    <label for="tabzero">车型处理</label>
     <div class="tab">
       <div class="condition">
         <div class="condition-model" hidden>
@@ -304,45 +304,6 @@
         </table>
       </div>
       <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile')" value="导出" /></div>
-    </div>
-    <input type="radio" name="tabs" id="tabone">
-    <label for="tabone">车型处理2</label>
-    <div class="tab">
-      <div class="condition">
-        <div class="condition-model" hidden>
-          <div class="condition-item">
-            Make: <input class="condition-Make" type="text">
-            Model: <input class="condition-Model" type="text">
-            <button class="conditon-remove">x</button>
-          </div>
-        </div>
-        <div class="condition-list">
-        </div>
-        <button class="condition-del">-</button>
-        <button class="condition-add">+</button>
-      </div>
-      <div class="condition-select">
-      </div>
-      <div class="up_btn">导入车型表：
-        <input type="file" id="xFile" multiple name=""
-          accept=".csv, application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-          onchange="showfile1(this,'excelFile1', 60000)" onclick="this.value=''" ;>
-      </div>
-      <div id="excelFile1">
-        <table border='1'>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Data</th>
-              <th>product Details</th>
-              <th>result</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="export_btn">导出excel:<input type="button" OnClick="btn_export('excelFile1')" value="导出" /></div>
     </div>
     <input type="radio" name="tabs" id="tabtwo">
     <label for="tabtwo">批量处理</label>
@@ -478,38 +439,106 @@
                 sku = e.SKU;
               }
               if (!skuArr[sku]) {
-                skuArr[sku] = [];
+                skuArr[sku] = {};
               }
-             // var curModel = e.Model + "</strong>";
-              var curModel = e.Model;
+
+              if(!skuArr[sku][e.Make]) {
+                skuArr[sku][e.Make] = {};
+              }
+
+              if(!skuArr[sku][e.Make][e.Model]) {
+                skuArr[sku][e.Make][e.Model] = {};
+              }
+
+              if(!skuArr[sku][e.Make][e.Model]["Year"]) {
+                skuArr[sku][e.Make][e.Model]["Year"] = {};
+              }
+
+              if(!skuArr[sku][e.Make][e.Model]["Year"][e.Year.toString().replace(/\s+/g," ").trim()]) {
+                skuArr[sku][e.Make][e.Model]["Year"][e.Year.toString().replace(/\s+/g," ").trim()] = {};
+              }
+
               if(e.Engine) {
-                curModel += " " +  e.Engine;
+                var curEngine = e.Engine.toString().replace(/\s+/g," ").trim();
+                if(curEngine.match(/[0-9a-zA-Z]+L/g) != null) {
+                  if(curEngine.match(/[0-9]+L/g) != null) {
+                    curEngine = curEngine.replace(/(.*[0-9]+L)(.*)/g,'$1');
+                  }
+                  if(!skuArr[sku][e.Make][e.Model]["Engine"]) {
+                    skuArr[sku][e.Make][e.Model]["Engine"] = {};
+                  }
+
+                  if(!skuArr[sku][e.Make][e.Model]["Engine"][curEngine]) {
+                    skuArr[sku][e.Make][e.Model]["Engine"][curEngine] = {};
+                  }
+                }
               }
-              curModel = curModel.replace(/\s+/g," ").trim().replace(/(.*[0-9]+L)(.*)/g,'$1');
-              skuArr[sku].push({
-                Make: e.Make,
-                Model: curModel,
-                Year: e.Year
-              });
             }
           });
-
           if (index === obj.files.length - 1) {
             var select_value = [];
             var fSkuArr = [];
             for (var sku in skuArr) {
+              var contentObj = {};
+              var contentArr = [];
+              for (var Make in skuArr[sku]) {
+                contentObj[Make] = {};
+                for (var Model in skuArr[sku][Make]) {
+                  contentObj[Make][Model] = {};
+                  contentObj[Make][Model]["Year"] = [];
+                  for (var Year in skuArr[sku][Make][Model]["Year"]) {
+                    contentObj[Make][Model]["Year"].push(Year);
+                  }
+                  contentObj[Make][Model]["Year"].sort();
+
+                  var yearStr = "";
+                  contentObj[Make][Model]["Year"].forEach(function (e, i) {
+                    if (i === 0) {
+                      yearStr = e;
+                    } else if (contentObj[Make][Model]["Year"][i] - contentObj[Make][Model]["Year"][i - 1] === 1) {
+                      if (yearStr.substring(yearStr.lastIndexOf("-")).length === 5) {
+                        yearStr = yearStr.substring(0, yearStr.lastIndexOf("-") + 1) + e;
+                      } else {
+                        yearStr += "-" + e;
+                      }
+                    } else {
+                      yearStr += "," + e;
+                    }
+                  });
+                  contentObj[Make][Model]["Year"] = yearStr;
+
+                  if(skuArr[sku][Make][Model]["Engine"]) {
+                    contentObj[Make][Model]["Engine"] = [];
+                    for (var Engine in skuArr[sku][Make][Model]["Engine"]) {
+                      contentObj[Make][Model]["Engine"].push(Engine);
+                    }
+                    contentObj[Make][Model]["Engine"].sort();
+                    contentObj[Make][Model]["Engine"] = contentObj[Make][Model]["Engine"].join(", ");
+                  }
+                  if(contentObj[Make][Model]["Engine"]) {
+                    contentArr.push({
+                      Make: Make,
+                      Model: Model,
+                      Year: contentObj[Make][Model]["Year"],
+                      Engine: contentObj[Make][Model]["Engine"]
+                    });
+                  }else {
+                    contentArr.push({
+                      Make: Make,
+                      Model: Model,
+                      Year: contentObj[Make][Model]["Year"]
+                    });
+                  }
+                }
+              }
+              contentArr.sort(sortLocaleCompare("Make", "Model"));
               fSkuArr.push({
                 sku: sku,
-                content: skuArr[sku]
+                content: contentArr
               });
             }
-            fSkuArr.sort(function (m, n) {
-              return m.sku - n.sku;
-            });
 
             fSkuArr.forEach(function (e) {
-              e.content = handleFinder(e.content);
-
               var content = e.content;
               if (content.length > 0) {
                 content = filterFinder(finderCondition, content);
@@ -582,7 +611,7 @@
                   if (content.length > 0) {
                     content = filterFinder(MakeCondition, content);
                   }
-                  getTable1(content, e.sku, importExcel, maxNum);
+                  getTable(content, e.sku, importExcel, maxNum);
                 });
 
                 if (select_value[this.value]) {
@@ -602,190 +631,7 @@
                       if (content.length > 0) {
                         content = filterFinder(ModelCondition, content);
                       }
-                      getTable1(content, e.sku, importExcel, maxNum);
-                    });
-                  });
-                }
-              });
-            }
-
-            loading.style.display = "none";
-          }
-        }
-      }
-    }
-
-    
-    // 读取文件的内容
-    function showfile1(obj, importExcel, maxNum) {
-      if (!obj.files) {
-        return;
-      }
-      var import_tbody = document.getElementById(importExcel).querySelector("tbody");
-      var export_btn = document.getElementById(importExcel).nextElementSibling;
-      var loading = document.querySelector(".loading");
-      var condition_select = document.querySelector(".condition-select");
-
-      loading.style.display = "";
-      export_btn.style.display = "none";
-      import_tbody.innerHTML = "";
-      condition_select.innerHTML = "";
-
-      var excelFile;
-      var skuArr = {};
-      var finderCondition = [];
-      obj.parentElement.parentElement.querySelectorAll(".condition-item").forEach(function (e) {
-        finderCondition.push({
-          Make: handleStr(e.querySelector(".condition-Make").value),
-          Model: handleStr(e.querySelector(".condition-Model").value)
-        });
-      });
-      finderCondition = unique(finderCondition);
-
-      for (var k = 0; k < obj.files.length; k++) {
-        var f = obj.files[k];
-        var reader = new FileReader();
-        reader.filename = f.name;
-        reader.index = k;
-        reader.readAsBinaryString(f);
-        reader.onload = function (e) {
-          var data = e.target.result;
-          var index = this.index;
-          var name = this.filename;
-          name = name.substring(0, name.lastIndexOf("."));
-          excelFile = XLSX.read(data, {
-            type: 'binary'
-          });
-          var headers = new Array();
-          var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
-          for (var key in str[0]) {
-            headers.push(key)  //获取表头
-          }
-          var allArr = str;
-          allArr.forEach(function (e) {
-            var sku = name;
-            if (e.SKU) {
-              sku = e.SKU;
-            }
-            if (!skuArr[sku]) {
-              skuArr[sku] = [];
-            }
-            skuArr[sku].push({
-              Make: e.Make,
-              Model: e.Model + e.Trim + e.Engine,
-              Year: e.Year
-            });
-          });
-
-          if (index === obj.files.length - 1) {
-            var select_value = [];
-            var fSkuArr = [];
-            for (var sku in skuArr) {
-              fSkuArr.push({
-                sku: sku,
-                content: skuArr[sku]
-              });
-            }
-            fSkuArr.sort(function (m, n) {
-              return m.sku - n.sku;
-            });
-
-            fSkuArr.forEach(function (e) {
-              e.content = handleFinder(e.content);
-
-              var content = e.content;
-              if (content.length > 0) {
-                content = filterFinder(finderCondition, content);
-              }
-              getTable1(content, e.sku, importExcel, maxNum);
-
-              select_value.push.apply(select_value, content);
-            });
-
-            if (select_value.length > 0) {
-              var select_value_unique = {};
-              select_value.forEach(function (e) {
-                if (e.Make) {
-                  if (!select_value_unique[e.Make]) {
-                    select_value_unique[e.Make] = {};
-                  }
-
-                  if (e.Model) {
-                    if (!select_value_unique[e.Make][e.Model]) {
-                      select_value_unique[e.Make][e.Model] = {};
-                    }
-                  }
-                }
-              });
-
-              var select_value_arr = [];
-              for (var Make in select_value_unique) {
-                var modelArr = [];
-                for (var Model in select_value_unique[Make]) {
-                  modelArr.push(Model);
-                }
-                modelArr.sort();
-                select_value_arr.push({
-                  Make: Make,
-                  Model: modelArr
-                });
-              }
-              select_value_arr.sort(sortLocaleCompare("Make"));
-
-              var select_value = {};
-              select_value_arr.forEach(function (e) {
-                select_value[e.Make] = e.Model;
-              });
-
-
-              var condition_Make = document.createElement("select");
-              condition_Make.name = "condition-Make";
-              condition_Make.innerHTML = '<option value="">Make</option>';
-              condition_select.appendChild(condition_Make);
-
-              var condition_Model = document.createElement("select");
-              condition_Model.name = "condition-Model";
-              condition_Model.innerHTML = '<option value="">Model</option>';
-              condition_select.appendChild(condition_Model);
-
-              for (var Make in select_value) {
-                condition_Make.innerHTML += '<option value="' + Make + '">' + Make + '</option>';
-              }
-
-              condition_Make.addEventListener("change", function () {
-                import_tbody.innerHTML = "";
-                condition_Model.innerHTML = '<option value="">Model</option>';
-                var MakeCondition = [{
-                  Make: this.value,
-                  Model: ""
-                }];
-                MakeCondition = unique(MakeCondition);
-                fSkuArr.forEach(function (e) {
-                  var content = e.content;
-                  if (content.length > 0) {
-                    content = filterFinder(MakeCondition, content);
-                  }
-                  getTable1(content, e.sku, importExcel, maxNum);
-                });
-
-                if (select_value[this.value]) {
-                  select_value[this.value].forEach(function (Model) {
-                    condition_Model.innerHTML += '<option value="' + Model + '">' + Model + '</option>';
-                  });
-
-                  condition_Model.addEventListener("change", function () {
-                    import_tbody.innerHTML = "";
-                    var ModelCondition = [{
-                      Make: this.previousElementSibling.value,
-                      Model: this.value
-                    }];
-                    ModelCondition = unique(ModelCondition);
-                    fSkuArr.forEach(function (e) {
-                      var content = e.content;
-                      if (content.length > 0) {
-                        content = filterFinder(ModelCondition, content);
-                      }
-                      getTable1(content, e.sku, importExcel, maxNum);
+                      getTable(content, e.sku, importExcel, maxNum);
                     });
                   });
                 }
@@ -857,6 +703,7 @@
     }
 
     function handleFinder(arr) {
+      console.log(arr)
       var finder = {};
       arr.forEach(function (e) {
         if (e.Make) {
@@ -920,7 +767,6 @@
       var newArr = arr;
       if (newArr.length > 0) {
         if (newArr.length > maxNum) {
-          newArr.sort(sortLocaleCompare("Index", "Make", "Model"));
           var tempArr = [];
           newArr.forEach(function (e, i) {
             if (i > newArr.length - maxNum - 1) {
@@ -929,11 +775,16 @@
           });
           newArr = tempArr;
         }
-        newArr.sort(sortLocaleCompare("Make", "Model"));
 
         var finalArr = [];
         newArr.forEach(function (e) {
-          finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
+          var newStr = "";
+          newStr = e.Year + " " + e.Make + " " + e.Model;
+          if(e.Engine) {
+            newStr = "<strong>" + newStr + "</strong> " + e.Engine;
+          }
+          newStr += ";"
+          finalArr.push(newStr);
         });
 
         //var finalStr = finalArr.join("<br>\n<strong>");
@@ -948,35 +799,6 @@
 
         document.getElementById(importExcel).querySelector("tbody").lastChild.lastChild.innerText = "codazon_custom_tab=" + transformDetails(finalStr.replace(/<br>/g,""));
 
-        document.getElementById(importExcel).nextElementSibling.style.display = "block";
-      }
-    }
-
-    function getTable1(arr, sku, importExcel, maxNum) {
-      var newArr = arr;
-      if (newArr.length > 0) {
-        if (newArr.length > maxNum) {
-          newArr.sort(sortLocaleCompare("Index", "Make", "Model"));
-          var tempArr = [];
-          newArr.forEach(function (e, i) {
-            if (i > newArr.length - maxNum - 1) {
-              tempArr.push(newArr[i]);
-            }
-          });
-          newArr = tempArr;
-        }
-        newArr.sort(sortLocaleCompare("Make", "Model"));
-
-        var finalArr = [];
-        newArr.forEach(function (e) {
-          finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
-        });
-
-        var finalStr = finalArr.join("<br>");
-        document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
-          + sku.replace(/\s/g, "")
-          + '</td><td contenteditable="true">' + finalStr
-          + '</td><td class="product-details" contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
         document.getElementById(importExcel).nextElementSibling.style.display = "block";
       }
     }
