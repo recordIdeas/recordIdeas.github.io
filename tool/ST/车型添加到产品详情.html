@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script src="../../../js/xlsx.core.min.js"></script>
+  <script src="../../../../js/xlsx.core.min.js"></script>
 
   <style>
     * {
@@ -432,6 +432,7 @@
       for (var k = 0; k < obj.files.length; k++) {
         var f = obj.files[k];
         var reader = new FileReader();
+        reader.filetype = f.type;
         reader.filename = f.name;
         reader.index = k;
         reader.readAsBinaryString(f);
@@ -440,28 +441,56 @@
           var index = this.index;
           var name = this.filename;
           name = name.substring(0, name.lastIndexOf("."));
-          excelFile = XLSX.read(data, {
-            type: 'binary'
-          });
-          var headers = new Array();
-          var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
-          for (var key in str[0]) {
-            headers.push(key)  //获取表头
+          var type = this.filetype;
+          if(type.toLocaleUpperCase().indexOf("CSV")!=-1) {
+            var typeFlag = true;
+          }
+          if(typeFlag) {
+            var str = [];
+            var dataArr = data.toString().split("\n");
+            var headers = dataArr[0].split(",");
+            var len = headers.length>5 ? 5 : headers;
+            headers = headers.splice(0, len)
+            for(var s=1; s<dataArr.length; s++) {
+              if(dataArr[s].replace(/[^0-9a-zA-Z]/g,"")!= "") {
+                var dataObj = {};
+                for(var h=0; h<len; h++) {
+                  dataObj[headers[h]] = dataArr[s].split(",")[h];
+                }
+                str.push(dataObj);
+              }
+            }
+          }else {
+            excelFile = XLSX.read(data, {
+              type: 'binary'
+            });
+            var headers = new Array();
+            var str = XLSX.utils.sheet_to_json(excelFile.Sheets[excelFile.SheetNames[0]]);
+            for (var key in str[0]) {
+              headers.push(key)  //获取表头
+            }
           }
           var allArr = str;
           allArr.forEach(function (e) {
-            var sku = name;
-            if (e.SKU) {
-              sku = e.SKU;
+            if(e.Make && e.Model && (e.Make+e.Model+e.Year).toString().trim() != "") {
+              var sku = name;
+              if (e.SKU) {
+                sku = e.SKU;
+              }
+              if (!skuArr[sku]) {
+                skuArr[sku] = [];
+              }
+              var curModel = e.Model + "</strong>";
+              if(e.Engine) {
+                curModel += " " +  e.Engine;
+              }
+              curModel = curModel.replace(/\s+/g," ").trim().replace(/(.*[0-9]+L)(.*)/g,'$1');
+              skuArr[sku].push({
+                Make: e.Make,
+                Model: curModel,
+                Year: e.Year
+              });
             }
-            if (!skuArr[sku]) {
-              skuArr[sku] = [];
-            }
-            skuArr[sku].push({
-              Make: e.Make,
-              Model: (e.Model + "</strong> " + e.Trim + " " + e.Engine).replace(/\s+/g," ").trim(),
-              Year: e.Year
-            });
           });
 
           if (index === obj.files.length - 1) {
@@ -907,7 +936,7 @@
         });
 
         var finalStr = finalArr.join("<br>\n<strong>");
-        finalStr = "<strong>" + finalStr.replace(/<br>/g,"") + "</strong>";
+        finalStr = "<strong>" + finalStr.replace(/<br>/g,"");
         document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
           + sku.replace(/\s/g, "")
           + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
