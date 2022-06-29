@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script src="../../../js/xlsx.core.min.js"></script>
+  <script src="../../../../js/xlsx.core.min.js"></script>
 
   <style>
     * {
@@ -416,6 +416,7 @@
               if(dataArr[s].replace(/[^0-9a-zA-Z]/g,"")!= "") {
                 var dataObj = {};
                 for(var h=0; h<len; h++) {
+                  headers[h] = headers[h].toString().replace(/[^0-9a-zA-Z\-]/g,"").trim();
                   dataObj[headers[h]] = dataArr[s].split(",")[h];
                 }
                 str.push(dataObj);
