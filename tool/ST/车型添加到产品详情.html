@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script src="../../../js/xlsx.core.min.js"></script>
+  <script src="../../../../js/xlsx.core.min.js"></script>
 
   <style>
     * {
@@ -869,7 +869,7 @@
         if(str1.indexOf("<td>") != -1) {
           tableFlag = 1;
         }
-        if(str1.indexOf("<td><td>") != -1) {
+        if(str1.indexOf("</td><td>") != -1) {
           engineFlag = 1;
         }
         var strArr1 = str1.split("\n");
@@ -898,8 +898,16 @@
                     if(engineFlag === 1) {
                       if(strArr1[i + j].indexOf("</td><td>") != -1) {
                         trStr += "\n<tr>" + strArr1[i + j].trim() + "</tr>";
-                      }else {
+                      }else if(strArr1[i + j].indexOf("<td>") != -1) {
                         trStr += "\n<tr>" + strArr1[i + j].trim() + "<td></td></tr>";
+                      }else {
+                        trStr += "\n<tr><td>" + strArr1[i + j].trim() + "</td><td></td></tr>";
+                      }
+                    }else {
+                      if(strArr1[i + j].indexOf("<td>") != -1) {
+                        trStr += "\n<tr>" + strArr1[i + j].trim() + "</tr>";
+                      }else {
+                        trStr += "\n<tr><td>" + strArr1[i + j].trim() + "</td></tr>";
                       }
                     }
                   }else {
@@ -932,8 +940,16 @@
                 if(engineFlag === 1) {
                   if(strArr1[i].indexOf("</td><td>") != -1) {
                     trStr += "\n<tr>" + strArr1[i].trim() + "</tr>";
-                  }else {
+                  }else if(strArr1[i].indexOf("<td>") != -1) {
                     trStr += "\n<tr>" + strArr1[i].trim() + "<td></td></tr>";
+                  }else {
+                    trStr += "\n<tr><td>" + strArr1[i].trim() + "</td><td></td></tr>";
+                  }
+                }else {
+                  if(strArr1[i].indexOf("<td>") != -1) {
+                    trStr += "\n<tr>" + strArr1[i].trim() + "</tr>";
+                  }else {
+                    trStr += "\n<tr><td>" + strArr1[i].trim() + "</td></tr>";
                   }
                 }
               }else {
