@@ -480,7 +480,8 @@
               if (!skuArr[sku]) {
                 skuArr[sku] = [];
               }
-              var curModel = e.Model + "</strong>";
+             // var curModel = e.Model + "</strong>";
+              var curModel = e.Model;
               if(e.Engine) {
                 curModel += " " +  e.Engine;
               }
@@ -935,8 +936,10 @@
           finalArr.push(e.Year + " " + e.Make + " " + e.Model + ";");
         });
 
-        var finalStr = finalArr.join("<br>\n<strong>");
-        finalStr = "<strong>" + finalStr.replace(/<br>/g,"");
+        //var finalStr = finalArr.join("<br>\n<strong>");
+        //finalStr = "<strong>" + finalStr.replace(/<br>/g,"");
+        var finalStr = finalArr.join("<br>\n");
+        finalStr = finalStr.replace(/<br>/g,"");
         document.getElementById(importExcel).querySelector("tbody").innerHTML += "<tr><td>"
           + sku.replace(/\s/g, "")
           + '</td><td contenteditable="true"></td><td class="details-result" contenteditable="true"></td></tr>';
