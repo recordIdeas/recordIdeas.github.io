@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>车型转换工具</title>
-  <script src="../../../../js/xlsx.core.min.js"></script>
+  <script src="../../../js/xlsx.core.min.js"></script>
 
   <style>
     * {
@@ -874,12 +874,13 @@
           engineFlag = 1;
         }
         var strArr1 = str1.split("\n");
+        var interval = strArr1.length > 90 ? 20 : strArr1.length > 60 ? 15 : 10;
         var modelStr = '<div class="part-fit">\n<h2>Part Fits For</h2>';
         if (strArr1.length > 30) {
           modelStr += '\n<div class="part-fit-radio">';
-          for (var i = 0; i < strArr1.length; i += 20) {
+          for (var i = 0; i < strArr1.length; i += interval) {
             if(strArr1[i]) {
-              var mIndex = parseInt(i / 20) + 1;
+              var mIndex = parseInt(i / interval) + 1;
               modelStr += '\n<input ';
               if (i == 0) {
                 modelStr += 'checked="checked"';
@@ -893,7 +894,7 @@
               }
 
               var trStr = "";
-              for (var j = 0; j < 20; j++) {
+              for (var j = 0; j < interval; j++) {
                 if (strArr1[i + j]) {
                   if(tableFlag === 1) {
                     if(engineFlag === 1) {
