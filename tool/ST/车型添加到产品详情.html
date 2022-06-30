@@ -967,6 +967,7 @@
           }
           modelStr += '\n</div>\n</div>';
         }
+        modelStr = modelStr.replace(/,/g,"/").replace(/\n/g," ");
         return modelStr;
       }
       return "";
