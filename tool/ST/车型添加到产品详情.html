@@ -930,7 +930,7 @@
           modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
         } else {
           if(tableFlag === 1) {
-            modelStr += '\n<div>\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
+            modelStr += '\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
             if(engineFlag === 1) {
               modelStr += '\n<th>Engine</th>';
             }
@@ -965,7 +965,7 @@
           }else {
             modelStr += '\n<ul>' + trStr + '\n</ul>';
           }
-          modelStr += '\n</div>\n</div>';
+          modelStr += '\n</div>';
         }
         modelStr = modelStr.replace(/,/g,"/").replace(/"/g,"'");
         return modelStr;
