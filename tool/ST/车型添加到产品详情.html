@@ -8,7 +8,6 @@
   <title>车型转换工具</title>
   <script src="../../../js/xlsx.core.min.js"></script>
 
-  
   <style>
     * {
       box-sizing: border-box;
@@ -763,7 +762,7 @@
       }
 
       return finalArr;
-    }getTable
+    }
 
     function getTable(arr, sku, importExcel, maxNum) {
       var newArr = arr;
@@ -931,7 +930,7 @@
           modelStr += '\n<label>\n<a href="#vehicle_matching">&gt;&gt;</a>\n</label>\n</div>\n</div>';
         } else {
           if(tableFlag === 1) {
-            modelStr += '\n<tbody>\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
+            modelStr += '\n<div>\n<table>\n<thead>\n<tr>\n<th>Vehicle Name</th>';
             if(engineFlag === 1) {
               modelStr += '\n<th>Engine</th>';
             }
