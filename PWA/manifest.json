@@ -1,0 +1,15 @@
+{
+  "name": "一个PWA实例",
+  "short_name": "主屏幕的应用名",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#f50",
+  "icons" : [
+    {
+      "src" : "/icon.jpg",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}
