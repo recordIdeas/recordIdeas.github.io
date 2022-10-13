@@ -1,4 +1,4 @@
-importScripts("http://127.0.0.1:8081/PWA/src/workbox-sw.js");
+importScripts("https://recordideas.github.io/PWA/src/workbox-sw.js");
 var cacheStorageKey = 'minimal-pwa-4'
 var cacheList = [
   '/',
