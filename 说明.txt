@@ -1,0 +1,13 @@
+manifest.json
+
+short_name: “ " 用户主屏幕上的应用名字
+
+display : “standalone" 设置启动样式，让您的网络应用隐藏浏览器的 URL 地址栏
+
+start_url : “/“ 设置启动网址，如果不提供的话，默认是使用当前页面
+
+theme_color : “ “ 用来告知浏览器用什么颜色来为地址栏等 UI 元素着色
+
+background_color: “ ” 设置启动页面的背景颜色
+
+icons：”” 就是添加到主屏幕之后的图标
