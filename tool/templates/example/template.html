@@ -1,0 +1,140 @@
+
+<div class="navigation-top">
+<div class="background-image" style="background-image: url({{media url=".thumbswysiwyg/metauto/category-page/{{navigation-top}}"}});">
+  <div class="background-image" style="padding: 5% 0 150px; background-image: url({{media url="wysiwyg/metauto/category-page/{{navigation-top}}"}});"></div>
+</div>
+</div>
+
+<div class="container">
+<div class="navigation-page">
+  <div class="page-title-wrapper">
+    <h1 class="page-title">
+      <span class="base" data-ui-id="page-title-wrapper">{{navigation-title}}</span>
+    </h1>
+  </div>
+
+  <div class="navigation-subcategory">
+    <div class="category-listing page-text-center">
+      {{block class="Magento\\Cms\\Block\\Block" block_id="{{navigation-subcategory}}"}}
+    </div>
+  </div>
+
+  <div class="navigation-description navigation-viewmore">
+    <div class="page-layout-grid">
+      <div class="page-layout-item grid-md-8">
+        <div class="image-show-md">
+          <div class="background-image"
+            style="padding-bottom: 149.8929%; background-image: url(/media/wysiwyg/metauto/category-page/{{navigation-description-pc}})">
+          </div>
+        </div>
+        <div class="image-hide-md">
+          <div class="background-image"
+            style="padding-bottom: 33.2464%; background-image: url(/media/wysiwyg/metauto/category-page/{{navigation-description-mobile}})">
+          </div>
+        </div>
+      </div>
+      <div class="page-layout-item grid-md-16">
+        <input type="checkbox" id="navigation-viewmore" name="navigation-viewmore" hidden>
+        <div class="viewmore-content">
+          <label class="viewmore-btn" for="navigation-viewmore">
+            <span></span>
+          </label>{{navigation-description-content}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation-category">
+    <div class="cdz-block-title text-center">
+      <h2 class="b-title h2"><span class="inner">BROWSE BY CATEGORIES</span></h2>
+      <p>Select Recent Hot Categories For Fast Shopping</p>
+    </div>
+    <div class="category-listing page-text-center">
+      {{widget type="MyWidget\CategoryList\Block\Widget\CategoryList" category_list_has_style="0" category_image_width="184" category_image_height="120" category_list_template="widget/categorywidget_1.phtml" custom_category="1" show_all_level="1" category_list_level_all="
+      35,26,27,21,98,31,99,100,101,102,103,104
+    " }}
+    </div>
+  </div>
+
+  <div class="navigation-banner">
+    <div class="page-layout-list max-item-2">
+      <div class="page-layout-item">
+        <div class="image-show-sm">
+          <div class="background-image background-image-lazy" data-background-image="url({{media url=&quot;wysiwyg/metauto/category-page/{{navigation-banner-1-pc}}&quot;}})"
+            style="padding-bottom: 28.5714%;"></div>
+        </div>
+        <div class="image-hide-sm">
+          <div class="background-image background-image-lazy" data-background-image="url({{media url=&quot;wysiwyg/metauto/category-page/{{navigation-banner-1-mobile}}&quot;}})"
+            style="padding-bottom: 52.549%;"></div>
+        </div>
+      </div>
+      <div class="page-layout-item">
+        <div class="image-show-sm">
+          <div class="background-image background-image-lazy" data-background-image="url({{media url=&quot;wysiwyg/metauto/category-page/{{navigation-banner-2-pc}}&quot;}})"
+            style="padding-bottom: 28.5714%;"></div>
+        </div>
+        <div class="image-hide-sm">
+          <div class="background-image background-image-lazy" data-background-image="url({{media url=&quot;wysiwyg/metauto/category-page/{{navigation-banner-2-mobile}}&quot;}})"
+            style="padding-bottom: 52.549%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation-vehicle">
+    <div class="cdz-block-title text-center">
+      <h2 class="b-title h2"><span class="inner">BROWSE BY VEHICLE</span></h2>
+      <p>Select Recent Hot Vehicle Modle For Fast Shopping</p>
+    </div>
+    <div class="page-article-9">
+      <div class="page-article-list">
+        {{block class="Magento\\Cms\\Block\\Block" block_id="navigation-vehicle-list"}}
+      </div>
+    </div>
+  </div>
+
+  <div class="cdz-blog-wrap base-slider post-list-style12">
+    <div class="cdz-block-title text-center">
+      <h2 class="b-title h2"><span class="inner">GUIDES & ARTICLES</span></h2>
+      <p>Useful articles fast to read and guides easy to understand written by mechanics and car enthusiasts to turn your shopping experience with Metauto into a pleasure</p>
+    </div>
+    <div class="cdz-block-content">
+      {{widget type="Codazon\ThemeLayoutPro\Block\Widget\BlogPostList"
+      main_opt_id="main-content-metauto||widget_1"
+      categories="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34"
+      order_by="publish_time"
+      order="desc"
+      post_count="6"
+      show_in_front="featured_img,title,short_content,publish_time,category"
+      desc_length="170"
+      date_format="M d"
+      thumb_width="440"
+      thumb_height="330"
+      post_template="custom"
+      custom_template="post/widget/grid-style-09.phtml"
+      total_rows="1"
+      total_cols="6"
+      show_slider="1"
+      slider_dots="0"
+      slider_nav="1"
+      slider_margin="20"
+      items_1900="4"
+      items_1600="4"
+      items_1420="4"
+      items_1280="3.5"
+      items_980="3"
+      items_768="2.5"
+      items_480="2.5"
+      items_320="1.5"
+      items_0="1"
+      }}</div>
+  </div>
+
+  {{block class="Magento\\Cms\\Block\\Block" block_id="recently_viewed_products"}}
+
+  <div class="navigation-banner">
+    <div class="background-image background-image-lazy" data-background-image="url({{media url=&quot;wysiwyg/metauto/category-page/{{navigation-bottom}}&quot;}})"
+    style="padding: 6.25% 0 110px;"></div>
+  </div>
+</div>
+</div>
