@@ -153,6 +153,7 @@
           templateData.excel = data;
         }
         if (!templateData.template || !templateData.excel) return false;
+        obj.value = '';
 
         var excelData = templateData.excel;
         excelFile = XLSX.read(excelData, {
@@ -201,7 +202,6 @@
           resizeTextArea();
         }
       }
-      obj.value = '';
     }
 
     window.addEventListener("input", function (e) {
