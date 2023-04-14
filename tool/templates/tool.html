@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>template tool</title>
+  <script type="text/javascript" src="src/compatible.js"></script>
+  <script type="text/javascript" src="src/xlsx.full.min.js"></script>
   <script type="text/javascript" src="/tool/templates/src/compatible.js"></script>
   <script type="text/javascript" src="/tool/templates/src/xlsx.full.min.js"></script>
 </head>
@@ -40,6 +42,7 @@
       margin: 10px 0;
     }
   </style>
+
 
   <a href="/tool/templates/example.rar" download>参考示例</a>
   <div class="up_btn">
@@ -179,16 +182,32 @@
 
           for (var r = 0; r < excelRow; r++) {
             if (sheet1[String.fromCharCode(66) + (r + 1)]) {
-              var name = "{{" + sheet1[String.fromCharCode(65) + (r + 1)].v + "}}";
-              var content = sheet1[String.fromCharCode(66) + (r + 1)].v;
+              var name = "{{<required>: " + sheet1[String.fromCharCode(65) + (r + 1)].v + "}}";
+              if (template.match(new RegExp(name, "g"))) {
+                var content = sheet1[String.fromCharCode(66) + (r + 1)].v;
 
-              if (name === "{{navigation-description-content}}") {
-                content = content.replace(/\s+/g, " ").trim().replace(/((?=^)|<\/[hp\d]*>)\s*(<[hp\d]*>)/g, "$1\n            $2");
+                if (name === "{{<required>: navigation-description-content}}") {
+                  content = content.replace(/\s+/g, " ").trim().replace(/((?=^)|<\/[hp\d]*>)\s*(<[hp\d]*>)/g, "$1\n            $2");
+                }
+
+                template = template.replace(new RegExp(name, "g"), content);
               }
 
-              template = template.replace(new RegExp(name, "g"), content);
+
+              var name = "{{" + sheet1[String.fromCharCode(65) + (r + 1)].v + "}}";
+              if (template.match(new RegExp(name, "g"))) {
+                var content = sheet1[String.fromCharCode(66) + (r + 1)].v;
+
+                if (name === "{{navigation-description-content}}") {
+                  content = content.replace(/\s+/g, " ").trim().replace(/((?=^)|<\/[hp\d]*>)\s*(<[hp\d]*>)/g, "$1\n            $2");
+                }
+
+                template = template.replace(new RegExp(name, "g"), content);
+              }
             }
           }
+
+          if (template.match(/{{<required>:.*?}}/)) continue;
 
           while(template.match(/background-image:\s*base64\((.*?)\);/)){
             var replaced = template.match(/background-image:\s*base64\((.*?)\);/)[0];
