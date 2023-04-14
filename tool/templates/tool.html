@@ -67,7 +67,7 @@
 
   <script type="template" id="base64-template">
     <tr>
-      <td><img src="{{img-base64}}"></td>
+      <td><img src="{{img-base64}}" alt="{{img-name}}"></td>
       <td>{{img-name}}</td>
     </tr>
   </script>
@@ -98,7 +98,6 @@
         var result = e.target.result;
 
         if (base64Obj.hasOwnProperty(name)) return false;
-        base64Obj[name] = result;
 
         var base64Templ = document.getElementById("base64-template").innerHTML;
         base64Templ = base64Templ.replaceAll("{{img-base64}}", result);
@@ -106,6 +105,7 @@
 
         base64List.innerHTML += base64Templ;
         var currentItem = base64List.lastElementChild;
+        currentItem.style.display = "none";
         var _img = currentItem.querySelector("img");
         _img.total = total;
         _img.flag = "false";
@@ -125,7 +125,8 @@
               _canvas.getContext("2d").drawImage(img, 0, 0, w, h);
               var base64 = _canvas.toDataURL("image/jpeg");
               img.src = base64;
-              img.parentElement.style.display = "";
+              img.parentElement.parentElement.style.display = "";
+              base64Obj[img.alt] = base64;
             });
           }
         }
@@ -139,7 +140,7 @@
         return;
       }
       var f = obj.files[0];
-      if (templateData && templateData.template && templateData.excel) obj.value = '';
+      if (window.templateData && templateData.template && templateData.excel) obj.value = '';
       var reader = new FileReader();
       reader.readAsBinaryString(f);
       reader.type = f.type;
