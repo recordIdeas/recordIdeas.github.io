@@ -139,7 +139,7 @@
         return;
       }
       var f = obj.files[0];
-      if (templateData && !templateData.template && !templateData.excel) obj.value = '';
+      if (templateData && templateData.template && templateData.excel) obj.value = '';
       var reader = new FileReader();
       reader.readAsBinaryString(f);
       reader.type = f.type;
