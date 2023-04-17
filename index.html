@@ -15,6 +15,7 @@ function createXMLHttpRequest() {
 }
 
 function sendRequest(url) {
+	url = url + '?' + new Date().getTime();
 	createXMLHttpRequest();
 	XMLHttpR.open("GET", url, true);
 	XMLHttpR.setRequestHeader("Content-Type", "text/html;charset=gb2312");
