@@ -26,7 +26,13 @@
 
     tr th:first-child,
     tr td:first-child {
-      width: 10em;
+      width: 15em;
+      vertical-align: top;
+    }
+
+    tr th:last-child,
+    tr td:last-child {
+      width: 20em;
       vertical-align: top;
     }
 
@@ -166,7 +172,7 @@
         });
 
         document.getElementById("excelFile").innerHTML = "";
-        var dataTable1 = "<table border='1'><thead><tr><th>name</th><th>content</th></tr></thead><tbody>";
+        var dataTable1 = "<table border='1'><thead><tr><th>name</th><th>content</th><th>tip</th></tr></thead><tbody>";
         for (var i = 0; i < excelFile.SheetNames.length; i++) {
           var template = templateData.template;
           var headers = new Array();
@@ -205,19 +211,43 @@
             }
           }
 
-          if (template.match(/{{<required>:.*?}}/)) continue;
+          var tip = "";
+          var tipObj = {};
+          var hasRequired = false;
+          while(template.match(/{{\s*<required>:\s*([\w-]+)\s*}}/)){
+            hasRequired = true;
+            var replaced = template.match(/{{\s*<required>:\s*([\w-]+)\s*}}/)[0];
+            var item_name = template.match(/{{\s*<required>:\s*([\w-]+)\s*}}/)[1].trim()
+            if (!tipObj.hasOwnProperty(item_name)) {
+              tipObj[item_name] = "";
+              tip += '必填项: ' + item_name + ' 未填;\n';
+            }
+            template = template.replaceAll(replaced, '');
+          }
+          if (hasRequired) template = '';
 
-          while(template.match(/background-image:\s*base64\((.*?)\);/)){
-            var replaced = template.match(/background-image:\s*base64\((.*?)\);/)[0];
-            var img_name = template.match(/background-image:\s*base64\((.*?)\);/)[1];
+          while(template.match(/{{\s*([\w-]+)\s*}}/)){
+            var replaced = template.match(/{{\s*([\w-]+)\s*}}/)[0];
+            var item_name = template.match(/{{\s*([\w-]+)\s*}}/)[1].trim()
+            if (!tipObj.hasOwnProperty(item_name)) {
+              tipObj[item_name] = "";
+              tip += '数据项: ' + item_name + ' 未填;\n';
+            }
+            template = template.replaceAll(replaced, '');
+          }
+
+          while(template.match(/background-image:\s*base64\((\s*[\w-]+.[a-zA-Z]+\s*)\);/)){
+            var replaced = template.match(/background-image:\s*base64\((\s*[\w-]+.[a-zA-Z]+\s*)\);/)[0];
+            var img_name = template.match(/background-image:\s*base64\((\s*[\w-]+.[a-zA-Z]+\s*)\);/)[1];
             var img_base64 = "";
             if (base64Obj.hasOwnProperty(img_name)) {
               img_base64 = "background-image: url(" + base64Obj[img_name] + ");";
             }
             template = template.replace(replaced, img_base64);
           }
+          template = template.replace(/background-image:\s*base64\(\s*\);/g, '');
 
-          dataTable1 += "<td><textarea>" + template + "</textarea></td></tr>";
+          dataTable1 += "<td><textarea>" + template + "</textarea></td><td>" + tip + "</td></tr>";
           document.getElementById("excelFile").innerHTML = dataTable1 + "</tbody></table>";
 
           resizeTextArea();
