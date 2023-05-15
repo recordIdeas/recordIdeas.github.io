@@ -16,237 +16,8 @@
     need.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      box-sizing: border-box;
-    }
-
-    .container {
-      margin: auto;
-      padding: 0 10px;
-      width: 100%;
-      max-width: 100%;
-    }
-
-    @media (min-width: 768px) {
-      .container {
-        max-width: 750px;
-      }
-    }
-
-    @media (min-width: 992px) {
-      .container {
-        max-width: 970px;
-      }
-    }
-
-    @media (min-width: 1200px) {
-      .container {
-        max-width: 1440px;
-      }
-    }
-
-    .background-image {
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      box-sizing: border-box;
-    }
-
-    /*page-article-11*/
-    .page-article-11 .page-article-left,
-    .page-article-11 .page-article-right {
-      padding: 10px 0 0 10px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .page-article-11 .page-article-left {
-      position: relative;
-    }
-
-    .page-article-11 .page-article-tip {
-      position: absolute;
-      text-align: center;
-      color: #fff;
-      background: #e11023;
-      border-radius: 0 10px 40px 0;
-      top: 0;
-      left: 0;
-    }
-
-    .page-article-11 .page-article-tip p {
-      margin: 10px;
-      font-size: 1.6em;
-      line-height: 0.8em;
-      font-weight: 550;
-    }
-
-    .page-article-11 .page-article-image {
-      width: 100%;
-      height: 100%;
-      min-height: 200px;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: 60% center;
-    }
-
-    .page-article-11 .image-hide-md .page-article-image {
-      position: relative;
-    }
-
-    .page-article-11 .image-hide-md .page-article-image div {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .page-article-11 .page-article-title {
-      font-size: 1.4em;
-      font-weight: 550;
-      line-height: 1.5em;
-    }
-
-    .page-article-11 .page-article-description {
-      margin: 10px 0;
-      font-size: 1.05em;
-      font-weight: 400;
-      line-height: 1.8em;
-    }
-
-    .page-article-11 .page-article-detail {
-      padding: 10px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .page-article-11 .page-article-detail .page-layout-list {
-      flex-grow: 1;
-    }
-
-    .page-article-11 .page-article-detail .page-article-detail {
-      padding: 15px 10px 5px;
-    }
-
-    .page-article-11 .page-article-detail .page-article-title {
-      font-size: 1.1em;
-    }
-
-    .page-article-11 .page-article-detail .page-article-description {
-      margin: 5px auto;
-      font-size: 0.9em;
-      max-width: 25em;
-    }
-
-    /*page-article-20*/
-    .page-article-20 {
-      position: relative;
-      background: #ececec;
-      overflow: hidden;
-    }
-
-    .page-article-20 h2 {
-      margin: 0 0 2vw;
-      padding: 10px 0;
-    }
-
-    .page-article-20 .page-layout-grid {
-      margin: 0;
-    }
-
-    .page-article-20 .page-layout-item {
-      padding: 0;
-    }
-
-    .page-article-20 .page-layout-content {
-      position: relative;
-      padding: 6vw 10px;
-      background: #ececec;
-      z-index: 3;
-    }
-
-    .page-article-20 .page-article-bg {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: 1;
-    }
-
-    .page-article-20.page-bg-left .page-article-bg {
-      left: 0;
-      right: 50%;
-      margin-right: -170px;
-    }
-
-    .page-article-20.page-bg-right .page-article-bg {
-      left: 50%;
-      right: 0;
-      margin-left: -170px;
-    }
-
-    .page-article-20 .page-article-gradient {
-      position: relative;
-      height: 100%;
-      z-index: 2;
-    }
-
-    .page-article-20.page-bg-left .page-article-gradient {
-      background: linear-gradient(to left, #ececec 5%, rgba(236, 236, 236, 0.9) 20%, rgba(236, 236, 236, 0));
-    }
-
-    .page-article-20.page-bg-right .page-article-gradient {
-      background: linear-gradient(to right, #ececec 5%, rgba(236, 236, 236, 0.9) 20%, rgba(236, 236, 236, 0));
-    }
-
-    @media (max-width: 575px) {
-      .page-article-20 h2 {
-        margin: 0 0 10px
-      }
-
-      .page-article-20 .page-article-bg {
-        position: relative;
-        height: 250px;
-        width: 100%
-      }
-
-      .page-article-20.page-bg-left .page-article-bg,
-      .page-article-20.page-bg-right .page-article-bg {
-        margin: 0;
-        left: 0;
-        right: 0
-      }
-
-      .page-article-20 .page-article-gradient {
-        position: absolute;
-        bottom: 100px;
-        left: 0;
-        right: 0;
-        height: 151px;
-        z-index: 3
-      }
-
-      .page-article-20.page-bg-left .page-article-gradient,
-      .page-article-20.page-bg-right .page-article-gradient {
-        background: linear-gradient(to bottom, #ececec 5%, rgba(236, 236, 236, 0.9) 20%, rgba(236, 236, 236, 0))
-      }
-
-      .page-article-20 .page-layout-content {
-        padding: 30px 10px 10px
-      }
-    }
-  </style>
   <style>
     .page-layout-grid {
       display: flex;
@@ -1490,12 +1261,287 @@
     .page-layout-item .page-layout-vertical .page-layout-detail {
       flex-grow: 1;
     }
+
+    /*page-article-11*/
+    .page-article-11 .page-article-left,
+    .page-article-11 .page-article-right {
+      padding: 10px 0 0 10px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-article-11 .page-article-left {
+      position: relative;
+    }
+
+    .page-article-11 .page-article-tip {
+      position: absolute;
+      text-align: center;
+      color: #fff;
+      background: #e11023;
+      border-radius: 0 10px 40px 0;
+      top: 0;
+      left: 0;
+    }
+
+    .page-article-11 .page-article-tip p {
+      margin: 10px;
+      font-size: 1.6em;
+      line-height: 0.8em;
+      font-weight: 550;
+    }
+
+    .page-article-11 .page-article-image {
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: 60% center;
+    }
+
+    .page-article-11 .image-hide-md .page-article-image {
+      position: relative;
+    }
+
+    .page-article-11 .image-hide-md .page-article-image div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .page-article-11 .page-article-title {
+      font-size: 1.4em;
+      font-weight: 550;
+      line-height: 1.5em;
+    }
+
+    .page-article-11 .page-article-description {
+      margin: 10px 0;
+      font-size: 1.05em;
+      font-weight: 400;
+      line-height: 1.8em;
+    }
+
+    .page-article-11 .page-article-detail {
+      padding: 10px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-article-11 .page-article-detail .page-layout-list {
+      flex-grow: 1;
+    }
+
+    .page-article-11 .page-article-detail .page-article-detail {
+      padding: 15px 10px 5px;
+    }
+
+    .page-article-11 .page-article-detail .page-article-title {
+      font-size: 1.1em;
+    }
+
+    .page-article-11 .page-article-detail .page-article-description {
+      margin: 5px auto;
+      font-size: 0.9em;
+      max-width: 25em;
+    }
+
+    /*page-article-20*/
+    .page-article-20 {
+      position: relative;
+      background: #ececec;
+      overflow: hidden;
+    }
+
+    .page-article-20 h2 {
+      margin: 0 0 2vw;
+      padding: 10px 0;
+    }
+
+    .page-article-20 .page-layout-grid {
+      margin: 0;
+    }
+
+    .page-article-20 .page-layout-item {
+      padding: 0;
+    }
+
+    .page-article-20 .page-layout-content {
+      position: relative;
+      padding: 6vw 10px;
+      background: #ececec;
+      z-index: 3;
+    }
+
+    .page-article-20 .page-article-bg {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
+    }
+
+    .page-article-20.page-bg-left .page-article-bg {
+      left: 0;
+      right: 50%;
+      margin-right: -170px;
+    }
+
+    .page-article-20.page-bg-right .page-article-bg {
+      left: 50%;
+      right: 0;
+      margin-left: -170px;
+    }
+
+    .page-article-20 .page-article-gradient {
+      position: relative;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .page-article-20.page-bg-left .page-article-gradient {
+      background: linear-gradient(to left, #ececec 5%, rgba(236, 236, 236, 0.9) 20%, rgba(236, 236, 236, 0));
+    }
+
+    .page-article-20.page-bg-right .page-article-gradient {
+      background: linear-gradient(to right, #ececec 5%, rgba(236, 236, 236, 0.9) 20%, rgba(236, 236, 236, 0));
+    }
+
+    @media (max-width: 575px) {
+      .page-article-20 h2 {
+        margin: 0 0 10px
+      }
+
+      .page-article-20 .page-article-bg {
+        position: relative;
+        height: 250px;
+        width: 100%
+      }
+
+      .page-article-20.page-bg-left .page-article-bg,
+      .page-article-20.page-bg-right .page-article-bg {
+        margin: 0;
+        left: 0;
+        right: 0
+      }
+
+      .page-article-20 .page-article-gradient {
+        position: absolute;
+        bottom: 100px;
+        left: 0;
+        right: 0;
+        height: 151px;
+        z-index: 3
+      }
+
+      .page-article-20.page-bg-left .page-article-gradient,
+      .page-article-20.page-bg-right .page-article-gradient {
+        background: linear-gradient(to bottom, #ececec 5%, rgba(236, 236, 236, 0.9) 20%, rgba(236, 236, 236, 0))
+      }
+
+      .page-article-20 .page-layout-content {
+        padding: 30px 10px 10px
+      }
+    }
   </style>
+
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      box-sizing: border-box;
+    }
+
+    html body {
+      color: #666
+    }
+
+    html body,
+    body address,
+    body p,
+    body ul,
+    body ol {
+      line-height: 1.66;
+      font-size: 15px;
+      font-weight: 400;
+      font-style: normal;
+      font-family: "Gotham", "Roboto", "Arial", "Helvetica", sans-serif !important;
+      list-style: none
+    }
+
+    @media (max-width: 767px) {
+
+      html body,
+      body address,
+      body p,
+      body ul,
+      body ol {
+        font-size: 13px
+      }
+    }
+
+    .container {
+      margin: auto;
+      padding: 0 10px;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        max-width: 750px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .container {
+        max-width: 970px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1440px;
+      }
+    }
+
+    .background-image {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      box-sizing: border-box;
+    }
+
+    .footer-bottom {
+      padding: 15px 0px;
+      text-align: center;
+      color: #fff;
+      background-color: #333
+    }
+
+    .footer-bottom .copyright-footer address {
+      margin: 3px 0 13px;
+      font-size: 13px
+    }
+
     /*cms-about-us*/
     .cms-about-us .about-logo {
+      padding: 1em;
       text-align: center;
-      padding: 20px;
+    }
+
+    .cms-about-us .about-logo img {
+      width: calc(150px + 5vw);
+      max-width: 246px;
+      padding: 0.1vw 0.5vw 0.4vw;
     }
 
     .cms-about-us .about-title {
@@ -1724,7 +1770,6 @@
 
     .cms-about-us .about-goals {
       padding: 3em 0;
-      background: #ececec;
     }
 
     .cms-about-us .about-goals .page-layout-vertical {
@@ -1740,33 +1785,45 @@
       padding: 15px 15px 5px;
     }
 
+    .cms-about-us .about-goals .page-layout-vertical .page-layout-detail {
+      background: #f1f1f1
+    }
+
     @media (max-width: 767px) {
       .cms-about-us .about-goals {
-        padding: 0 10px;
+        padding: 20px 10px 0;
         background: transparent
-      }
-
-      .cms-about-us .about-goals .page-layout-vertical .page-layout-detail {
-        background: #f1f1f1
       }
     }
 
     .cms-about-us .about-bottom {
       text-align: center;
-      padding: 40px 10px;
+      padding: 10px 10px 60px;
     }
 
     .cms-about-us .about-bottom h2 {
       font-family: roboto;
-      font-size: 2em;
+      font-size: 2.5em;
       color: #333;
       font-weight: 900;
       text-transform: capitalize;
     }
 
+    .cms-about-us .about-bottom p {
+      font-size: 1.5em;
+    }
+
     @media (max-width: 767px) {
       .cms-about-us .about-bottom {
-        padding: 20px 15px
+        padding: 40px 15px 50px;
+      }
+
+      .cms-about-us .about-bottom h2 {
+        font-size: 2em;
+      }
+
+      .cms-about-us .about-bottom p {
+        font-size: 1.2em;
       }
     }
   </style>
@@ -2013,7 +2070,7 @@
       </div>
     </div>
 
-    <div class="about-bottom container">
+    <div class="about-bottom">
       <h2>Contact Us</h2>
       <p>Now for more information. please contact us via info@metautoparts.com .</p>
     </div>
